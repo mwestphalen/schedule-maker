@@ -1,8 +1,6 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 public class Student {
-	// majorCourse could be an array due to there being more than one potential major
-	
 	private String rNumber;
 	private String firstName;
 	private String lastName;
@@ -25,12 +23,65 @@ public class Student {
 		lastName = lName;
 		rNumber = numb;
 		totalCredits = 0;
-		majors[1] = major1;
-		majors[2] = major2;
+		majors[0] = major1;
+		majors[1] = major2;
 	}
-//	public String getMajorCourse() {
-//		return majorCourse;
-//	}
+	
+	public void addMajorCourse(ArrayList<Course> introCourses) {
+		for (int i = 0; i < 2; i++) {
+			String major = majors[i];
+			if (major.equals("N")) {
+				for (int j = 0; j < introCourses.size(); j++) {
+					Course toAdd = introCourses.get(j);
+					if (toAdd.checkAvailability()) {
+						if (schedule.checkConflict(toAdd)) {
+							if (toAdd.getHasLab()) {
+								Course toAddLab = introCourses.get(j + 1);
+								if (schedule.checkConflict(toAddLab)) {
+									schedule.setLabCourse(toAddLab);
+									toAddLab.addStudent();
+									schedule.setMajorCourse(toAdd);
+									toAdd.addStudent();
+									return;
+								}
+							} else {
+								schedule.setMajorCourse(toAdd);
+								toAdd.addStudent();
+								return;
+							}
+						}
+					}
+				}
+			}
+			for (int j = 0; j < introCourses.size(); j++) {
+				Course toAdd = introCourses.get(j);
+				if (major.equals(toAdd.getCourseMajor())) {
+					if (toAdd.checkAvailability()) {
+						if (schedule.checkConflict(toAdd)) {
+							if (toAdd.getHasLab()) {
+								Course toAddLab = introCourses.get(j + 1);
+								if (schedule.checkConflict(toAddLab)) {
+									schedule.setLabCourse(toAddLab);
+									toAddLab.addStudent();
+									schedule.setMajorCourse(toAdd);
+									toAdd.addStudent();
+									return;
+								}
+							} else {
+								schedule.setMajorCourse(toAdd);
+								toAdd.addStudent();
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+						
+					
+		
+
 //	
 //	public String getElectiveCourse() {
 //		return electiveCourse;
@@ -39,6 +90,10 @@ public class Student {
 //	public String getCompetencyCourse() {
 //		return competencyCourse;
 //	}
+	
+	public Schedule getStudentSchedule() {
+		return schedule;
+	}
 	
 	public String getRNumber() {
 		return rNumber;
