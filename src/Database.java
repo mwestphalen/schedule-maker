@@ -3,12 +3,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 public class Database {
-	private ArrayList<Course> electiveCourses = new ArrayList<Course>();
-	private ArrayList<Course> introductoryCourses = new ArrayList<Course>();
-	private ArrayList<Course> proficiencyCourses = new ArrayList<Course>();
-	private ArrayList<Student> studentList = new ArrayList<Student>();
-	//maybe an arraylist of students and their information, then in main go through the arraylist
-	//calling on generate schedule for all of them
+	// Make the database a singleton
+	private static ArrayList<Course> electiveCourses = new ArrayList<Course>();
+	private static ArrayList<Course> introductoryCourses = new ArrayList<Course>();
+	private static ArrayList<Course> proficiencyCourses = new ArrayList<Course>();
+	private static ArrayList<Student> studentList = new ArrayList<Student>();
+	
+	
 	public Database() {
 		 // Maybe make calls to all of the generate functions?
 	}
@@ -22,13 +23,15 @@ public class Database {
 				String[] values = line.split(", ");
 				int courseCapacity = Integer.parseInt(values[0]);
 				int CRN = Integer.parseInt(values[1]);
-				String name = values[2];
-				String title = values[3];
-				int hours = Integer.parseInt(values[4]);
-				String time = values[5];
-				String days = values[6];
-				String subject = values[7];
-				electiveCourses.add(new Course(CRN, subject, name, hours, time, days, courseCapacity, title));
+				String course = values[2];
+				String courseTitle = values[3];
+				int credits = Integer.parseInt(values[4]);
+				String meetingTime = values[5];
+				String meetingDays = values[6];
+				String courseMajor = values[7];
+				String proficiency = values[8];
+				Boolean hasLab = Boolean.parseBoolean(values[9]);
+				electiveCourses.add(new Course(courseCapacity, CRN, course, courseTitle, credits, meetingTime, meetingDays, courseMajor, proficiency, hasLab));
 			}
 			fileInput.close();
 		} catch (FileNotFoundException exc) {
@@ -46,13 +49,15 @@ public class Database {
 				String[] values = line.split(", ");
 				int courseCapacity = Integer.parseInt(values[0]);
 				int CRN = Integer.parseInt(values[1]);
-				String name = values[2];
-				String title = values[3];
-				int hours = Integer.parseInt(values[4]);
-				String time = values[5];
-				String days = values[6];
-				String subject = values[7];
-				introductoryCourses.add(new Course(CRN, subject, name, hours, time, days, courseCapacity, title));
+				String course = values[2];
+				String courseTitle = values[3];
+				int credits = Integer.parseInt(values[4]);
+				String meetingTime = values[5];
+				String meetingDays = values[6];
+				String courseMajor = values[7];
+				String proficiency = values[8];
+				Boolean hasLab = Boolean.parseBoolean(values[9]);
+				introductoryCourses.add(new Course(courseCapacity, CRN, course, courseTitle, credits, meetingTime, meetingDays, courseMajor, proficiency, hasLab));
 			}
 			fileInput.close();
 		} catch (FileNotFoundException exc) {
@@ -88,19 +93,21 @@ public class Database {
 		}
 	}
 	
+	public ArrayList<Course> getElectiveCourses() {
+		return electiveCourses;
+	}
+	
 	public ArrayList<Course> getIntroductoryCourses() {
 		return introductoryCourses;
 	}
 	
-//	public Course findMajorCourse(Student s) {
-//		
-//	}
+	public ArrayList<Course> getProficiencyCourse() {
+		return proficiencyCourses;
+	}
 	
-//	public Course findElectiveCourse(Student s) {
-//		
-//	}
-//	
-//	public Course findProficiencyCourse(Student s) {
-//		
-//	}
+	public ArrayList<Student> getStudentList() {
+		return studentList;
+	}
+	
+
 }
