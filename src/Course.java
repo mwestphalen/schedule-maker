@@ -1,40 +1,43 @@
 public class Course {
+	private final int capacity;
 	private final int CRN;
-	private final String courseSubject;
-	//private final String courseNumber;
 	private final String course;
 	private final String courseTitle;
 	private final int credits;
-	private final int capacity;
-	private int numbStudents;
-	// Find way to store meetInfo other than string
 	private final String meetingTime;
 	private final String meetingDays;
+	private final String courseMajor;
+	private final String proficiency;
+	private final boolean hasLab;
+	private int numbStudents;
+	// Find way to store meetInfo other than string
+
 	
-	public Course(int crn, String subject, String name, int creds, String time, String days, int cap, 
-			String title) {
-		CRN = crn;
-		courseSubject = subject;
-		course = name;
-		credits = creds;
-		meetingTime = time;
-		meetingDays = days;
-		capacity = cap;
-		numbStudents = 0;
-		courseTitle = title;
+	public Course(int capacity1, int crn1, String course1, String courseTitle1, int credits1, String meetingTime1
+			, String meetingDays1, String courseMajor1, String proficiency1, boolean hasLab1) {
+		capacity = capacity1;
+		CRN = crn1;
+		course = course1;
+		courseTitle = courseTitle1;
+		credits = credits1;
+		meetingTime = meetingTime1;
+		meetingDays = meetingDays1;
+		courseMajor = courseMajor1;
+		proficiency = proficiency1;
+		hasLab = hasLab1;
 	}
 	
 	public int getCRN() {
 		return CRN;
 	}
 	
-	public String getCourseSubject() {
-		return courseSubject;
+	public String getCourseMajor() {
+		return courseMajor;
 	}
 	
-//	public String getCourseNumber() {
-//		return courseNumber;
-//	}
+	public String getProficiency() {
+		return proficiency;
+	}
 	
 	public String getCourseName() {
 		return course;
@@ -60,10 +63,12 @@ public class Course {
 		return meetingDays;
 	}
 	
+	public boolean getHasLab() {
+		return hasLab;
+	}
+	
 	public void addStudent() {
-		if (checkAvailability()) {
-			numbStudents++;
-		}
+		numbStudents++;
 	}
 	
 	public boolean checkAvailability() {
