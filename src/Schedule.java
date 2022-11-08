@@ -4,8 +4,8 @@ public class Schedule {
 	private Course electiveCourse;
 	private Course competencyCourse;
 	private Course rccCourse;
-	
-	
+	private Course labCourse;
+	private Course[] scheduleList = new Course[5];
 	
 	
 	public Course getMajorCourse() {
@@ -14,6 +14,18 @@ public class Schedule {
 
 	public void setMajorCourse(Course majorCourse) {
 		this.majorCourse = majorCourse;
+	}
+	
+	public void setLabCourse(Course c) {
+		labCourse = c;
+	}
+	
+	public Course getLabCourse() {
+		return labCourse;
+	}
+	
+	public Course[] getScheduleList() {
+		return scheduleList;
 	}
 
 	public Course getElectiveCourse() {
@@ -40,9 +52,6 @@ public class Schedule {
 		this.rccCourse = rccCourse;
 	}
 
-	public void addMajorCourse() {
-		
-	}
 	
 	public void addElectiveCourse() {
 		
@@ -53,6 +62,14 @@ public class Schedule {
 	}
 	
 	public boolean checkConflict(Course c) {
-		return false;
+//		for (int i = 0; i < 4; i++) {
+//			String meetDays1 = scheduleList[i].getMeetingDays();
+//			String meetTime1 = scheduleList[i].getMeetingTime();
+//			if (meetDays1.equals(c.getMeetingDays())) {
+//				//find way to convert string of time so that it can be compared. If they do intercept return false.
+//				return false;
+//			}
+//		}
+		return true;
 	}
 }
