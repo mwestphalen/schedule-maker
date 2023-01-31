@@ -1,2 +1,21 @@
-12, 91747, RFLA 100A, Visual Journals, 4, 9:30-10:45-A, TR, N, N, false
-22, 92074, RFLA 100C, Quo Vadis Europe, 4, 9:30-10:45-A, TR, N, N, false
+18, 91720, RCC 100 01, Cultures: Yoga Mind and Body, 4, 09:00-09:50-A, MWF, N, N, false
+14, 91721, RCC 100 02, Making Art in the 2D, 4, 09:30-10:45-A, TR, N, N, false
+18, 91722, RCC 100 03, Round the Wrld in 90 Busn Days, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91723, RCC 100 04, Strengthening Roots Stem Success, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91724, RCC 100 05, Strengthening Roots Stem Success, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91725, RCC 100 06, Re envisioning Community, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91726, RCC 100 07, US Food Policy Chng World, 4, 09:00-09:50-A, MWF, N, ECMP, false
+18, 91727, RCC 100 08, Only in Florida, 4, 09:00-09:50-A, MWF, N, WCMP, false
+18, 91728, RCC 100 09, Only in Florida, 4, 09:00-09:50-A, MWF, N, WCMP, false
+18, 91729, RCC 100 10, Pursuit of Dao, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91730, RCC 100 11, Key Events History of Democracy, 4, 09:00-09:50-A, MWF, N, N, false
+14, 91731, RCC 100 12, Electricity & Making for Change, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91732, RCC 100 13, Discipline, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91733, RCC 100 14, Profit and Purpose, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91734, RCC 100 15, Sex & Love in Hookup Culture, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91735, RCC 100 16, Mindful Living, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91736, RCC 100 17, Art Gone Bad, 4, 09:00-09:50-A, MWF, N, ECMP, false
+18, 91737, RCC 100 18, 21st Century Business Trips, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91738, RCC 100 19, Successful Pathways thru Music, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91739, RCC 100 20, French Through Pop Culture, 4, 09:00-09:50-A, MWF, N, FCMP, false
+18, 91740, RCC 100 21, Pixar Shorts, 4, 09:00-09:50-A, MWF, N, WCMP, false
