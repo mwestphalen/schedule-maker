@@ -1,0 +1,2 @@
+12, 91747, RFLA 100A, Visual Journals, 4, 9:30-10:45-A, TR, N, N, false
+22, 92074, RFLA 100C, Quo Vadis Europe, 4, 9:30-10:45-A, TR, N, N, false

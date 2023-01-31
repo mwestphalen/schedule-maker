@@ -1,0 +1,10 @@
+40, 91320, CMS 120, Intro to Computer Science, 4, 1:00-2:15-P, MW, CMS, N, true
+40, 91321, CMS 120L, Intro to Computer Science Lab, 2, 2:00-5:00-P, R, CMS, N, false
+22, 91221, ECO 108, Mathematical Mths for Econ, 4, 11:00-12:15-P, TR, ECO, N, false
+18, 91407, ENG 190, Txt/Context: 10 Amazing Books, 4, 11:00-12:15-P, TR, ENG, HLIT, false
+24, 91685, COM 100, Intro Communication Studies, 4, 8:00-8:50-A, MWF, COM, N, false
+24, 91583, INB 200, Intro to Intl Business, 4, 8:00-8:50-A, MWF, INB, N, false
+24, 91537, LAT 101, Introductory Latin 1, 4, 11:00-11:50-A, MWF, N, N, false
+18, 91212, ENV 130, The Geosphere, 4, 11:00-11:50-A, MWF, ENV, HSCI, true
+18, 91212, ENV 130L, The Geosphere Lab, 2, 2:00-5:00-P, M, ENV, N, false
+24, 91462, MUS 151, Theory 1, 4, 1:00-2:15-P, MW, MUS, N, false
