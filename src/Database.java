@@ -227,7 +227,7 @@ public class Database {
 						rccPref.add(c);
 					}
 				}
-				studentList.add(new Student(firstName, lastName, rNumber, firstMajor, secondMajor, electivePref, rccPref));
+				studentList.add(new Student(rNumber, firstName, lastName, firstMajor, secondMajor, electivePref, rccPref));
 			}
 			fileInput.close();
 		} catch (FileNotFoundException exc) {
@@ -263,6 +263,9 @@ public class Database {
 			}
 		}
 		// This should never happen there should always be a course, if this does happen make it so it prints an error message and potentially quit the method or add random course?
+			// -> This could happen if user enters or mistypes the elective course tiel (i.e. Ethivs instead of Ethics).
+			// In that case, you're right... we have to print a message. But what if we check for the course CRN instead of 
+			// its title? Sounds more unique and less error prone.
 		return electiveCourses.get(1);
 	}
 	

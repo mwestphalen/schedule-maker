@@ -12,11 +12,11 @@ public class Student {
 		
 	}
 
-	public Student(String fName, String lName, String numb, String major1, String major2, ArrayList<ScheduledCourse> electivePref
+	public Student(String numb, String fName, String lName, String major1, String major2, ArrayList<ScheduledCourse> electivePref
 			, ArrayList<ScheduledCourse> rccPref) {
+		rNumber = numb;
 		firstName = fName;
 		lastName = lName;
-		rNumber = numb;
 		majors[0] = major1;
 		majors[1] = major2;
 		for(int i = 0; i < electivePref.size(); i++) {

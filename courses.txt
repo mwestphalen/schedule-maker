@@ -1,10 +1,32 @@
-40, 91320, CMS 120, Intro to Computer Science, 4, 1:00-2:15-P, MW, CMS, N, true
-40, 91321, CMS 120L, Intro to Computer Science Lab, 2, 2:00-5:00-P, R, CMS, N, false
+40, 91320, CMS 120, Introduction to Computer Science, 4, 01:00-2:15-P, MW, CMS, N, true
+40, 91321, CMS 120L, Introduction to Computer Science Lab, 2, 02:00-5:00-P, R, CMS, N, false
 22, 91221, ECO 108, Mathematical Mths for Econ, 4, 11:00-12:15-P, TR, ECO, N, false
-18, 91407, ENG 190, Txt/Context: 10 Amazing Books, 4, 11:00-12:15-P, TR, ENG, HLIT, false
-24, 91685, COM 100, Intro Communication Studies, 4, 8:00-8:50-A, MWF, COM, N, false
-24, 91583, INB 200, Intro to Intl Business, 4, 8:00-8:50-A, MWF, INB, N, false
+18, 91407, ENG 190, Texts and Context: 10 Amazing Books, 4, 11:00-12:15-P, TR, ENG, HLIT, false
+24, 91685, COM 100, Introduction Communication Studies, 4, 08:00-8:50-A, MWF, COM, N, false
+24, 91583, INB 200, Introduction to Intl Business, 4, 08:00-8:50-A, MWF, INB, N, false
 24, 91537, LAT 101, Introductory Latin 1, 4, 11:00-11:50-A, MWF, N, N, false
 18, 91212, ENV 130, The Geosphere, 4, 11:00-11:50-A, MWF, ENV, HSCI, true
-18, 91212, ENV 130L, The Geosphere Lab, 2, 2:00-5:00-P, M, ENV, N, false
-24, 91462, MUS 151, Theory 1, 4, 1:00-2:15-P, MW, MUS, N, false
+18, 91212, ENV 130L, The Geosphere Lab, 2, 02:00-5:00-P, M, ENV, N, false
+24, 91462, MUS 151, Theory 1, 4, 01:00-2:15-P, MW, MUS, N, true
+7, 91464, MUS 153, Keyboard Harmony 1, 09:30-10:45-A, TR, MUS, N, false 
+24, 91284, ANT 200, Cultural Anthropologie, 4, 01:00-2:15-P, MW, ANT, N, false
+16, 91277, ANT 210, Human Evolution, 4, 11:00-11:50-A, MWF, ANT, N false
+24, 91219, ECO 121, Economics of Contemporary Issues, 4, 02:30-3:45-P, ECO, N, false
+16, 91227, ECO 221, Statistics for Economics, 4, 02:00-3:15-P, ECO, MCMP, false
+24, 91533, PHI 108, Ethics, 4, 08:00-8:50-A, MWF, PHI, ECMP, false
+24, 91583, INB 200, Introduction to International Business, 4, 08:00-8:50, MWF, BUS, N, false
+24, 91579, MGT 101, Introduction to Responsible Business Management, 4, 12:00-12:50-P, BUS, N, false
+24, 92177, SE 100, Social Entrepreneurship: Leading Change, 4, 11:00-11:50-A, SE, N, false
+24, 91528, PHI 223, Intro to Formal Logic, 4, 12:00-12:50-P, PHI, MCMP, false
+24, 91890, PPE 119, Contemporary Issues in Public Policy and Economics, 4, 11:00-11:50-A, MWF, PPE, N, false
+18, 92180, ENG 234, Literature and Law, 4, 01:00-2:15-P, ENG, N, false
+18, 91541, SPN 101, Elementary Spanish 1, 4, 08:00-8:50-A, MWF, SPN, N, false
+19, 91460, GBH 310, Introduction to Global Health, 4, 11:00-12:15-P, TR, GBH, N, false
+24, 91567, PHY 120, General Physics 1, 4, 10:00-10:50-A, MWF, PHY, N, true
+24, 91567, PHY 120L, General Physics 1, 2, 02:00-05:00-P, W, PHY, N, false
+29, 92192, MAT 103, Statistical Reasoning, 4, 01:00-02:15-P, MW, MAT, MCMP, false
+29, 91429, MAT 109, Precalculus Mathematics, 4, 11:00-11:50, MWF, MAT, MCMP, false
+15, 91600, PSY 101, Introduction to Psychology, 4, 06:45-9:15-P, M, PSY, N, false
+24, 91620, PSY 150, Perspectives in Psychology 1, 4, 03:30-04:45-P, TR, PSY, N, false
+18, 91626, PSY 250, Statistics & Research Methods 1 w/ Lab, 4, 11:00-12:50-P, TR, PSY, MCMP, true
+18, 91626, PSY 250L, Statistics & Research Methods 1 Lab, 2, 02:00-03:15P, TR, PSY, N, false

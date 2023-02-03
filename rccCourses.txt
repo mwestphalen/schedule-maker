@@ -17,5 +17,11 @@
 18, 91736, RCC 100 17, Art Gone Bad, 4, 09:00-09:50-A, MWF, N, ECMP, false
 18, 91737, RCC 100 18, 21st Century Business Trips, 4, 09:00-09:50-A, MWF, N, N, false
 18, 91738, RCC 100 19, Successful Pathways thru Music, 4, 09:00-09:50-A, MWF, N, N, false
-18, 91739, RCC 100 20, French Through Pop Culture, 4, 09:00-09:50-A, MWF, N, FCMP, false
-18, 91740, RCC 100 21, Pixar Shorts, 4, 09:00-09:50-A, MWF, N, WCMP, false
+18, 91740, RCC 100 20, French Through Pop Culture, 4, 09:00-09:50-A, MWF, N, FCMP, false
+18, 91741, RCC 100 21, Pixar Shorts, 4, 09:00-09:50-A, MWF, N, WCMP, false
+18, 91742, RCC 100 22, Spanish on the Run, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91743, RCC 100 24, Theatre & Autism: Create w/Me_CE, 09:00-09:50-A, N, N, false
+18, 91744, RCC 100 25, Designing Your Life, 09:00-09:50-A, MWF, N, N, false
+18, 91745, RCC 100 26, Experiments in Psychology, 09:30-10:45-A, TR, N, N, false
+18, 91805, RCC 100 29, Intro to Economics Through Games, 4, 09:00-09:50-A, MWF, N, N, false
+18, 91818, RCC 100 30, Children of the World_CE, 4, 09:00-09:50-A, MWF, N, N, false

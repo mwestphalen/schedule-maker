@@ -1,0 +1,8 @@
+16, 91227, ECO 221, Statistics for Economics, 02:00-3:15-P, ECO, MCMP, false
+18, 91212, ENV 130, The Geosphere, 4, 11:00-11:50-A, MWF, ENV, HSCI, true
+18, 91407, ENG 190, Texts and Context: 10 Amazing Books, 4, 11:00-12:15-P, TR, ENG, HLIT, false
+24, 91528, PHI 223, Intro to Formal Logic, 4, 12:00-12:50-P, PHI, MCMP, false
+29, 92192, MAT 103, Statistical Reasoning, 4, 01:00-02:15-P, MW, MAT, MCMP, false
+29, 91429, MAT 109, Precalculus Mathematics, 4, 11:00-11:50, MWF, MAT, MCMP, false
+18, 91626, PSY 250, Statistics & Research Methods 1 w/ Lab, 4, 11:00-12:50-P, TR, PSY, MCMP, true
+18, 91626, PSY 250L, Statistics & Research Methods 1 Lab, 2, 02:00-03:15P, TR, PSY, N, false
