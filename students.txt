@@ -1,3 +1,99 @@
 R00000001, Bob, Jerry, CMS, MAT
 ENV 130, ENG 190, COM 100, INB 200, ECO 108, LAT 101, CMS 120
 N, N, N, N, N, N, N
+R00000002, Tim, Johnson, N, N
+N, N, N, N, N, N, N
+N, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N
+R00000003, John, Doe, MUS, ENV
+LAT 101, N, N, N, N, N, N
+RCC 100 01, N, N, N, N, N, N

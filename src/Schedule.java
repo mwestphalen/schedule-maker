@@ -46,25 +46,25 @@ public class Schedule {
 	}
 	
 	public void addElectiveCourse(ArrayList<ScheduledCourse> electiveCourses, ArrayList<ScheduledCourse> electivePref) {
-		// check to see if preference is empty, if so add them to a random course
-		if (electivePref.isEmpty()) {
-			boolean courseFound = false;
-			while (!courseFound) {
-				ScheduledCourse toAdd = getRandomCourse(electiveCourses);
+		
+		if (!electivePref.isEmpty()) {
+			for (int i = 0; i < electivePref.size(); i++) {
+				ScheduledCourse toAdd = electivePref.get(i);
 				if (toAdd.getCourse().checkAvailability()) {
 					if (checkConflict(toAdd)) {
 						setElectiveCourse(toAdd);
 						toAdd.getCourse().addStudent();
 						if (toAdd.getHasLab()) {
 							toAdd.getCourseLab().addStudent();
+							return;
+							}
 						}
-						courseFound = true;
 					}
 				}
 			}
-		} else {
-			for (int i = 0; i < electivePref.size(); i++) {
-			ScheduledCourse toAdd = electivePref.get(i);
+		boolean courseFound = false;
+		while (!courseFound) {
+			ScheduledCourse toAdd = getRandomCourse(electiveCourses);
 			if (toAdd.getCourse().checkAvailability()) {
 				if (checkConflict(toAdd)) {
 					setElectiveCourse(toAdd);
@@ -72,8 +72,7 @@ public class Schedule {
 					if (toAdd.getHasLab()) {
 						toAdd.getCourseLab().addStudent();
 					}
-					return;
-				}
+					courseFound = true;
 				}
 			}
 		}
@@ -88,19 +87,7 @@ public class Schedule {
 	
 	public void addRCCCourse(ArrayList<ScheduledCourse> rccCourses, ArrayList<ScheduledCourse> rccPreferences) {
 		
-		if (rccPreferences.isEmpty()) {
-			boolean courseFound = false;
-			while (!courseFound) {
-				ScheduledCourse toAdd = getRandomCourse(rccCourses);
-				if (toAdd.getCourse().checkAvailability()) {
-					if (checkConflict(toAdd)) {
-						setRCCCourse(toAdd);
-						toAdd.getCourse().addStudent();
-						return;
-					}
-				}
-			}
-		} else {
+		if (!rccPreferences.isEmpty()) {
 			for (int i = 0; i < rccPreferences.size(); i++) {
 				ScheduledCourse toAdd = rccPreferences.get(i);
 				if (toAdd.getCourse().checkAvailability()) {
@@ -108,10 +95,22 @@ public class Schedule {
 						setRCCCourse(toAdd);
 						toAdd.getCourse().addStudent();
 						return;
+						}
+					}
 				}
 			}
+		// this adds a random method, if there is an empty list or none of the courses listed are available
+		boolean courseFound = false;
+		while (!courseFound) {
+			ScheduledCourse toAdd = getRandomCourse(rccCourses);
+			if (toAdd.getCourse().checkAvailability()) {
+				if (checkConflict(toAdd)) {
+					setRCCCourse(toAdd);
+					toAdd.getCourse().addStudent();
+					return;
+					}
+				}
 		}
-	}
 	}
 	
 	public ScheduledCourse[] getScheduleList() {

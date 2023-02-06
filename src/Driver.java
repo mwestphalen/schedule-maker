@@ -7,10 +7,10 @@ public class Driver {
 		data.generateIntroductoryCourses();
 		data.generateElectiveCourses();
 		data.generateRCCCourses();
+		data.generateCompetencyCourses();
 		
 		data.generateStudentList();
 		ArrayList<Student> studentList = data.getStudentList();
-		ArrayList<ScheduledCourse> introCourses = data.getIntroductoryCourses();
 		
 		for (int i = 0; i < studentList.size(); i++) {
 			Student a = studentList.get(i);
@@ -22,7 +22,6 @@ public class Driver {
 		for (int i = 0; i < studentList.size(); i++) {
 			Schedule s1 = studentList.get(i).getStudentSchedule();
 			//s1.addCourseCredits(); this wont work until we have all add methods working as will try to access null
-			ScheduledCourse[] schList = s1.getScheduleList();
 			System.out.println(studentList.get(i).getFirstName() + " " + studentList.get(i).getLastName());
 			System.out.println("Major course: " + studentList.get(i).getStudentSchedule().getMajorCourse().getCourse().getCourseTitle());
 			if (studentList.get(i).getStudentSchedule().getMajorCourse().getHasLab()) {
@@ -37,12 +36,14 @@ public class Driver {
 				System.out.println("RCC course lab: " + studentList.get(i).getStudentSchedule().getRCCCourse().getCourseLab().getCourseTitle());
 			}
 			System.out.println("Total Credits: " + s1.getTotalCredits());
+			System.out.println();
 		}
 		System.out.println();
 		System.out.println("Introductory Courses:");
 		for (int i = 0; i < data.getIntroductoryCourses().size(); i++) {
 			System.out.print(data.getIntroductoryCourses().get(i).getCourse().getCourseName());
 			System.out.print(" " + data.getIntroductoryCourses().get(i).getCourse().getNumbStudents());
+			System.out.print(" / " + data.getIntroductoryCourses().get(i).getCourse().getCapacity());
 			System.out.println();
 		}
 		System.out.println();
@@ -50,6 +51,7 @@ public class Driver {
 		for (int i = 0; i < data.getElectiveCourses().size(); i++) {
 			System.out.print(data.getElectiveCourses().get(i).getCourse().getCourseName());
 			System.out.print(" " + data.getElectiveCourses().get(i).getCourse().getNumbStudents());
+			System.out.print(" / " + data.getElectiveCourses().get(i).getCourse().getCapacity());
 			System.out.println();
 		}
 		System.out.println();
@@ -57,9 +59,9 @@ public class Driver {
 		for(int i = 0; i < data.getRCCCourses().size(); i++) {
 			System.out.print(data.getRCCCourses().get(i).getCourse().getCourseName());
 			System.out.print(" " + data.getRCCCourses().get(i).getCourse().getNumbStudents());
+			System.out.print(" / " + data.getRCCCourses().get(i).getCourse().getCapacity());
 			System.out.println();
 		}
-		 // show that course capacity has changed
 	}
 
 }
