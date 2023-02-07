@@ -69,10 +69,22 @@ public class Student {
 	}
 
 	public void printStudentSchedule() {
-		System.out.println(schedule.getMajorCourse());
-		System.out.println(schedule.getCompetencyCourse());
-		System.out.println(schedule.getRCCCourse());
-		System.out.println(schedule.getElectiveCourse());
+		schedule.getMajorCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getMajorCourse().getTime().printTime();
+		System.out.println();
+		schedule.getElectiveCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getElectiveCourse().getTime().printTime();
+		System.out.println();
+		schedule.getRCCCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getRCCCourse().getTime().printTime();
+		System.out.println();
+		// add this only when adding comptency course is working
+//		schedule.getCompetencyCourse().getCourse().printCourseInfo();
+//		System.out.print(" ");
+//		schedule.getCompetencyCourse().getTime().printTime();
 	}
 
 }

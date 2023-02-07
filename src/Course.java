@@ -62,6 +62,8 @@ public class Course {
 			return false;
 		}
 	}
-
-
+	
+	public void printCourseInfo() {
+		System.out.print(CRN + " " + course + " " + courseTitle + " " + credits);
+	}
 }

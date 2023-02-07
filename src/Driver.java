@@ -1,6 +1,16 @@
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
 public class Driver {
-
+	
+	public Queue<Student> generateStudentQueue(ArrayList<Student> studentList) {
+		Queue<Student> studentQueue = new LinkedList<>();
+		for (int i = 0; i < studentList.size(); i++) {
+			studentQueue.add(studentList.get(i));
+		}
+		return studentQueue;
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Database data = new Database();
@@ -12,6 +22,16 @@ public class Driver {
 		data.generateStudentList();
 		ArrayList<Student> studentList = data.getStudentList();
 		
+		//Queue<Student> majorQueue = generateStudentQueue(data.getStudentList());
+		
+		//while(!majorQueue.isEmpty()) {
+			//Student currentStudent = majorQueue.element();
+			//String[] majors = currentStudent.getMajors();
+			//if (majors[0].equals("N") && majors[1].equals("N")) {
+				// then remove from front and put to back
+			//}
+		//}
+		
 		for (int i = 0; i < studentList.size(); i++) {
 			Student a = studentList.get(i);
 			a.getStudentSchedule().addMajorCourse(data.getIntroductoryCourses(), a.getMajors());
@@ -20,23 +40,12 @@ public class Driver {
 		}
 	
 		for (int i = 0; i < studentList.size(); i++) {
-			Schedule s1 = studentList.get(i).getStudentSchedule();
+			Student s1 = studentList.get(i);
 			//s1.addCourseCredits(); this wont work until we have all add methods working as will try to access null
-			System.out.println(studentList.get(i).getFirstName() + " " + studentList.get(i).getLastName());
-			System.out.println("Major course: " + studentList.get(i).getStudentSchedule().getMajorCourse().getCourse().getCourseTitle());
-			if (studentList.get(i).getStudentSchedule().getMajorCourse().getHasLab()) {
-				System.out.println("Major course lab: " + studentList.get(i).getStudentSchedule().getMajorCourse().getCourseLab().getCourseTitle());
-			}
-			System.out.println("Elective course: " + studentList.get(i).getStudentSchedule().getElectiveCourse().getCourse().getCourseTitle());
-			if (studentList.get(i).getStudentSchedule().getElectiveCourse().getHasLab()) {
-				System.out.println("Elective course lab: " + studentList.get(i).getStudentSchedule().getElectiveCourse().getCourseLab().getCourseTitle());
-			}
-			System.out.println("RCC course: " + studentList.get(i).getStudentSchedule().getRCCCourse().getCourse().getCourseTitle());
-			if (studentList.get(i).getStudentSchedule().getRCCCourse().getHasLab()) {
-				System.out.println("RCC course lab: " + studentList.get(i).getStudentSchedule().getRCCCourse().getCourseLab().getCourseTitle());
-			}
-			System.out.println("Total Credits: " + s1.getTotalCredits());
+			System.out.println(s1.getFirstName() + " " + s1.getLastName());
+			s1.printStudentSchedule();
 			System.out.println();
+			
 		}
 		System.out.println();
 		System.out.println("Introductory Courses:");
