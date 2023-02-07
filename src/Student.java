@@ -3,6 +3,7 @@ public class Student {
 	private String rNumber;
 	private String firstName;
 	private String lastName;
+	private String language;
 	private Schedule schedule = new Schedule();
 	private String[] majors = new String[2];
 	private ArrayList<ScheduledCourse> electivePreferences = new ArrayList<ScheduledCourse>();
@@ -12,13 +13,14 @@ public class Student {
 		
 	}
 
-	public Student(String fName, String lName, String numb, String major1, String major2, ArrayList<ScheduledCourse> electivePref
-			, ArrayList<ScheduledCourse> rccPref) {
+	public Student(String fName, String lName, String numb, String major1, String major2, String lang,
+			ArrayList<ScheduledCourse> electivePref, ArrayList<ScheduledCourse> rccPref) {
 		firstName = fName;
 		lastName = lName;
 		rNumber = numb;
 		majors[0] = major1;
 		majors[1] = major2;
+		language = lang;
 		for(int i = 0; i < electivePref.size(); i++) {
 			electivePreferences.add(electivePref.get(i));
 		}
@@ -56,6 +58,10 @@ public class Student {
 		return rccPreferences;
 	}
 	
+	public String getLanguage() {
+		return language;
+	}
+	
 	public void setRNumber(String num) {
 		rNumber = num;
 	}
@@ -66,6 +72,10 @@ public class Student {
 	
 	public void setLastName(String name) {
 		lastName = name;
+	}
+	
+	public void setLanguage(String lang) {
+		language = lang;
 	}
 
 	public void printStudentSchedule() {
@@ -81,10 +91,10 @@ public class Student {
 		System.out.print(" ");
 		schedule.getRCCCourse().getTime().printTime();
 		System.out.println();
-		// add this only when adding comptency course is working
-//		schedule.getCompetencyCourse().getCourse().printCourseInfo();
-//		System.out.print(" ");
-//		schedule.getCompetencyCourse().getTime().printTime();
+		schedule.getCompetencyCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getCompetencyCourse().getTime().printTime();
+		System.out.println();
 	}
 
 }

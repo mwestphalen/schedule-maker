@@ -207,6 +207,7 @@ public class Database {
 				String lastName = values[2];
 				String firstMajor = values[3];
 				String secondMajor = values[4];
+				String lang = values[5];
 				String line2 = fileInput.nextLine();
 				String[] values2 = line2.split(", ");
 				ArrayList<ScheduledCourse> electivePref = new ArrayList<ScheduledCourse>();
@@ -227,7 +228,7 @@ public class Database {
 						rccPref.add(c);
 					}
 				}
-				studentList.add(new Student(firstName, lastName, rNumber, firstMajor, secondMajor, electivePref, rccPref));
+				studentList.add(new Student(firstName, lastName, rNumber, firstMajor, secondMajor, lang, electivePref, rccPref));
 			}
 			fileInput.close();
 		} catch (FileNotFoundException exc) {
@@ -286,5 +287,6 @@ public class Database {
 		// This should never happen there should always be a course, if this does happen make it so it prints an error message and potentially quit the method or add random course?
 		return introductoryCourses.get(1);
 	}
+	
 
 }

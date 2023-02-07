@@ -37,12 +37,14 @@ public class Driver {
 			a.getStudentSchedule().addMajorCourse(data.getIntroductoryCourses(), a.getMajors());
 			a.getStudentSchedule().addElectiveCourse(data.getElectiveCourses(), studentList.get(i).getElectivePreferences());
 			a.getStudentSchedule().addRCCCourse(data.getRCCCourses(), studentList.get(i).getRCCPref());
+			a.getStudentSchedule().addCompetencyCourse(data.getCompetencyCourse(), a.getMajors(), a.getLanguage());
 		}
 	
 		for (int i = 0; i < studentList.size(); i++) {
 			Student s1 = studentList.get(i);
-			//s1.addCourseCredits(); this wont work until we have all add methods working as will try to access null
+			s1.getStudentSchedule().addCourseCredits();
 			System.out.println(s1.getFirstName() + " " + s1.getLastName());
+			System.out.println("Total Credits: " + s1.getStudentSchedule().getTotalCredits());
 			s1.printStudentSchedule();
 			System.out.println();
 			
