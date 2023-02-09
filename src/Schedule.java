@@ -7,21 +7,17 @@ public class Schedule {
 	
 	public void addMajorCourse(ArrayList<ScheduledCourse> introCourses, String[] majors) {
 		// third iteration is for when both majors are full
+		String major = "N";
 		for (int i = 0; i < 3; i++) {
-			String major = majors[i];
+			if (i != 2) {
+				major = majors[i];
+			}
 			if (major.equals("N") || i == 2) {
 				boolean courseFound = false;
 				while (!courseFound) {
 					ScheduledCourse toAdd = getRandomCourse(introCourses);
-					if (toAdd.getCourse().checkAvailability()) {
-						if (checkConflict(toAdd)) {
-							setMajorCourse(toAdd);
-							toAdd.getCourse().addStudent();
-							if (toAdd.getHasLab()) {
-								toAdd.getCourseLab().addStudent();
-							}
-							return;
-						}
+					if (addCourse(toAdd, "M")) {
+						return;
 					}
 				}
 			} else {
@@ -29,17 +25,10 @@ public class Schedule {
 				// change this to make use of the find method
 				ScheduledCourse toAdd = introCourses.get(j);
 				if (major.equals(toAdd.getCourse().getCourseMajor())) {
-					if (toAdd.getCourse().checkAvailability()) {
-						if (checkConflict(toAdd)) {
-							setMajorCourse(toAdd);
-							toAdd.getCourse().addStudent();
-							if (toAdd.getHasLab()) {
-								toAdd.getCourseLab().addStudent();
-							}
-							return;
-							}
-						}
+					if (addCourse(toAdd, "M")) {
+						return;
 					}
+				}
 				}
 			}
 		}
@@ -50,30 +39,16 @@ public class Schedule {
 		if (!electivePref.isEmpty()) {
 			for (int i = 0; i < electivePref.size(); i++) {
 				ScheduledCourse toAdd = electivePref.get(i);
-				if (toAdd.getCourse().checkAvailability()) {
-					if (checkConflict(toAdd)) {
-						setElectiveCourse(toAdd);
-						toAdd.getCourse().addStudent();
-						if (toAdd.getHasLab()) {
-							toAdd.getCourseLab().addStudent();
-							return;
-							}
-						}
-					}
+				if (addCourse(toAdd, "E")) {
+					return;
 				}
 			}
+		}
 		boolean courseFound = false;
 		while (!courseFound) {
 			ScheduledCourse toAdd = getRandomCourse(electiveCourses);
-			if (toAdd.getCourse().checkAvailability()) {
-				if (checkConflict(toAdd)) {
-					setElectiveCourse(toAdd);
-					toAdd.getCourse().addStudent();
-					if (toAdd.getHasLab()) {
-						toAdd.getCourseLab().addStudent();
-					}
-					return;
-				}
+			if (addCourse(toAdd, "E")) {
+				return;
 			}
 		}
 		
@@ -92,21 +67,13 @@ public class Schedule {
 			}
 			for (int i = 0; i < languageCourses.size(); i++) {
 				toAdd = languageCourses.get(i);
-				if (toAdd.getCourse().checkAvailability()) {
-					if (checkConflict(toAdd)) {
-						setCompetencyCourse(toAdd);
-						toAdd.getCourse().addStudent();
-						if (toAdd.getHasLab()) {
-							toAdd.getCourseLab().addStudent();
-						}
-						return;
-					}
+				if (addCourse(toAdd, "C")) {
+					return;
 				}
 			}
 		}
 		// if student does not have a lang preference or it is full see what competency if good for
 		// first major
-		ArrayList<ScheduledCourse> compCoursesForMajor = new ArrayList<ScheduledCourse>();
 		for (int i = 0; i < 2; i++) {
 			String major = majors[i];
 			if (!major.equals("N")) {
@@ -116,15 +83,8 @@ public class Schedule {
 						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("ECMP") && !competency.equals("MCMP")) {
 							// this below should be made into its on method
-							if (toAdd.getCourse().checkAvailability()) {
-								if (checkConflict(toAdd)) {
-									setCompetencyCourse(toAdd);
-									toAdd.getCourse().addStudent();
-									if (toAdd.getHasLab()) {
-										toAdd.getCourseLab().addStudent();
-									}
-									return;
-								}
+							if (addCourse(toAdd, "C")) {
+								return;
 							}
 						}
 					}
@@ -134,15 +94,8 @@ public class Schedule {
 						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("ECMP")) {
 							// this below should be made into its on method
-							if (toAdd.getCourse().checkAvailability()) {
-								if (checkConflict(toAdd)) {
-									setCompetencyCourse(toAdd);
-									toAdd.getCourse().addStudent();
-									if (toAdd.getHasLab()) {
-										toAdd.getCourseLab().addStudent();
-									}
-									return;
-								}
+							if (addCourse(toAdd, "C")) {
+								return;
 							}
 						}
 					}
@@ -152,15 +105,8 @@ public class Schedule {
 						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("WCMP")) {
 							// this below should be made into its on method
-							if (toAdd.getCourse().checkAvailability()) {
-								if (checkConflict(toAdd)) {
-									setCompetencyCourse(toAdd);
-									toAdd.getCourse().addStudent();
-									if (toAdd.getHasLab()) {
-										toAdd.getCourseLab().addStudent();
-									}
-									return;
-								}
+							if (addCourse(toAdd, "C")) {
+								return;
 							}
 						}
 					}
@@ -170,15 +116,8 @@ public class Schedule {
 						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("ECMP") && !competency.equals("MCMP") && !competency.equals("FCMP")) {
 							// this below should be made into its on method
-							if (toAdd.getCourse().checkAvailability()) {
-								if (checkConflict(toAdd)) {
-									setCompetencyCourse(toAdd);
-									toAdd.getCourse().addStudent();
-									if (toAdd.getHasLab()) {
-										toAdd.getCourseLab().addStudent();
-									}
-									return;
-								}
+							if (addCourse(toAdd, "C")) {
+								return;
 							}
 						}
 					}
@@ -190,15 +129,8 @@ public class Schedule {
 						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("MCMP")) {
 							// this below should be made into its on method
-							if (toAdd.getCourse().checkAvailability()) {
-								if (checkConflict(toAdd)) {
-									setCompetencyCourse(toAdd);
-									toAdd.getCourse().addStudent();
-									if (toAdd.getHasLab()) {
-										toAdd.getCourseLab().addStudent();
-									}
-									return;
-								}
+							if (addCourse(toAdd, "C")) {
+								return;
 							}
 						}
 					}
@@ -217,15 +149,8 @@ public class Schedule {
 		// checks to see if student can be added to an English 140 course
 		for (int i = 0; i < english140Courses.size(); i++) {
 			toAdd = english140Courses.get(i);
-			if (toAdd.getCourse().checkAvailability()) {
-				if (checkConflict(toAdd)) {
-					setCompetencyCourse(toAdd);
-					toAdd.getCourse().addStudent();
-					if (toAdd.getHasLab()) {
-						toAdd.getCourseLab().addStudent();
-					}
-					return;
-				}
+			if (addCourse(toAdd, "C")) {
+				return;
 			}
 		}
 		
@@ -233,15 +158,8 @@ public class Schedule {
 		boolean courseFound = false;
 		while (!courseFound) {
 			toAdd = getRandomCourse(competencyCourses);
-			if (toAdd.getCourse().checkAvailability()) {
-				if (checkConflict(toAdd)) {
-					setCompetencyCourse(toAdd);
-					toAdd.getCourse().addStudent();
-					if (toAdd.getHasLab()) {
-						toAdd.getCourseLab().addStudent();
-					}
-					return;
-				}
+			if (addCourse(toAdd, "C")) {
+				return;
 			}
 		}
 	}
@@ -252,32 +170,18 @@ public class Schedule {
 		if (!rccPreferences.isEmpty()) {
 			for (int i = 0; i < rccPreferences.size(); i++) {
 				ScheduledCourse toAdd = rccPreferences.get(i);
-				if (toAdd.getCourse().checkAvailability()) {
-					if (checkConflict(toAdd)) {
-						setRCCCourse(toAdd);
-						toAdd.getCourse().addStudent();
-						if (toAdd.getHasLab()) {
-							toAdd.getCourseLab().addStudent();
-						}
-						return;
-						}
-					}
+				if (addCourse(toAdd, "R")) {
+					return;
+				}
 				}
 			}
 		// this adds a random method, if there is an empty list or none of the courses listed are available
 		boolean courseFound = false;
 		while (!courseFound) {
 			ScheduledCourse toAdd = getRandomCourse(rccCourses);
-			if (toAdd.getCourse().checkAvailability()) {
-				if (checkConflict(toAdd)) {
-					setRCCCourse(toAdd);
-					toAdd.getCourse().addStudent();
-					if (toAdd.getHasLab()) {
-						toAdd.getCourseLab().addStudent();
-					}
-					return;
-					}
-				}
+			if (addCourse(toAdd, "R")) {
+				return;
+			}
 		}
 	}
 	
@@ -336,6 +240,29 @@ public class Schedule {
 			}
 			totalCredits = totalCredits + creditsToAdd;
 		}
+	}
+	
+	public boolean addCourse(ScheduledCourse toAdd, String courseType) {
+		// M is for major, C is for competency, E is for elective, and R for RCC
+		if (toAdd.getCourse().checkAvailability()) {
+			if (checkConflict(toAdd)) {
+				if (courseType.equals("M")) {
+					setMajorCourse(toAdd);
+				} else if (courseType.equals("E")) {
+					setElectiveCourse(toAdd);
+				} else if (courseType.equals("C")) {
+					setCompetencyCourse(toAdd);
+				} else {
+					setRCCCourse(toAdd);
+				}
+				toAdd.getCourse().addStudent();
+				if (toAdd.getHasLab()) {
+					toAdd.getCourseLab().addStudent();
+				}
+				return true;
+				}
+			}
+		return false;
 	}
 
 	

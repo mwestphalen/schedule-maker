@@ -208,6 +208,7 @@ public class Database {
 				String firstMajor = values[3];
 				String secondMajor = values[4];
 				String lang = values[5];
+				String status = values[6];
 				String line2 = fileInput.nextLine();
 				String[] values2 = line2.split(", ");
 				ArrayList<ScheduledCourse> electivePref = new ArrayList<ScheduledCourse>();
@@ -228,7 +229,7 @@ public class Database {
 						rccPref.add(c);
 					}
 				}
-				studentList.add(new Student(firstName, lastName, rNumber, firstMajor, secondMajor, lang, electivePref, rccPref));
+				studentList.add(new Student(firstName, lastName, rNumber, firstMajor, secondMajor, lang, status, electivePref, rccPref));
 			}
 			fileInput.close();
 		} catch (FileNotFoundException exc) {
