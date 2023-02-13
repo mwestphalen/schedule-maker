@@ -80,7 +80,7 @@ public class Schedule {
 				if (major.equals("BUS") || major.equals("SE")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getProficiency();
+						String competency = toAdd.getCourse().getCompetency();
 						if (!competency.equals("ECMP") && !competency.equals("MCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -91,7 +91,7 @@ public class Schedule {
 				} else if (major.equals("PHI")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getProficiency();
+						String competency = toAdd.getCourse().getCompetency();
 						if (!competency.equals("ECMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -102,7 +102,7 @@ public class Schedule {
 				} else if (major.equals("ENG")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getProficiency();
+						String competency = toAdd.getCourse().getCompetency();
 						if (!competency.equals("WCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -113,7 +113,7 @@ public class Schedule {
 				} else if (major.equals("INB")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getProficiency();
+						String competency = toAdd.getCourse().getCompetency();
 						if (!competency.equals("ECMP") && !competency.equals("MCMP") && !competency.equals("FCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -126,7 +126,7 @@ public class Schedule {
 					|| major.equals("SOC")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getProficiency();
+						String competency = toAdd.getCourse().getCompetency();
 						if (!competency.equals("MCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
