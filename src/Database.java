@@ -30,9 +30,9 @@ public class Database {
 				String meetingTime = values[5];
 				String meetingDays = values[6];
 				String courseMajor = values[7];
-				String proficiency = values[8];
+				String competency = values[8];
 				Boolean hasLab = Boolean.parseBoolean(values[9]);
-				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, proficiency);
+				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
 				Time courseTime = new Time(meetingTime, meetingDays);
 				if (hasLab == true) {
 					String line2 = fileInput.nextLine();
@@ -45,8 +45,8 @@ public class Database {
 					String meetingTime2 = values2[5];
 					String meetingDays2 = values2[6];
 					String courseMajor2 = values2[7];
-					String proficiency2 = values2[8];
-					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, proficiency2);
+					String competency2 = values2[8];
+					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
 					Time courseLabTime = new Time(meetingTime2, meetingDays2);
 					electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 				} else {
@@ -75,9 +75,9 @@ public class Database {
 				String meetingTime = values[5];
 				String meetingDays = values[6];
 				String courseMajor = values[7];
-				String proficiency = values[8];
+				String competency = values[8];
 				Boolean hasLab = Boolean.parseBoolean(values[9]);
-				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, proficiency);
+				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
 				Time courseTime = new Time(meetingTime, meetingDays);
 				if (hasLab == true) {
 					String line2 = fileInput.nextLine();
@@ -90,8 +90,8 @@ public class Database {
 					String meetingTime2 = values2[5];
 					String meetingDays2 = values2[6];
 					String courseMajor2 = values2[7];
-					String proficiency2 = values2[8];
-					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, proficiency2);
+					String competency2 = values2[8];
+					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
 					Time courseLabTime = new Time(meetingTime2, meetingDays2);
 					introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 				} else {
@@ -121,9 +121,9 @@ public class Database {
 				String meetingTime = values[5];
 				String meetingDays = values[6];
 				String courseMajor = values[7];
-				String proficiency = values[8];
+				String competency = values[8];
 				Boolean hasLab = Boolean.parseBoolean(values[9]);
-				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, proficiency);
+				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
 				Time courseTime = new Time(meetingTime, meetingDays);
 				if (hasLab == true) {
 					String line2 = fileInput.nextLine();
@@ -136,8 +136,8 @@ public class Database {
 					String meetingTime2 = values2[5];
 					String meetingDays2 = values2[6];
 					String courseMajor2 = values2[7];
-					String proficiency2 = values2[8];
-					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, proficiency2);
+					String competency2 = values2[8];
+					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
 					Time courseLabTime = new Time(meetingTime2, meetingDays2);
 					competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 				} else {
@@ -166,9 +166,9 @@ public class Database {
 				String meetingTime = values[5];
 				String meetingDays = values[6];
 				String courseMajor = values[7];
-				String proficiency = values[8];
+				String competency = values[8];
 				Boolean hasLab = Boolean.parseBoolean(values[9]);
-				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, proficiency);
+				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
 				Time courseTime = new Time(meetingTime, meetingDays);
 				if (hasLab == true) {
 					String line2 = fileInput.nextLine();
@@ -181,8 +181,8 @@ public class Database {
 					String meetingTime2 = values2[5];
 					String meetingDays2 = values2[6];
 					String courseMajor2 = values2[7];
-					String proficiency2 = values2[8];
-					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, proficiency2);
+					String competency2 = values2[8];
+					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
 					Time courseLabTime = new Time(meetingTime2, meetingDays2);
 					rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 				} else {
@@ -214,7 +214,7 @@ public class Database {
 				ArrayList<ScheduledCourse> electivePref = new ArrayList<ScheduledCourse>();
 				for(int i = 0; i < 7; i++) {
 					if (!values2[i].equals("N")) {
-						// tests to see if they have an elective preference or not, if not don't add like if they have 3 preferences instead of 7
+						// tests to see if they have an elective preference or not, if not don't add... like if they have 3 preferences instead of 8
 						ScheduledCourse c = findElectiveCourse(values2[i]);
 						electivePref.add(c);
 					}
@@ -223,7 +223,7 @@ public class Database {
 				String line3 = fileInput.nextLine();
 				String[] values3 = line3.split(", ");
 				ArrayList<ScheduledCourse> rccPref = new ArrayList<ScheduledCourse>();
-				for(int i = 0; i < 7; i++) {
+				for(int i = 0; i < 8; i++) {
 					if (!values3[i].equals("N")) {
 						ScheduledCourse c = findRCCCourse(values3[i]);
 						rccPref.add(c);
