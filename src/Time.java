@@ -48,5 +48,9 @@ public class Time {
 	public char getAmOrPm() {
 		return amOrPm;
 	}
+	
+	public void printTime() {
+		System.out.print(startTime + "-" + endTime + "-" + amOrPm + " " + meetingDays);
+	}
 
 }

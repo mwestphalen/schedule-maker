@@ -3,6 +3,8 @@ public class Student {
 	private String rNumber;
 	private String firstName;
 	private String lastName;
+	private String language;
+	private String status;
 	private Schedule schedule = new Schedule();
 	private String[] majors = new String[2];
 	private ArrayList<ScheduledCourse> electivePreferences = new ArrayList<ScheduledCourse>();
@@ -12,13 +14,14 @@ public class Student {
 		
 	}
 
-	public Student(String numb, String fName, String lName, String major1, String major2, ArrayList<ScheduledCourse> electivePref
-			, ArrayList<ScheduledCourse> rccPref) {
-		rNumber = numb;
+	public Student(String fName, String lName, String numb, String major1, String major2, String lang,
+			String stat, ArrayList<ScheduledCourse> electivePref, ArrayList<ScheduledCourse> rccPref) {
 		firstName = fName;
 		lastName = lName;
 		majors[0] = major1;
 		majors[1] = major2;
+		language = lang;
+		status = stat;
 		for(int i = 0; i < electivePref.size(); i++) {
 			electivePreferences.add(electivePref.get(i));
 		}
@@ -43,6 +46,9 @@ public class Student {
 		return lastName;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
 	
 	public String[] getMajors() {
 		return majors;
@@ -56,6 +62,10 @@ public class Student {
 		return rccPreferences;
 	}
 	
+	public String getLanguage() {
+		return language;
+	}
+	
 	public void setRNumber(String num) {
 		rNumber = num;
 	}
@@ -67,12 +77,36 @@ public class Student {
 	public void setLastName(String name) {
 		lastName = name;
 	}
+	
+	public void setLanguage(String lang) {
+		language = lang;
+	}
+	
+	public void setStatus(String stat) {
+		status = stat;
+	}
 
 	public void printStudentSchedule() {
-		System.out.println(schedule.getMajorCourse());
-		System.out.println(schedule.getCompetencyCourse());
-		System.out.println(schedule.getRCCCourse());
-		System.out.println(schedule.getElectiveCourse());
+		System.out.println("Major: ");
+		schedule.getMajorCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getMajorCourse().getTime().printTime();
+		System.out.println();
+		System.out.println("Elective: ");
+		schedule.getElectiveCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getElectiveCourse().getTime().printTime();
+		System.out.println();
+		System.out.println("RCC: ");
+		schedule.getRCCCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getRCCCourse().getTime().printTime();
+		System.out.println();
+		System.out.println("Competency: ");
+		schedule.getCompetencyCourse().getCourse().printCourseInfo();
+		System.out.print(" ");
+		schedule.getCompetencyCourse().getTime().printTime();
+		System.out.println();
 	}
 
 }
