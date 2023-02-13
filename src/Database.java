@@ -15,51 +15,6 @@ public class Database {
 		 // Maybe make calls to all of the generate functions?
 	}
 	
-	public void generateElectiveCourses() {
-		try {
-			File fileObj = new File("electives.txt");
-			Scanner fileInput = new Scanner(fileObj);
-			while (fileInput.hasNextLine()) {
-				String line = fileInput.nextLine();
-				String[] values = line.split(", ");
-				int courseCapacity = Integer.parseInt(values[0]);
-				int CRN = Integer.parseInt(values[1]);
-				String course = values[2];
-				String courseTitle = values[3];
-				int credits = Integer.parseInt(values[4]);
-				String meetingTime = values[5];
-				String meetingDays = values[6];
-				String courseMajor = values[7];
-				String competency = values[8];
-				Boolean hasLab = Boolean.parseBoolean(values[9]);
-				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
-				Time courseTime = new Time(meetingTime, meetingDays);
-				if (hasLab == true) {
-					String line2 = fileInput.nextLine();
-					String[] values2 = line2.split(", ");
-					int courseCapacity2 = Integer.parseInt(values2[0]);
-					int CRN2 = Integer.parseInt(values2[1]);
-					String course2 = values2[2];
-					String courseTitle2 = values2[3];
-					int credits2 = Integer.parseInt(values2[4]);
-					String meetingTime2 = values2[5];
-					String meetingDays2 = values2[6];
-					String courseMajor2 = values2[7];
-					String competency2 = values2[8];
-					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
-					Time courseLabTime = new Time(meetingTime2, meetingDays2);
-					electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
-				} else {
-					electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime));
-				}
-			}
-			fileInput.close();
-		} catch (FileNotFoundException exc) {
-			System.out.println("An error occurred.");
-			exc.printStackTrace();
-		}
-	}
-	
 	public void generateIntroductoryCourses() {
 		try {
 			File fileObj = new File("courses.txt");
@@ -105,6 +60,95 @@ public class Database {
 		}
 	}
 	
+	public void generateElectiveCourses() {
+		try {
+			File fileObj = new File("electives.txt");
+			Scanner fileInput = new Scanner(fileObj);
+			while (fileInput.hasNextLine()) {
+				String line = fileInput.nextLine();
+				String[] values = line.split(", ");
+				int courseCapacity = Integer.parseInt(values[0]);
+				int CRN = Integer.parseInt(values[1]);
+				String course = values[2];
+				String courseTitle = values[3];
+				int credits = Integer.parseInt(values[4]);
+				String meetingTime = values[5];
+				String meetingDays = values[6];
+				String courseMajor = values[7];
+				String competency = values[8];
+				Boolean hasLab = Boolean.parseBoolean(values[9]);
+				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
+				Time courseTime = new Time(meetingTime, meetingDays);
+				if (hasLab == true) {
+					String line2 = fileInput.nextLine();
+					String[] values2 = line2.split(", ");
+					int courseCapacity2 = Integer.parseInt(values2[0]);
+					int CRN2 = Integer.parseInt(values2[1]);
+					String course2 = values2[2];
+					String courseTitle2 = values2[3];
+					int credits2 = Integer.parseInt(values2[4]);
+					String meetingTime2 = values2[5];
+					String meetingDays2 = values2[6];
+					String courseMajor2 = values2[7];
+					String competency2 = values2[8];
+					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
+					Time courseLabTime = new Time(meetingTime2, meetingDays2);
+					electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
+				} else {
+					electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime));
+				}
+			}
+			fileInput.close();
+		} catch (FileNotFoundException exc) {
+			System.out.println("An error occurred.");
+			exc.printStackTrace();
+		}
+	}
+
+	public void generateRCCCourses() {
+		try {
+			File fileObj = new File("rccCourses.txt");
+			Scanner fileInput = new Scanner(fileObj);
+			while (fileInput.hasNextLine()) {
+				String line = fileInput.nextLine();
+				String[] values = line.split(", ");
+				int courseCapacity = Integer.parseInt(values[0]);
+				int CRN = Integer.parseInt(values[1]);
+				String course = values[2];
+				String courseTitle = values[3];
+				int credits = Integer.parseInt(values[4]);
+				String meetingTime = values[5];
+				String meetingDays = values[6];
+				String courseMajor = values[7];
+				String competency = values[8];
+				Boolean hasLab = Boolean.parseBoolean(values[9]);
+				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
+				Time courseTime = new Time(meetingTime, meetingDays);
+				if (hasLab == true) {
+					String line2 = fileInput.nextLine();
+					String[] values2 = line2.split(", ");
+					int courseCapacity2 = Integer.parseInt(values2[0]);
+					int CRN2 = Integer.parseInt(values2[1]);
+					String course2 = values2[2];
+					String courseTitle2 = values2[3];
+					int credits2 = Integer.parseInt(values2[4]);
+					String meetingTime2 = values2[5];
+					String meetingDays2 = values2[6];
+					String courseMajor2 = values2[7];
+					String competency2 = values2[8];
+					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
+					Time courseLabTime = new Time(meetingTime2, meetingDays2);
+					rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
+				} else {
+					rccCourses.add(new ScheduledCourse(courseToAdd, courseTime));
+				}
+			}
+			fileInput.close();
+		} catch (FileNotFoundException exc) {
+			System.out.println("An error occurred.");
+			exc.printStackTrace();
+		}
+	}
 	
 	public void generateCompetencyCourses() {
 		try {
@@ -145,50 +189,6 @@ public class Database {
 				}
 			}
 			fileInput.close();
-		} catch (FileNotFoundException exc) {
-			System.out.println("An error occurred.");
-			exc.printStackTrace();
-		}
-	}
-	
-	public void generateRCCCourses() {
-		try {
-			File fileObj = new File("rccCourses.txt");
-			Scanner fileInput = new Scanner(fileObj);
-			while (fileInput.hasNextLine()) {
-				String line = fileInput.nextLine();
-				String[] values = line.split(", ");
-				int courseCapacity = Integer.parseInt(values[0]);
-				int CRN = Integer.parseInt(values[1]);
-				String course = values[2];
-				String courseTitle = values[3];
-				int credits = Integer.parseInt(values[4]);
-				String meetingTime = values[5];
-				String meetingDays = values[6];
-				String courseMajor = values[7];
-				String competency = values[8];
-				Boolean hasLab = Boolean.parseBoolean(values[9]);
-				Course courseToAdd = new Course(courseCapacity, CRN, course, courseTitle, credits, courseMajor, competency);
-				Time courseTime = new Time(meetingTime, meetingDays);
-				if (hasLab == true) {
-					String line2 = fileInput.nextLine();
-					String[] values2 = line2.split(", ");
-					int courseCapacity2 = Integer.parseInt(values2[0]);
-					int CRN2 = Integer.parseInt(values2[1]);
-					String course2 = values2[2];
-					String courseTitle2 = values2[3];
-					int credits2 = Integer.parseInt(values2[4]);
-					String meetingTime2 = values2[5];
-					String meetingDays2 = values2[6];
-					String courseMajor2 = values2[7];
-					String competency2 = values2[8];
-					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, competency2);
-					Time courseLabTime = new Time(meetingTime2, meetingDays2);
-					rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
-				} else {
-					rccCourses.add(new ScheduledCourse(courseToAdd, courseTime));
-				}
-			}
 		} catch (FileNotFoundException exc) {
 			System.out.println("An error occurred.");
 			exc.printStackTrace();

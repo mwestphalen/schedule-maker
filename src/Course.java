@@ -17,6 +17,7 @@ public class Course {
 		credits = credits1;
 		courseMajor = courseMajor1;
 		competency = competency1;
+		numbStudents = 0;
 	}
 	
 	public int getCRN() {

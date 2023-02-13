@@ -137,6 +137,9 @@ public class Driver {
 			System.out.println();
 		}
 		
+		/*
+		 * Printing All Classes (Available Seats/Capacity)
+		 */
 		System.out.println();
 		System.out.println("Introductory Courses:");
 		for (int i = 0; i < data.getIntroductoryCourses().size(); i++) {
