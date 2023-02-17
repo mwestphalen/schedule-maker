@@ -18,6 +18,7 @@ public class Student {
 			String stat, ArrayList<ScheduledCourse> electivePref, ArrayList<ScheduledCourse> rccPref) {
 		firstName = fName;
 		lastName = lName;
+		rNumber = numb;
 		majors[0] = major1;
 		majors[1] = major2;
 		language = lang;
@@ -87,7 +88,7 @@ public class Student {
 	}
 
 	public void printStudentSchedule() {
-		System.out.println("Major: ");
+		System.out.println("Intro: ");
 		schedule.getMajorCourse().getCourse().printCourseInfo();
 		System.out.print(" ");
 		schedule.getMajorCourse().getTime().printTime();

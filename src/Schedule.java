@@ -5,7 +5,7 @@ public class Schedule {
 	private ScheduledCourse[] scheduleList = new ScheduledCourse[4];
 	private int totalCredits = 0;
 	
-	public void addMajorCourse(ArrayList<ScheduledCourse> introCourses, String[] majors) {
+	public void addIntroCourse(ArrayList<ScheduledCourse> introCourses, String[] majors) {
 		// third iteration is for when both majors are full
 		String major = "N";
 		for (int i = 0; i < 3; i++) {
@@ -51,7 +51,6 @@ public class Schedule {
 				return;
 			}
 		}
-		
 	}
 	
 	public void addCompetencyCourse(ArrayList<ScheduledCourse> competencyCourses, String[] majors, String lang) {
@@ -80,7 +79,7 @@ public class Schedule {
 				if (major.equals("BUS") || major.equals("SE")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getCompetency();
+						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("ECMP") && !competency.equals("MCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -91,7 +90,7 @@ public class Schedule {
 				} else if (major.equals("PHI")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getCompetency();
+						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("ECMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -102,7 +101,7 @@ public class Schedule {
 				} else if (major.equals("ENG")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getCompetency();
+						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("WCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -113,7 +112,7 @@ public class Schedule {
 				} else if (major.equals("INB")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getCompetency();
+						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("ECMP") && !competency.equals("MCMP") && !competency.equals("FCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -126,7 +125,7 @@ public class Schedule {
 					|| major.equals("SOC")) {
 					for (int j = 0; j < competencyCourses.size(); j++) {
 						toAdd = competencyCourses.get(i);
-						String competency = toAdd.getCourse().getCompetency();
+						String competency = toAdd.getCourse().getProficiency();
 						if (!competency.equals("MCMP")) {
 							// this below should be made into its on method
 							if (addCourse(toAdd, "C")) {
@@ -194,8 +193,8 @@ public class Schedule {
 		return scheduleList[0];
 	}
 
-	public void setMajorCourse(ScheduledCourse majorCourse) {
-		scheduleList[0] = majorCourse;
+	public void setIntroCourse(ScheduledCourse introCourse) {
+		scheduleList[0] = introCourse;
 	}
 	
 	public ScheduledCourse getCompetencyCourse() {
@@ -247,7 +246,7 @@ public class Schedule {
 		if (toAdd.getCourse().checkAvailability()) {
 			if (checkConflict(toAdd)) {
 				if (courseType.equals("M")) {
-					setMajorCourse(toAdd);
+					setIntroCourse(toAdd);
 				} else if (courseType.equals("E")) {
 					setElectiveCourse(toAdd);
 				} else if (courseType.equals("C")) {

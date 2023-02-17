@@ -5,19 +5,18 @@ public class Course {
 	private final String courseTitle;
 	private final int credits;
 	private final String courseMajor;
-	private final String competency;
+	private final String proficiency;
 	private int numbStudents;
 	
 	public Course(int capacity1, int crn1, String course1, String courseTitle1, int credits1, 
-			String courseMajor1, String competency1) {
+			String courseMajor1, String proficiency1) {
 		capacity = capacity1;
 		CRN = crn1;
 		course = course1;
 		courseTitle = courseTitle1;
 		credits = credits1;
 		courseMajor = courseMajor1;
-		competency = competency1;
-		numbStudents = 0;
+		proficiency = proficiency1;
 	}
 	
 	public int getCRN() {
@@ -32,8 +31,8 @@ public class Course {
 		return courseMajor;
 	}
 	
-	public String getCompetency() {
-		return competency;
+	public String getProficiency() {
+		return proficiency;
 	}
 	
 	public String getCourseName() {

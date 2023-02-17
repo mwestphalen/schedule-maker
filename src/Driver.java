@@ -1,124 +1,145 @@
+
 import java.util.*;
+
+
 public class Driver {
 	
+	public static void createDeque(ArrayList<Student> studentList, Deque<Student> courseDeque) {
+		Student currentStudent;
+		for (int i = 0; i < studentList.size(); i++) {
+			currentStudent = studentList.get(i);
+			if (currentStudent.getStatus().equals("H") || currentStudent.getStatus().equals("E")) {
+				courseDeque.addFirst(currentStudent);
+			} else {
+				courseDeque.add(currentStudent);
+			}
+		}
+		return;
+	}
 	
+	public static void addStudentsToIntroCourses(Deque<Student> courseDeque,  ArrayList<ScheduledCourse> courses) {
+		Student currentStudent;
+		int studentsNoPref = 0;
+		while (!courseDeque.isEmpty()) {
+			currentStudent = courseDeque.element();
+			String[] majors = currentStudent.getMajors();
+			if (majors[0].equals("N") && majors[1].equals("N")) {
+				// this is used to put those without a preference for major at the end
+				if (studentsNoPref >= courseDeque.size()) {
+					currentStudent.getStudentSchedule().addIntroCourse(courses, currentStudent.getMajors());
+					courseDeque.remove();
+				} else {
+					courseDeque.addLast(currentStudent);
+					courseDeque.remove();
+					studentsNoPref++;
+				}
+			} else {
+				currentStudent.getStudentSchedule().addIntroCourse(courses, currentStudent.getMajors());
+				courseDeque.remove();
+			}	
+		}
+	}
+	
+	public static void addStudentsToCompetencyCourses(Deque<Student> courseDeque, ArrayList<ScheduledCourse> courses) {
+		Student currentStudent;
+		int studentsNoPref = 0;
+		while (!courseDeque.isEmpty()) {
+			currentStudent = courseDeque.element();
+			String[] majors = currentStudent.getMajors();
+			String lang = currentStudent.getLanguage();
+			if (majors[0].equals("N") && majors[1].equals("N")) {
+				// this is used to put those without a preference for major at the end
+				if (studentsNoPref >= courseDeque.size()) {
+					currentStudent.getStudentSchedule().addCompetencyCourse(courses, majors, lang);
+					courseDeque.remove();
+				} else {
+					courseDeque.addLast(currentStudent);
+					courseDeque.remove();
+					studentsNoPref++;
+				}
+			} else {
+				currentStudent.getStudentSchedule().addCompetencyCourse(courses, majors, lang);
+				courseDeque.remove();
+			}
+		}
+	}
+	
+	public static void addStudentsToElectiveCourses(Deque<Student> courseDeque, ArrayList<ScheduledCourse> courses) {
+		Student currentStudent;
+		int studentsNoPref = 0;
+		while (!courseDeque.isEmpty()) {
+			currentStudent = courseDeque.element();
+			ArrayList<ScheduledCourse> electivePref = currentStudent.getElectivePreferences();
+			if (electivePref.isEmpty()) {
+				if (studentsNoPref >= courseDeque.size()) {
+					currentStudent.getStudentSchedule().addElectiveCourse(courses, electivePref);
+					courseDeque.remove();
+				} else {
+					courseDeque.addLast(currentStudent);
+					courseDeque.remove();
+					studentsNoPref++;
+				}
+			} else {
+				currentStudent.getStudentSchedule().addElectiveCourse(courses, electivePref);
+				courseDeque.remove();
+			}
+		}
+	}
+	
+	public static void addStudentsToRCCCourses(Deque<Student> courseDeque, ArrayList<ScheduledCourse> courses) {
+		Student currentStudent;
+		int studentsNoPref = 0;
+		while(!courseDeque.isEmpty()) {
+			currentStudent = courseDeque.element();
+			ArrayList<ScheduledCourse> rccPref = currentStudent.getRCCPref();
+			if (rccPref.isEmpty()) {
+				if (studentsNoPref >= courseDeque.size()) {
+					currentStudent.getStudentSchedule().addRCCCourse(courses, rccPref);
+					courseDeque.remove();
+				} else {
+					courseDeque.addLast(currentStudent);
+					courseDeque.remove();
+					studentsNoPref++;
+				}
+			} else {
+				currentStudent.getStudentSchedule().addRCCCourse(courses, rccPref);
+				courseDeque.remove();
+			}
+		}
+	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Database data = new Database();
-		data.generateIntroductoryCourses();
-		data.generateElectiveCourses();
-		data.generateRCCCourses();
-		data.generateCompetencyCourses();
+		// could use strings instead of letters to make it more clear
+		data.generateCourses('i');
+		data.generateCourses('c');
+		data.generateCourses('e');
+		data.generateCourses('r');
 		
 		data.generateStudentList();
 		ArrayList<Student> studentList = data.getStudentList();
 		
-		Deque<Student> majorDeque = new LinkedList<>();
+		Deque<Student> introDeque = new LinkedList<>();
 		Deque<Student> compDeque = new LinkedList<>();
 		Deque<Student> eleDeque = new LinkedList<>();
 		Deque<Student> rccDeque = new LinkedList<>();
-		Student currentStudent;
 		
-		for (int i = 0; i < studentList.size(); i++) {
-			currentStudent = studentList.get(i);
-			if (currentStudent.getStatus().equals("H") || currentStudent.getStatus().equals("E")) {
-				majorDeque.addFirst(studentList.get(i));
-				compDeque.addFirst(studentList.get(i));
-				eleDeque.addFirst(studentList.get(i));
-				rccDeque.addFirst(studentList.get(i));
-			} else {
-				majorDeque.add(studentList.get(i));
-				compDeque.add(studentList.get(i));
-				eleDeque.add(studentList.get(i));
-				rccDeque.add(studentList.get(i));
-			}
-		}
+		createDeque(studentList, introDeque);
+		createDeque(studentList, compDeque);
+		createDeque(studentList, eleDeque);
+		createDeque(studentList, rccDeque);
 		
-		int studentsNoPref = 0;
+		addStudentsToIntroCourses(introDeque, data.getIntroductoryCourses());
+		addStudentsToCompetencyCourses(compDeque, data.getCompetencyCourse());
+		addStudentsToElectiveCourses(eleDeque, data.getElectiveCourses());
+		addStudentsToRCCCourses(rccDeque, data.getRCCCourses());
 		
-		while (!majorDeque.isEmpty()) {
-			currentStudent = majorDeque.element();
-			String[] majors = currentStudent.getMajors();
-			if (majors[0].equals("N") && majors[1].equals("N")) {
-				// this is used to put those without a preference for major at the end
-				if (studentsNoPref >= majorDeque.size()) {
-					currentStudent.getStudentSchedule().addMajorCourse(data.getIntroductoryCourses(), currentStudent.getMajors());
-					majorDeque.remove();
-				} else {
-					majorDeque.addLast(currentStudent);
-					majorDeque.remove();
-					studentsNoPref++;
-				}
-			} else {
-				currentStudent.getStudentSchedule().addMajorCourse(data.getIntroductoryCourses(), currentStudent.getMajors());
-				majorDeque.remove();
-			}
-			
-		}
-		
-		studentsNoPref = 0;
-		while (!compDeque.isEmpty()) {
-			currentStudent = compDeque.element();
-			String[] majors = currentStudent.getMajors();
-			String lang = currentStudent.getLanguage();
-			if (majors[0].equals("N") && majors[1].equals("N")) {
-				// this is used to put those without a preference for major at the end, ask
-				// if what she thinks about language are they higher priority to place as in the
-				// students who want to take it
-				if (studentsNoPref >= compDeque.size()) {
-					currentStudent.getStudentSchedule().addCompetencyCourse(data.getCompetencyCourse(), majors, lang);
-					compDeque.remove();
-				} else {
-					compDeque.addLast(currentStudent);
-					compDeque.remove();
-					studentsNoPref++;
-				}
-			} else {
-				currentStudent.getStudentSchedule().addCompetencyCourse(data.getCompetencyCourse(), majors, lang);
-				compDeque.remove();
-			}
-			
-		}
-		
-		studentsNoPref = 0;
-		while (!eleDeque.isEmpty()) {
-			currentStudent = eleDeque.element();
-			ArrayList<ScheduledCourse> electivePref = currentStudent.getElectivePreferences();
-			if (electivePref.isEmpty()) {
-				if (studentsNoPref >= eleDeque.size()) {
-					currentStudent.getStudentSchedule().addElectiveCourse(data.getElectiveCourses(), electivePref);
-					eleDeque.remove();
-				} else {
-					eleDeque.addLast(currentStudent);
-					eleDeque.remove();
-					studentsNoPref++;
-				}
-			} else {
-				currentStudent.getStudentSchedule().addElectiveCourse(data.getElectiveCourses(), electivePref);
-				eleDeque.remove();
-			}
-		}
-		
-		studentsNoPref = 0;
-		while(!rccDeque.isEmpty()) {
-			currentStudent = rccDeque.element();
-			ArrayList<ScheduledCourse> rccPref = currentStudent.getRCCPref();
-			if (rccPref.isEmpty()) {
-				if (studentsNoPref >= rccDeque.size()) {
-					currentStudent.getStudentSchedule().addRCCCourse(data.getRCCCourses(), rccPref);
-					rccDeque.remove();
-				} else {
-					rccDeque.addLast(currentStudent);
-					rccDeque.remove();
-					studentsNoPref++;
-				}
-			} else {
-				currentStudent.getStudentSchedule().addRCCCourse(data.getRCCCourses(), rccPref);
-				rccDeque.remove();
-			}
-		}
-		
+		// here to make sure that the deque is in order and working
+//		Iterator<Student> it = majorDeque.iterator();
+//		 while (it.hasNext()) {
+//			 System.out.println(it.next().getFirstName());
+//		 }
 		
 //		for (int i = 0; i < studentList.size(); i++) {
 //			Student a = studentList.get(i);
@@ -137,9 +158,6 @@ public class Driver {
 			System.out.println();
 		}
 		
-		/*
-		 * Printing All Classes (Available Seats/Capacity)
-		 */
 		System.out.println();
 		System.out.println("Introductory Courses:");
 		for (int i = 0; i < data.getIntroductoryCourses().size(); i++) {
