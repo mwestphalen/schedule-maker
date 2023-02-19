@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import com.groupdocs.conversion.*;
-
 
 import java.util.ArrayList;
 
@@ -222,9 +220,5 @@ public class Student {
 			e.printStackTrace();
 		}  
 	}
-	
-	public void convertExcelToPDF(int sheetNum) {
-		Converter converter = new Converter("StudentSchedules.xlsx");
-		
-	}
+
 }
