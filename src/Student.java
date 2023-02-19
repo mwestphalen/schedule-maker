@@ -1,11 +1,12 @@
 // For EXCEL output
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.groupdocs.conversion.*;
+
 
 import java.util.ArrayList;
 
@@ -211,55 +212,19 @@ public class Student {
 			}
 		}
 		
+		// Deleting template sheet
+		workbook.removeSheetAt(0);
+		
 		// Writing to excel file
 		try (FileOutputStream outputStream = new FileOutputStream("StudentSchedules.xlsx")) {
 			workbook.write(outputStream);
 		} catch (IOException e) { 
 			e.printStackTrace();
-		} 
-	  
+		}  
 	}
 	
-	 // Not used at all
-	public void printStudentSchedule_CSV(String fileNum) {
-		try {
-			FileWriter fw = new FileWriter("studentSchedule_ " + fileNum + ".csv");
-			
-			// Print student info
-			fw.write("Name," + firstName + " " + lastName);
-			fw.write("\n");
-			fw.write("R-Number," + rNumber);
-			fw.write("\n");
-			fw.write("Major," + majors[0] + "/" + majors[1]);
-			fw.write("\n\n");
-			
-			// Print schedule info
-			// Create data structure to hold data labels String[] studentLabels = new
-			String[] scheduleLabels = new String[] {"CRN", "Course #", "Course Title", "Credits", "Days", "Time"};
-			for (int i = 0; i < scheduleLabels.length; i++) {
-				fw.write(scheduleLabels[i] + ",");
-			}
-			fw.write("\n");
-			
-			// Write 4 suggested courses (major, elective, rcc, competency)
-			fw.write(schedule.getMajorCourse().getCourse().getCourseInfo_CSV());
-			fw.write(schedule.getMajorCourse().getTime().getTimeInfo_CSV());
-			fw.write("\n");
-			fw.write(schedule.getElectiveCourse().getCourse().getCourseInfo_CSV());
-			fw.write(schedule.getElectiveCourse().getTime().getTimeInfo_CSV());
-			fw.write("\n");
-			fw.write(schedule.getRCCCourse().getCourse().getCourseInfo_CSV());
-			fw.write(schedule.getRCCCourse().getTime().getTimeInfo_CSV());
-			fw.write("\n");
-			fw.write(schedule.getCompetencyCourse().getCourse().getCourseInfo_CSV());
-			fw.write(schedule.getCompetencyCourse().getTime().getTimeInfo_CSV());
-			fw.write("\n");
-			fw.close();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void convertExcelToPDF(int sheetNum) {
+		Converter converter = new Converter("StudentSchedules.xlsx");
 		
 	}
 }

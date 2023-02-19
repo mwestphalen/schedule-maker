@@ -162,7 +162,7 @@ public class Driver {
 		
 		// Print to XLSX File (one workbook w/ worksheets for each student... good)
 		for (int i = 0; i < studentList.size(); i++) {
-			studentList.get(i).printStudentSchedule_Excel(i);
+			studentList.get(i).printStudentSchedule_Excel(i + 1);
 		}
 		
 		System.out.println();
