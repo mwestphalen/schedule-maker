@@ -4,3 +4,7 @@
 .project
 .classpath
 README.md
+*.csv
+*.xlsx
+/target/
+schedule_template.xltx

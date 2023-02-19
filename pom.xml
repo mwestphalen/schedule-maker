@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ScheduleMaker</groupId>
+  <artifactId>ScheduleMaker</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Rollins Schedule Automation</name>
+  <description>This software automates schedule creation for Rollins' incoming freshmen.</description>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>17</release>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+  	<!-- Needed to write data to Excel Template -->
+	<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+  	<dependency>
+  		<groupId>org.apache.poi</groupId>
+  		<artifactId>poi-ooxml</artifactId>
+  		<version>5.2.3</version>
+  	</dependency>
+  	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+	<dependency>
+    	<groupId>org.apache.logging.log4j</groupId>
+    	<artifactId>log4j-core</artifactId>
+    	<version>2.19.0</version>
+    	
+    <!-- Needed to convert .xlsx to .pdf -->
+	</dependency>
+	  	<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+	<dependency>
+    	<groupId>com.itextpdf</groupId>
+    	<artifactId>itextpdf</artifactId>
+    	<version>5.5.13.3</version>
+	</dependency>
+  </dependencies>
+</project>

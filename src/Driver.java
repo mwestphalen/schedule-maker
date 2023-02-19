@@ -149,19 +149,26 @@ public class Driver {
 //			a.getStudentSchedule().addCompetencyCourse(data.getCompetencyCourse(), a.getMajors(), a.getLanguage());
 //		}
 	
-		for (int i = 0; i < studentList.size(); i++) {
+		
+		// Print to TERMINAL
+		for (int i = 0; i < studentList.size(); i++) { 
 			Student s1 = studentList.get(i);
 			s1.getStudentSchedule().addCourseCredits();
 			System.out.println(s1.getFirstName() + " " + s1.getLastName());
 			System.out.println("Total Credits: " + s1.getStudentSchedule().getTotalCredits());
-			s1.printStudentSchedule();
+			s1.printStudentSchedule_Terminal();
 			System.out.println();
+		}	
+		
+		// Print to XLSX File (one workbook w/ worksheets for each student... good)
+		for (int i = 0; i < studentList.size(); i++) {
+			studentList.get(i).printStudentSchedule_Excel(i);
 		}
 		
 		System.out.println();
 		System.out.println("Introductory Courses:");
 		for (int i = 0; i < data.getIntroductoryCourses().size(); i++) {
-			System.out.print(data.getIntroductoryCourses().get(i).getCourse().getCourseName());
+			System.out.print(data.getIntroductoryCourses().get(i).getCourse().getCourseCode());
 			System.out.print(" " + data.getIntroductoryCourses().get(i).getCourse().getNumbStudents());
 			System.out.print(" / " + data.getIntroductoryCourses().get(i).getCourse().getCapacity());
 			System.out.println();
@@ -169,7 +176,7 @@ public class Driver {
 		System.out.println();
 		System.out.println("Elective Courses:");
 		for (int i = 0; i < data.getElectiveCourses().size(); i++) {
-			System.out.print(data.getElectiveCourses().get(i).getCourse().getCourseName());
+			System.out.print(data.getElectiveCourses().get(i).getCourse().getCourseCode());
 			System.out.print(" " + data.getElectiveCourses().get(i).getCourse().getNumbStudents());
 			System.out.print(" / " + data.getElectiveCourses().get(i).getCourse().getCapacity());
 			System.out.println();
@@ -177,7 +184,7 @@ public class Driver {
 		System.out.println();
 		System.out.println("RCC Courses:");
 		for(int i = 0; i < data.getRCCCourses().size(); i++) {
-			System.out.print(data.getRCCCourses().get(i).getCourse().getCourseName());
+			System.out.print(data.getRCCCourses().get(i).getCourse().getCourseCode());
 			System.out.print(" " + data.getRCCCourses().get(i).getCourse().getNumbStudents());
 			System.out.print(" / " + data.getRCCCourses().get(i).getCourse().getCapacity());
 			System.out.println();

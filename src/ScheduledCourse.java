@@ -56,8 +56,5 @@ public class ScheduledCourse {
 	
 	public boolean getHasLab() {
 		return hasLab;
-	}
-	
-	
-	
+	}	
 }

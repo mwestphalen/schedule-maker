@@ -1,7 +1,9 @@
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
+
+
 public class Database {
 	// Make the database a singleton
 	private static ArrayList<ScheduledCourse> electiveCourses = new ArrayList<ScheduledCourse>();
@@ -151,7 +153,7 @@ public class Database {
 	
 	public ScheduledCourse findElectiveCourse(String name) {
 		for(int i = 0; i < electiveCourses.size(); i++) {
-			if (name.equals(electiveCourses.get(i).getCourse().getCourseName())) {
+			if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
 				return electiveCourses.get(i);
 			}
 		}
@@ -162,7 +164,7 @@ public class Database {
 	public ScheduledCourse findRCCCourse(String name) {
 		// used to find the course in the student's course preferences for rcc.
 		for(int i = 0; i < rccCourses.size(); i++) {
-			if (name.equals(rccCourses.get(i).getCourse().getCourseName())) {
+			if (name.equals(rccCourses.get(i).getCourse().getCourseCode())) {
 				return rccCourses.get(i);
 			}
 		}
@@ -172,7 +174,7 @@ public class Database {
 	
 	public ScheduledCourse findIntroductoryCourse(String name) {
 		for(int i = 0; i < introductoryCourses.size(); i++) {
-			if (name.equals(introductoryCourses.get(i).getCourse().getCourseName())) {
+			if (name.equals(introductoryCourses.get(i).getCourse().getCourseCode())) {
 				return introductoryCourses.get(i);
 			}
 		}

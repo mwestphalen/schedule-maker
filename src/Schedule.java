@@ -140,7 +140,7 @@ public class Schedule {
 		// makes list of all English 140 courses
 		ArrayList<ScheduledCourse> english140Courses = new ArrayList<ScheduledCourse>();
 		for (int i = 0; i < competencyCourses.size(); i++) {
-			if(competencyCourses.get(i).getCourse().getCourseName().contains("ENGW 140")) {
+			if(competencyCourses.get(i).getCourse().getCourseCode().contains("ENGW 140")) {
 				english140Courses.add(competencyCourses.get(i));
 			}
 		}
