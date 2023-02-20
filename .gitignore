@@ -4,6 +4,5 @@
 .project
 .classpath
 README.md
-*.csv
-*.xlsx
 /target/
+/.apt_generated/
