@@ -1,9 +1,9 @@
-/bin
-.DS_Store
-.settings
+
+*.class
 .project
+README.md
+.settings/org.eclipse.jdt.core.prefs
+README.md
 .classpath
 README.md
-*.csv
-*.xlsx
-/target/
+README.md
