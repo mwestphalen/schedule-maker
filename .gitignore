@@ -1,9 +1,9 @@
-
-*.class
+/bin
+.DS_Store
+.settings
 .project
-README.md
-.settings/org.eclipse.jdt.core.prefs
-README.md
 .classpath
 README.md
-README.md
+/target/
+/.apt_generated/
+StudentSchedules.xlsx

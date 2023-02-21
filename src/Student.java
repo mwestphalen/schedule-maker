@@ -210,15 +210,21 @@ public class Student {
 			}
 		}
 		
-		// Deleting template sheet
-		workbook.removeSheetAt(0);
-		
 		// Writing to excel file
 		try (FileOutputStream outputStream = new FileOutputStream("StudentSchedules.xlsx")) {
 			workbook.write(outputStream);
+			
+			// Remove template sheet and close output stream
+			if (workbook.getSheetIndex("Template") != -1) {
+				workbook.removeSheetAt(0);
+			}
+			outputStream.close();
+			
 		} catch (IOException e) { 
 			e.printStackTrace();
 		}  
+		
+		
 	}
 
 }
