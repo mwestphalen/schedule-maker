@@ -8,30 +8,37 @@ public class Schedule {
 	public void addIntroCourse(ArrayList<ScheduledCourse> introCourses, String[] majors) {
 		// third iteration is for when both majors are full
 		String major = "N";
-		for (int i = 0; i < 3; i++) {
-			if (i != 2) {
-				major = majors[i];
-			}
-			if (major.equals("N") || i == 2) {
-				boolean courseFound = false;
-				while (!courseFound) {
-					ScheduledCourse toAdd = getRandomCourse(introCourses);
-					if (addCourse(toAdd, "M")) {
-						return;
+		try {
+			for (int i = 0; i < 3; i++) {
+				if (i != 2) {
+					major = majors[i];
+				}
+				if (major.equals("N") || i == 2) {
+					boolean courseFound = false;
+					while (!courseFound) {
+						ScheduledCourse toAdd = getRandomCourse(introCourses);
+						if (addCourse(toAdd, "M")) {
+							return;
+						}
+					}
+				} else {
+					for (int j = 0; j < introCourses.size(); j++) {
+						// change this to make use of the find method
+						ScheduledCourse toAdd = introCourses.get(j);
+						if (major.equals(toAdd.getCourse().getCourseMajor())) {
+							if (addCourse(toAdd, "M")) {
+							return;
+							}
+						}
 					}
 				}
-			} else {
-				for (int j = 0; j < introCourses.size(); j++) {
-				// change this to make use of the find method
-				ScheduledCourse toAdd = introCourses.get(j);
-				if (major.equals(toAdd.getCourse().getCourseMajor())) {
-					if (addCourse(toAdd, "M")) {
-						return;
-					}
-				}
-				}
 			}
+		} catch (Exception e) {
+			System.out.println("Error: When retrieving introductory course to add to schedule.");
+			System.out.println("Please make sure that there are enough courses for students");
+			System.exit(0);
 		}
+	
 	}
 	
 	public void addElectiveCourse(ArrayList<ScheduledCourse> electiveCourses, ArrayList<ScheduledCourse> electivePref) {
@@ -53,10 +60,12 @@ public class Schedule {
 		}
 	}
 	
+	//COMPETENCY TAKES WAAAAAAAAAAAAAAY TO LONG, FIND A WAY TO SPEED IT UP AND REDUCE LOAD
 	public void addCompetencyCourse(ArrayList<ScheduledCourse> competencyCourses, String[] majors, String lang) {
 		
 		ScheduledCourse toAdd;
 		// if student has a language preference priority is put on getting them into that course
+		// could cause problems with not recognizing language preference. VALIDATE
 		if (!lang.equals("N")) {
 			ArrayList<ScheduledCourse> languageCourses = new ArrayList<ScheduledCourse>();
 			for (int i = 0; i < competencyCourses.size(); i++) {
@@ -140,7 +149,7 @@ public class Schedule {
 		// makes list of all English 140 courses
 		ArrayList<ScheduledCourse> english140Courses = new ArrayList<ScheduledCourse>();
 		for (int i = 0; i < competencyCourses.size(); i++) {
-			if(competencyCourses.get(i).getCourse().getCourseCode().contains("ENGW 140")) {
+			if(competencyCourses.get(i).getCourse().getCourseName().contains("ENGW 140")) {
 				english140Courses.add(competencyCourses.get(i));
 			}
 		}
@@ -165,23 +174,44 @@ public class Schedule {
 
 	
 	public void addRCCCourse(ArrayList<ScheduledCourse> rccCourses, ArrayList<ScheduledCourse> rccPreferences) {
-		
-		if (!rccPreferences.isEmpty()) {
-			for (int i = 0; i < rccPreferences.size(); i++) {
-				ScheduledCourse toAdd = rccPreferences.get(i);
+		try {
+			if (!rccPreferences.isEmpty()) {
+				for (int i = 0; i < rccPreferences.size(); i++) {
+					ScheduledCourse toAdd = rccPreferences.get(i);
+					if (addCourse(toAdd, "R")) {
+						return;
+					}
+					}
+				}
+			// this adds a random method, if there is an empty list or none of the courses listed are available
+			boolean courseFound = false;
+			while (!courseFound) {
+				ScheduledCourse toAdd = getRandomCourse(rccCourses);
 				if (addCourse(toAdd, "R")) {
 					return;
 				}
-				}
 			}
-		// this adds a random method, if there is an empty list or none of the courses listed are available
-		boolean courseFound = false;
-		while (!courseFound) {
-			ScheduledCourse toAdd = getRandomCourse(rccCourses);
-			if (addCourse(toAdd, "R")) {
-				return;
-			}
+		} catch (Exception e) {
+			System.out.println("Error: When retrieving RCC course course to add to schedule.");
+			System.out.println("Please make sure that there are enough courses for students");
+			System.exit(0);
 		}
+//		if (!rccPreferences.isEmpty()) {
+//			for (int i = 0; i < rccPreferences.size(); i++) {
+//				ScheduledCourse toAdd = rccPreferences.get(i);
+//				if (addCourse(toAdd, "R")) {
+//					return;
+//				}
+//				}
+//			}
+//		// this adds a random method, if there is an empty list or none of the courses listed are available
+//		boolean courseFound = false;
+//		while (!courseFound) {
+//			ScheduledCourse toAdd = getRandomCourse(rccCourses);
+//			if (addCourse(toAdd, "R")) {
+//				return;
+//			}
+//		}
 	}
 	
 	public ScheduledCourse[] getScheduleList() {
@@ -230,12 +260,17 @@ public class Schedule {
 	}
 	
 	public void addCourseCredits() {
-		// iterate through the schedule list adding up all the credits
-		// this must be done after all courses have been added, if done before will crash
+		int creditsToAdd;
 		for (int i = 0; i < 4; i++) {
-			int creditsToAdd = scheduleList[i].getCourse().getCredits();
-			if (scheduleList[i].getHasLab() == true) {
-				creditsToAdd = creditsToAdd + scheduleList[i].getCourseLab().getCredits();
+			creditsToAdd = 0;
+			try {
+				scheduleList[i].getCourse();
+				creditsToAdd = scheduleList[i].getCourse().getCredits();
+				if (scheduleList[i].getHasLab() == true) {
+					creditsToAdd = creditsToAdd + scheduleList[i].getCourseLab().getCredits();
+				}
+			} catch (Exception e) {
+				
 			}
 			totalCredits = totalCredits + creditsToAdd;
 		}
@@ -374,7 +409,7 @@ public class Schedule {
 	}
 	
 	// takes list of courses and selects a random course from it
-	public ScheduledCourse getRandomCourse(ArrayList<ScheduledCourse> courses) {
+	public static ScheduledCourse getRandomCourse(ArrayList<ScheduledCourse> courses) {
 		Random rand = new Random();
 		int index = rand.nextInt(courses.size());
 		ScheduledCourse selectedCourse = courses.get(index);

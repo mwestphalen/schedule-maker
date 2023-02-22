@@ -110,14 +110,28 @@ public class Driver {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		// new GUI();
+		
 		Database data = new Database();
 		// could use strings instead of letters to make it more clear
+
 		data.generateCourses('i');
+		System.out.println("Introductory courses have been loaded.");
 		data.generateCourses('c');
+		System.out.println("Competency courses have been loaded.");
 		data.generateCourses('e');
+		System.out.println("Elective courses have been loaded.");
 		data.generateCourses('r');
+		System.out.println("RCC courses have been loaded.");
 		
 		data.generateStudentList();
+		System.out.println("Students have been loaded.");
+		
+		data.enoughCoursesForStudents(data.getIntroductoryCourses(), data.getStudentList().size(), 'i');
+		data.enoughCoursesForStudents(data.getCompetencyCourses(), data.getStudentList().size(), 'c');
+		data.enoughCoursesForStudents(data.getElectiveCourses(), data.getStudentList().size(), 'e');
+		data.enoughCoursesForStudents(data.getRCCCourses(), data.getStudentList().size(), 'r');
+		
 		ArrayList<Student> studentList = data.getStudentList();
 		
 		Deque<Student> introDeque = new LinkedList<>();
@@ -130,45 +144,37 @@ public class Driver {
 		createDeque(studentList, eleDeque);
 		createDeque(studentList, rccDeque);
 		
+		// instead of checking if the courses are all full when adding can perhaps do a preemptive check comparing
+		// size of all courses in category to number of students
+		// might still run into issue if there is overlap
 		addStudentsToIntroCourses(introDeque, data.getIntroductoryCourses());
-		addStudentsToCompetencyCourses(compDeque, data.getCompetencyCourse());
+		System.out.println("All students have a introductory course added.");
+		addStudentsToCompetencyCourses(compDeque, data.getCompetencyCourses());
+		System.out.println("All students have a competency course added.");
 		addStudentsToElectiveCourses(eleDeque, data.getElectiveCourses());
+		System.out.println("All students have a elective course added.");
 		addStudentsToRCCCourses(rccDeque, data.getRCCCourses());
+		System.out.println("All students have a RCC course added.");
 		
 		// here to make sure that the deque is in order and working
 //		Iterator<Student> it = majorDeque.iterator();
 //		 while (it.hasNext()) {
 //			 System.out.println(it.next().getFirstName());
 //		 }
-		
-//		for (int i = 0; i < studentList.size(); i++) {
-//			Student a = studentList.get(i);
-//			a.getStudentSchedule().addMajorCourse(data.getIntroductoryCourses(), a.getMajors());
-//			a.getStudentSchedule().addElectiveCourse(data.getElectiveCourses(), studentList.get(i).getElectivePreferences());
-//			a.getStudentSchedule().addRCCCourse(data.getRCCCourses(), studentList.get(i).getRCCPref());
-//			a.getStudentSchedule().addCompetencyCourse(data.getCompetencyCourse(), a.getMajors(), a.getLanguage());
-//		}
 	
-		
-		// Print to TERMINAL
-		for (int i = 0; i < studentList.size(); i++) { 
-			Student s1 = studentList.get(i);
-			s1.getStudentSchedule().addCourseCredits();
-			System.out.println(s1.getFirstName() + " " + s1.getLastName());
-			System.out.println("Total Credits: " + s1.getStudentSchedule().getTotalCredits());
-			s1.printStudentSchedule_Terminal();
-			System.out.println();
-		}	
-		
-		// Print to XLSX File (one workbook w/ worksheets for each student... good)
-		for (int i = 0; i < studentList.size(); i++) {
-			studentList.get(i).printStudentSchedule_Excel(i + 1);
-		}
+//		for (int i = 0; i < studentList.size(); i++) {
+//			Student s1 = studentList.get(i);
+//			s1.getStudentSchedule().addCourseCredits();
+//			System.out.println(s1.getFirstName() + " " + s1.getLastName());
+//			System.out.println("Total Credits: " + s1.getStudentSchedule().getTotalCredits());
+//			s1.printStudentSchedule();
+//			System.out.println();
+//		}
 		
 		System.out.println();
 		System.out.println("Introductory Courses:");
 		for (int i = 0; i < data.getIntroductoryCourses().size(); i++) {
-			System.out.print(data.getIntroductoryCourses().get(i).getCourse().getCourseCode());
+			System.out.print(data.getIntroductoryCourses().get(i).getCourse().getCourseName());
 			System.out.print(" " + data.getIntroductoryCourses().get(i).getCourse().getNumbStudents());
 			System.out.print(" / " + data.getIntroductoryCourses().get(i).getCourse().getCapacity());
 			System.out.println();
@@ -176,7 +182,7 @@ public class Driver {
 		System.out.println();
 		System.out.println("Elective Courses:");
 		for (int i = 0; i < data.getElectiveCourses().size(); i++) {
-			System.out.print(data.getElectiveCourses().get(i).getCourse().getCourseCode());
+			System.out.print(data.getElectiveCourses().get(i).getCourse().getCourseName());
 			System.out.print(" " + data.getElectiveCourses().get(i).getCourse().getNumbStudents());
 			System.out.print(" / " + data.getElectiveCourses().get(i).getCourse().getCapacity());
 			System.out.println();
@@ -184,7 +190,7 @@ public class Driver {
 		System.out.println();
 		System.out.println("RCC Courses:");
 		for(int i = 0; i < data.getRCCCourses().size(); i++) {
-			System.out.print(data.getRCCCourses().get(i).getCourse().getCourseCode());
+			System.out.print(data.getRCCCourses().get(i).getCourse().getCourseName());
 			System.out.print(" " + data.getRCCCourses().get(i).getCourse().getNumbStudents());
 			System.out.print(" / " + data.getRCCCourses().get(i).getCourse().getCapacity());
 			System.out.println();
