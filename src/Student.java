@@ -152,33 +152,49 @@ public class Student {
 	}
 
 	
-	 public void printStudentSchedule_Terminal() {
-		 System.out.println("Major: ");
-		 schedule.getMajorCourse().getCourse().printCourseInfo();
-		 System.out.print(" "); 
-		 schedule.getMajorCourse().getTime().printTime();
-		 System.out.println(); 
-		 System.out.println("Elective: ");
-		 schedule.getElectiveCourse().getCourse().printCourseInfo();
-		 System.out.print(" "); 
-		 schedule.getElectiveCourse().getTime().printTime();
-		 System.out.println();
-		 System.out.println("RCC: ");
-		 schedule.getRCCCourse().getCourse().printCourseInfo();
-		 System.out.print(" ");
-		 schedule.getRCCCourse().getTime().printTime();
-		 System.out.println();
-		 System.out.println("Competency: ");
-		 schedule.getCompetencyCourse().getCourse().printCourseInfo();
-		 System.out.print(" ");
-		 schedule.getCompetencyCourse().getTime().printTime();
-		 System.out.println(); 
+	public void printStudentSchedule_Terminal() {
+		System.out.println("Intro: ");
+		try {
+			schedule.getMajorCourse().getCourse().printCourseInfo();
+			System.out.print(" ");
+			schedule.getMajorCourse().getTime().printTime();
+		} catch (Exception e){
+			
+		}
+		System.out.println();
+		System.out.println("Elective: ");
+		try {
+			schedule.getElectiveCourse().getCourse().printCourseInfo();
+			System.out.print(" ");
+			schedule.getElectiveCourse().getTime().printTime();
+		} catch (Exception e) {
+			
+		}
+		System.out.println();
+		System.out.println("RCC: ");
+		try {
+			schedule.getRCCCourse().getCourse().printCourseInfo();
+			System.out.print(" ");
+			schedule.getRCCCourse().getTime().printTime();
+		} catch (Exception e) {
+			
+		}
+		System.out.println();
+		System.out.println("Competency: ");
+		try {
+			schedule.getCompetencyCourse().getCourse().printCourseInfo();
+			System.out.print(" ");
+			schedule.getCompetencyCourse().getTime().printTime();
+		} catch (Exception e) {
+			
+		}
+		System.out.println();
 	}
 	 	
 	
 	public void printStudentSchedule_Excel(int sheetNum) {
 		// Create blank sheet from template
-		XSSFSheet sheet = workbook.cloneSheet(0, "Student's Schedule " + sheetNum);
+		XSSFSheet sheet = workbook.cloneSheet(0, firstName + " " + lastName + " (" + sheetNum + ")");
 		sheet.setFitToPage(true);
 		sheet.getPrintSetup().setFitWidth((short) 1);
 		sheet.getPrintSetup().setFitHeight((short) 0);
