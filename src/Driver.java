@@ -91,7 +91,7 @@ public class Driver {
 		int studentsNoPref = 0;
 		while(!courseDeque.isEmpty()) {
 			currentStudent = courseDeque.element();
-			ArrayList<ScheduledCourse> rccPref = currentStudent.getRCCPref();
+			ArrayList<ScheduledCourse> rccPref = currentStudent.getRCCPreferences();
 			if (rccPref.isEmpty()) {
 				if (studentsNoPref >= courseDeque.size()) {
 					currentStudent.getStudentSchedule().addRCCCourse(courses, rccPref);
@@ -110,7 +110,7 @@ public class Driver {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		// new GUI();
+		//new GUI();
 		
 		Database data = new Database();
 		// could use strings instead of letters to make it more clear
@@ -185,7 +185,7 @@ public class Driver {
 		
 		// Print to XLSX File (one workbook w/ worksheets for each student... good)
 		for (int i = 0; i < studentList.size(); i++) {
-			studentList.get(i).printStudentSchedule_Excel(i + 1);
+			studentList.get(i).printStudentSchedule_Excel(i + 1, studentList.size());
 		}
 		
 		System.out.println();
@@ -197,6 +197,14 @@ public class Driver {
 			System.out.println();
 		}
 		System.out.println();
+		System.out.println("Competency Courses:");
+		for(int i = 0; i < data.getCompetencyCourses().size(); i++) {
+			System.out.print(data.getCompetencyCourses().get(i).getCourse().getCourseCode());
+			System.out.print(" " + data.getCompetencyCourses().get(i).getCourse().getNumbStudents());
+			System.out.print(" / " + data.getCompetencyCourses().get(i).getCourse().getCapacity());
+			System.out.println();
+		}
+		System.out.println();
 		System.out.println("Elective Courses:");
 		for (int i = 0; i < data.getElectiveCourses().size(); i++) {
 			System.out.print(data.getElectiveCourses().get(i).getCourse().getCourseCode());
@@ -204,6 +212,8 @@ public class Driver {
 			System.out.print(" / " + data.getElectiveCourses().get(i).getCourse().getCapacity());
 			System.out.println();
 		}
+		
+		
 		System.out.println();
 		System.out.println("RCC Courses:");
 		for(int i = 0; i < data.getRCCCourses().size(); i++) {

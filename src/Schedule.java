@@ -218,7 +218,6 @@ public class Schedule {
 		return scheduleList;
 	}
 	
-	
 	public ScheduledCourse getMajorCourse() {
 		return scheduleList[0];
 	}
@@ -250,7 +249,7 @@ public class Schedule {
 	public void setRCCCourse(ScheduledCourse rcc) {
 		scheduleList[3] = rcc;
 	}
-	
+
 	public int getTotalCredits() {
 		return totalCredits;
 	}
@@ -289,6 +288,7 @@ public class Schedule {
 				} else {
 					setRCCCourse(toAdd);
 				}
+				
 				toAdd.getCourse().addStudent();
 				if (toAdd.getHasLab()) {
 					toAdd.getCourseLab().addStudent();

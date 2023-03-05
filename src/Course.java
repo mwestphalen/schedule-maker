@@ -67,10 +67,6 @@ public class Course {
 		System.out.print(CRN + " " + courseCode + " " + courseTitle + " " + credits);
 	}
 	
-	public String getCourseInfo_CSV() {
-		return CRN + "," + courseCode + "," + courseTitle + "," + credits + ",";
-	}
-	
 	public String[] getCourseInfo_XLSX() {
 		return new String[] {String.valueOf(CRN), courseCode, courseTitle, String.valueOf(credits)};
 		

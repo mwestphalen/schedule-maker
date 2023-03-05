@@ -53,10 +53,6 @@ public class Time {
 		System.out.print(startTime + "-" + endTime + "-" + amOrPm + " " + meetingDays);
 	}
 	
-	public String getTimeInfo_CSV() {
-		return meetingDays + "," + startTime + "-" + endTime + amOrPm;
-	}
-	
 	public String[] getTimeInfo_XLSX() {
 		return new String[] {meetingDays, startTime.toString() + "-" + endTime.toString() + String.valueOf(amOrPm)};
 	}

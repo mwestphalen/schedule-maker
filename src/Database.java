@@ -77,25 +77,26 @@ public class Database {
 					String proficiency2 = values2[8];
 					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, proficiency2);
 					Time courseLabTime = new Time(meetingTime2, meetingDays2);
+					
 					if (typeOfCourses == 'i') {
-						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
+						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "Major"));
 					} else if (typeOfCourses == 'c') {
-						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
+						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "Competency"));
 					} else if (typeOfCourses == 'e') {
-						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
+						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "Elective"));
 					} else {
-						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
+						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "RCC"));
 					}
 					lineNumber++;
 				} else {
 					if (typeOfCourses == 'i') {
-						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime));
+						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, "Major"));
 					} else if (typeOfCourses == 'c') {
-						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime));
+						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime, "Competency"));
 					} else if (typeOfCourses == 'e') {
-						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime));
+						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, "Elective"));
 					} else {
-						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime));
+						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, "RCC"));
 					}
 				}
 				lineNumber++;
