@@ -6,9 +6,11 @@ import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.TreeSet;
 
 
@@ -65,9 +67,9 @@ public class GUI  {
 		constPanel = new JPanel(cardLayout);
 		constPanel.add(mainMenuPanel, "menu");
 		constPanel.add(addStudentPanel, "addStudent");
-		constPanel.add(remStudentPanel, "removeStudent");
+		constPanel.add(remStudentPanel, "remStudent");
 		constPanel.add(addCoursePanel, "addCourse");
-		constPanel.add(remCoursePanel, "removeCourse");
+		constPanel.add(remCoursePanel, "remCourse");
 
 		// First page to show when application opens
 		cardLayout.show(constPanel, "menu");
@@ -131,6 +133,7 @@ public class GUI  {
 		JButton addRCCButton = new JButton("+");
 		JLabel electivesLabel = new JLabel("Pick student's Electives:");
 		JButton addElectiveButton = new JButton("+");
+		JButton backButton = new JButton("Back");
 		JButton submitButton = new JButton("Submit");
 		
 		
@@ -424,10 +427,16 @@ public class GUI  {
 		
 		//JScrollPane scrollPane = new JScrollPane(addStudentPanel);
 		
+		GridBagConstraints gbc_backButton = new GridBagConstraints();
+		gbc_backButton.insets = new Insets(0, 0, 0, 5);
+		gbc_backButton.gridx = 7;
+		gbc_backButton.gridy = 16;
+		addStudentPanel.add(backButton, gbc_backButton);
+		
 		GridBagConstraints gbc_submitButton = new GridBagConstraints();
 		gbc_submitButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_submitButton.insets = new Insets(0, 0, 0, 5);
-		gbc_submitButton.gridx = 7;
+		gbc_submitButton.gridx = 8;
 		gbc_submitButton.gridy = 16;
 		addStudentPanel.add(submitButton, gbc_submitButton);
 		//scrollPane.setPreferredSize(new Dimension(770,560));
@@ -465,12 +474,14 @@ public class GUI  {
 				gbc_addElectiveButton.gridy++;
 				gbc_electivesComboBoxes.gridy++;
 				
-				// Move submit button down
+				// Move back/submit button down
+				gbc_backButton.gridy++;
 				gbc_submitButton.gridy++;
 				
 				// Add new combobox and update addButton
 				addStudentPanel.add(newComboBox, gbc_rccComboBoxes);
 				addStudentPanel.add(addRCCButton, gbc_addRCCButton);
+				addStudentPanel.add(backButton, gbc_backButton);
 				addStudentPanel.add(submitButton, gbc_submitButton);
 				addStudentPanel.add(electivesLabel, gbc_electivesLabel);
 				addStudentPanel.add(electivesComboBoxes.get(0), gbc_electivesComboBoxes);
@@ -599,37 +610,156 @@ public class GUI  {
 			cardLayout.show(constPanel, "menu");
 			addStudentPanel.removeAll();
 		});
+		
+		backButton.addActionListener(event -> {
+			cardLayout.show(constPanel, "menu");
+			addStudentPanel.removeAll();
+		});
 	}
 
+	 ////////////////////
+	 // Remove Student //
+	 ////////////////////
+	
 	private void remStudent(JPanel remStudentPanel) {
 		// Set up Panel
-		remStudentPanel.setLayout(new BoxLayout(remStudentPanel, BoxLayout.Y_AXIS));
-		remStudentPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+		GridBagLayout layout = new GridBagLayout();
+		remStudentPanel.setLayout(layout);
+		
+		// Set layout dimensions
+		layout.columnWidths = new int[]{34, 136, 130, 0, 0, 134, 45, 183, 0, 0};
+		layout.rowHeights = new int[]{25, 0, 16, 26, 16, 26, 16, 27, 16, 27, 16, 27, 16, 29, 16, 31, 29, 0};
+		layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		layout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		
+		/*
+		 *  Common Components
+		 */
+		JLabel title = new JLabel("Remove Student Form");
+		JLabel rNumber = new JLabel("R-Number");
+		JTextField rNumberField = new JTextField();
+		JButton removeButton = new JButton("Remove");
+		
+		
+		// Initialize database/courses
+		// TODO: Maybe initialize this every time we're in main menu instead
+		database = new Database();
+		database.generateCourses('i');
+		database.generateCourses('c');
+		database.generateCourses('r');
+		database.generateCourses('e');
+		database.generateStudentList();
+	
+		/*
+		 * Add Components to panel
+		 */
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		GridBagConstraints gbc_title = new GridBagConstraints();
+		gbc_title.anchor = GridBagConstraints.WEST;
+		gbc_title.insets = new Insets(0, 0, 5, 5);
+		gbc_title.gridwidth = 3;
+		gbc_title.gridx = 3;
+		gbc_title.gridy = 1;
+		remStudentPanel.add(title, gbc_title);
+		rNumber.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		
+		GridBagConstraints gbc_rNumber = new GridBagConstraints();
+		gbc_rNumber.anchor = GridBagConstraints.NORTH;
+		gbc_rNumber.insets = new Insets(0, 0, 5, 5);
+		gbc_rNumber.gridx = 4;
+		gbc_rNumber.gridy = 4;
+		remStudentPanel.add(rNumber, gbc_rNumber);
+		
+		rNumberField.setColumns(10);
+		GridBagConstraints gbc_rNumberField = new GridBagConstraints();
+		gbc_rNumberField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_rNumberField.anchor = GridBagConstraints.NORTH;
+		gbc_rNumberField.insets = new Insets(0, 0, 5, 5);
+		gbc_rNumberField.gridx = 4;
+		gbc_rNumberField.gridy = 5;
+		remStudentPanel.add(rNumberField, gbc_rNumberField);
+		
+		GridBagConstraints gbc_removeButton = new GridBagConstraints();
+		gbc_removeButton.insets = new Insets(0, 0, 5, 5);
+		gbc_removeButton.gridx = 4;
+		gbc_removeButton.gridy = 6;
 
-		// Common student's details
-		JLabel firstName = new JLabel("Student's first name:");
-		JTextField firstNameBox = new JTextField(20);
-		JLabel lastName = new JLabel("Student's last name:");
-		JTextField lastNameBox = new JTextField(20);
-		JLabel rNumber = new JLabel("Student's R-Number:");
-		JTextField rNumberBox = new JTextField(20);
-		JButton submit = new JButton("Submit");
-		
-		remStudentPanel.add(firstName);
-		remStudentPanel.add(firstNameBox);
-		remStudentPanel.add(lastName);
-		remStudentPanel.add(lastNameBox);
-		remStudentPanel.add(rNumber);
-		remStudentPanel.add(rNumberBox);
-		remStudentPanel.add(submit);
-		
-		submit.addActionListener(event -> {
-			// Add student to .txt file
+		removeButton.addActionListener(event -> {
+			for (Student student : database.getStudentList()) {
+				if (student.getRNumber().equals(rNumberField.getText())) {				
+					
+					// Try to open the file
+					File inputFile = new File("./students.txt");
+					if (!inputFile.exists()) {
+						JOptionPane.showMessageDialog(remStudentPanel, "Error: There are no records of any student in the system.", 
+								"Unable to remove student", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					// Try to remove student from students.txt
+					try {
+						File outputFile = new File("remStudent_output.txt");
+						Scanner scanner = new Scanner(inputFile);
+						BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+						while (scanner.hasNextLine()) {
+							// Read student data that is split into 3 lines
+							String line1 = scanner.nextLine();
+							String line2 = scanner.nextLine();
+							String line3 = scanner.nextLine();
+							
+							// Check if R-Number of student to be removed matches the first string
+							// in the first line, which happens to be the R-Number as well. If so,
+							// we are not writing it back to the file
+							if (!line1.startsWith(student.getRNumber())) {
+								writer.write(line1);
+								writer.newLine();
+								writer.write(line2);
+								writer.newLine();
+								writer.write(line3);
+								writer.newLine();
+							}
+						}
+						
+						// Close input and output stream
+						scanner.close();
+						writer.close();
+						
+						// Replace input file with the output file
+						inputFile.delete();
+						outputFile.renameTo(inputFile);
+						
+						// Remove Student from ArrayList<Student> StudentList in database
+						database.getStudentList().remove(student);
+						
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+					// If reached here, student has been successfully removed from everywhere
+					JOptionPane.showMessageDialog(remStudentPanel, "Student successfully removed.",
+							"Student Removal", JOptionPane.OK_OPTION);
+					
+					// Go back to main menu
+					cardLayout.show(constPanel, "menu");
+					remStudentPanel.removeAll();
+					
+				}
+			}
 			
-			// Clean panel and go back to main menu 
-			cardLayout.show(constPanel, "menu");
-			remStudentPanel.removeAll();
+			// Didn't find student
+			JOptionPane.showMessageDialog(remStudentPanel, "Unable to locate student. Please enter R Number again", 
+					"Unable to locate student", JOptionPane.ERROR_MESSAGE);
+			return;
 		});
+		
+		remStudentPanel.add(removeButton, gbc_removeButton);
+		//remStudentPanel.add(scrollPane);
+
+
 	}
 
 	public static void main(String[] args) {
