@@ -156,7 +156,7 @@ public class Database {
 				lineNumber++;
 				String[] values3 = line3.split(", ");
 				ArrayList<ScheduledCourse> rccPref = new ArrayList<ScheduledCourse>();
-				for(int i = 0; i < 7; i++) {
+				for(int i = 0; i < 8; i++) {
 					if (!values3[i].equals("N")) {
 						ScheduledCourse c = findCourse(values3[i], 'r');
 						rccPref.add(c);

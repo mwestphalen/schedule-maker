@@ -12,3 +12,5 @@
 13, 91296, ART 120, Three-Dimensional Foundations, 4, 4:00-5:10-P, TR, ART, HART, false
 22, 91602, BUS 236 2, Statistics for Business, 4, 9:30-10:45-A, TR, BUS, MCMP, false
 22, 91602, BUS 236 3, Statistics for Business, 4, 11:00-11:50-A, MWF, BUS, MCMP, false
+24, 91538, LAT 201 1, Intermediate Latin I, 4, 12:00-12:50-P, MWF, CLS, FCMP, false
+18, 91176, CHN 201 1, Intermediate Chinese I, 4, 10:00-10:50-A, MWF, N, FCMP, false

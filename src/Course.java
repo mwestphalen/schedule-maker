@@ -8,11 +8,11 @@ public class Course {
 	private final String proficiency;
 	private int numbStudents;
 	
-	public Course(int capacity1, int crn1, String course1, String courseTitle1, int credits1, 
+	public Course(int capacity1, int crn1, String courseCode1, String courseTitle1, int credits1, 
 			String courseMajor1, String proficiency1) {
 		capacity = capacity1;
 		CRN = crn1;
-		courseCode = course1;
+		courseCode = courseCode1;
 		courseTitle = courseTitle1;
 		credits = credits1;
 		courseMajor = courseMajor1;

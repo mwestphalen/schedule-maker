@@ -35,6 +35,8 @@ public class Student {
 	
 	// Excel Output variables
 	private static XSSFWorkbook workbook;
+	private static CellStyle infoLabelCellStyle;
+	private static CellStyle infoDefaultCellStyle;
 	private static CellStyle labelCellStyle;
 	private static CellStyle defaultCellStyle;
 	private static CellStyle courseTitleStyle;
@@ -54,10 +56,24 @@ public class Student {
 		subheaderFont.setUnderline(FontUnderline.SINGLE);
 		subheaderFont.setFontHeightInPoints((short) 28);
 		
-		/* TODO */
-		// Make font subscript for Honors Student indicator
-		
 		// Set cell style for output
+		infoLabelCellStyle = workbook.createCellStyle();
+		infoLabelCellStyle.setAlignment(HorizontalAlignment.RIGHT);
+		infoLabelCellStyle.setFillForegroundColor(IndexedColors.ROYAL_BLUE.getIndex());
+		infoLabelCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		infoLabelCellStyle.setBorderTop(BorderStyle.THIN);
+		infoLabelCellStyle.setBorderBottom(BorderStyle.THIN);
+		infoLabelCellStyle.setBorderLeft(BorderStyle.THIN);
+		infoLabelCellStyle.setBorderRight(BorderStyle.THIN);
+		infoLabelCellStyle.setFont(boldFont);
+		
+		infoDefaultCellStyle = workbook.createCellStyle();
+		infoDefaultCellStyle.setAlignment(HorizontalAlignment.RIGHT);
+		infoDefaultCellStyle.setBorderTop(BorderStyle.THIN);
+		infoDefaultCellStyle.setBorderBottom(BorderStyle.THIN);
+		infoDefaultCellStyle.setBorderLeft(BorderStyle.THIN);
+		infoDefaultCellStyle.setBorderRight(BorderStyle.THIN);
+		
 		labelCellStyle = workbook.createCellStyle();
 		labelCellStyle.setAlignment(HorizontalAlignment.CENTER);
 		labelCellStyle.setFillForegroundColor(IndexedColors.ROYAL_BLUE.getIndex());
@@ -478,34 +494,34 @@ public class Student {
 		for (int rowIndex = 6; rowIndex < 9; rowIndex++) {
 			XSSFRow row = sheet.createRow(rowIndex);
 			XSSFCell cell;
-	
+			
 			switch (rowIndex) {
 			case 6:
 				// Set Name label (bold, centered)
 				cell = row.createCell(0);	
-				cell.setCellStyle(labelCellStyle);
+				cell.setCellStyle(infoLabelCellStyle);
 				cell.setCellValue("Name");
 			
 				cell = row.createCell(1);
-				cell.setCellStyle(defaultCellStyle);
+				cell.setCellStyle(infoDefaultCellStyle);
 				cell.setCellValue(firstName + " " + lastName);
 				break;
 			case 7:
 				cell = row.createCell(0);
-				cell.setCellStyle(labelCellStyle);
+				cell.setCellStyle(infoLabelCellStyle);
 				cell.setCellValue("R-Number");
 			
 				cell = row.createCell(1);
-				cell.setCellStyle(defaultCellStyle);
+				cell.setCellStyle(infoDefaultCellStyle);
 				cell.setCellValue(rNumber);
 				break;
 			case 8:
 				cell = row.createCell(0);
-				cell.setCellStyle(labelCellStyle);
+				cell.setCellStyle(infoLabelCellStyle);
 				cell.setCellValue("Major of Interest");
 			
 				cell = row.createCell(1);
-				cell.setCellStyle(defaultCellStyle);
+				cell.setCellStyle(infoDefaultCellStyle);	
 			
 				// Set student's Major of Interest (if only one, or any at all)
 				if (!majors[0].equals("N") && !majors[1].equals("N")) {
@@ -515,10 +531,12 @@ public class Student {
 				} else {
 					cell.setCellValue("Exploring");
 				}
+				
+				
 				break;
 			default:
 				cell = row.createCell(0);
-				cell.setCellStyle(defaultCellStyle);
+				cell.setCellStyle(infoDefaultCellStyle);
 				cell.setCellValue("ERROR");
 				break;
 			}

@@ -110,7 +110,7 @@ public class Driver {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//new GUI();
+		//new DataTypeWindow();
 		
 		Database data = new Database();
 		// could use strings instead of letters to make it more clear
@@ -171,13 +171,12 @@ public class Driver {
 //           s1.printStudentSchedule();
 //           System.out.println();
 //		}
-	
 		
 		// Print to TERMINAL
 		for (int i = 0; i < studentList.size(); i++) { 
 			Student s1 = studentList.get(i);
 			s1.getStudentSchedule().addCourseCredits();
-			System.out.println(s1.getFirstName() + " " + s1.getLastName());
+			System.out.println("#" + (i + 1) + " - " + s1.getFirstName() + " " + s1.getLastName());
 			System.out.println("Total Credits: " + s1.getStudentSchedule().getTotalCredits());
 			s1.printStudentSchedule_Terminal();
 			System.out.println();
