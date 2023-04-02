@@ -26,20 +26,29 @@ public class GUI {
 
 	public GUI() {
 
-		// Initialize database/courses
-		database = new Database();
-		database.generateCourses('i');
-		database.generateCourses('c');
-		database.generateCourses('r');
-		database.generateCourses('e');
-
 		// Create and set up
 		JFrame frame = new JFrame("Freshmen Schedule Automation");
 		frame.setMinimumSize(new Dimension(770, 560));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// Where the components controlled by the cardLayout are initialized
-		JPanel mainMenuPanel = new JPanel();
+		/*
+		 *  Where the components controlled by the cardLayout are initialized
+		 */
+		JPanel mainMenuPanel = new JPanel()  {
+			// Using anonymous inner class to override method the that
+			// displays the window to the screen
+			@Override 
+			public void setVisible(boolean visible) {
+				// Call super class method
+				super.setVisible(visible);
+				
+				// Generate courses and students' list every time we reach the main menu, aka, update and refresh
+				if (visible) {
+					database = new Database();
+					System.out.println("Database initiated");
+				}
+			}
+		};
 		JPanel addStudentPanel = new JPanel();
 		JPanel remStudentPanel = new JPanel();
 		JPanel addCoursePanel = new JPanel();
@@ -88,7 +97,9 @@ public class GUI {
 		gbc_box.gridy = 3;
 		mainMenuPanel.add(box, gbc_box);
 
-		// Interactions with the buttons
+		/*
+		 * Action Listeners
+		 */
 		addStudentButton.addActionListener(event -> {
 			cardLayout.show(constPanel, "addStudent");
 			addStudent(addStudentPanel);
@@ -108,6 +119,8 @@ public class GUI {
 			cardLayout.show(constPanel, "remCourse");
 			remCourse(remCoursePanel);
 		});
+		
+		// Add other screens/panels to the layout manager (cardLayout)
 		constPanel.add(addStudentPanel, "addStudent");
 		constPanel.add(remStudentPanel, "remStudent");
 		constPanel.add(addCoursePanel, "addCourse");
@@ -122,8 +135,8 @@ public class GUI {
 		frame.setLocationRelativeTo(null);
 		frame.pack();
 		frame.setVisible(true);
-
 	}
+
 
 	////////////////////
 	// Add Student //
@@ -283,7 +296,6 @@ public class GUI {
 		// TODO Put this all in a method for better readability
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-
 		GridBagConstraints gbc_title = new GridBagConstraints();
 		gbc_title.anchor = GridBagConstraints.NORTHWEST;
 		gbc_title.insets = new Insets(0, 0, 5, 5);
@@ -291,8 +303,8 @@ public class GUI {
 		gbc_title.gridx = 3;
 		gbc_title.gridy = 1;
 		addStudentPanel.add(title, gbc_title);
+		
 		name.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-
 		GridBagConstraints gbc_name = new GridBagConstraints();
 		gbc_name.anchor = GridBagConstraints.NORTHWEST;
 		gbc_name.insets = new Insets(0, 0, 5, 5);
@@ -445,8 +457,6 @@ public class GUI {
 		gbc_addElectiveButton.gridy = 15;
 		addStudentPanel.add(addElectiveButton, gbc_addElectiveButton);
 
-		// JScrollPane scrollPane = new JScrollPane(addStudentPanel);
-
 		GridBagConstraints gbc_backButton = new GridBagConstraints();
 		gbc_backButton.insets = new Insets(0, 0, 0, 5);
 		gbc_backButton.gridx = 7;
@@ -459,12 +469,7 @@ public class GUI {
 		gbc_submitButton.gridx = 8;
 		gbc_submitButton.gridy = 16;
 		addStudentPanel.add(submitButton, gbc_submitButton);
-		// scrollPane.setPreferredSize(new Dimension(770,560));
-		// frame.getContentPane().add(scrollPane);
-
-		// frame.pack();
-		// frame.setVisible(true);
-
+		
 		/*
 		 * Action Listeners
 		 */
@@ -565,8 +570,17 @@ public class GUI {
 				return;
 			}
 
-			// TODO: Check if student is not already entered based on R-
-
+			ArrayList<Student> studentsCopy = database.getStudentList();
+			for (Student student : studentsCopy) {
+				if (rNumberField.getText().equals(student.getRNumber())) {
+					// Found a student with the same R-Number, issue warning
+					JOptionPane.showMessageDialog(addStudentPanel,
+							"Error: A student with the same R-Number is already in the system.", "Unable to remove student",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+			
 			// Add student to .txt file
 			try {
 				// Convert the selected preferences for RCC into arrays using Course Code
@@ -603,8 +617,8 @@ public class GUI {
 								: langPreferencePick.getSelectedItem().toString())
 						+ // Ternary Operator: (condition) ? (value if true) : (value if false)
 						", " + (statusPick.getSelectedItem().toString().equals("N/A") ? "N"
-								: statusPick.getSelectedItem().toString()); // Ternary Operator: (condition) ? (value if
-																			// true) : (value if false)
+								: statusPick.getSelectedItem().toString()); // Ternary Operator: (condition) ? (value if true) : (value if false)
+				
 				String studentData2 = electivePref[0] + ", " + electivePref[1] + ", " + electivePref[2] + ", "
 						+ electivePref[3] + ", " + electivePref[4] + ", " + electivePref[5] + ", " + electivePref[6];
 				String studentData3 = rccPref[0] + ", " + rccPref[1] + ", " + rccPref[2] + ", " + rccPref[3] + ", "
@@ -614,11 +628,6 @@ public class GUI {
 				if (!file.exists()) {
 					file.createNewFile();
 				}
-
-				// Test
-				System.out.println(studentData1);
-				System.out.println(studentData2);
-				System.out.println(studentData3);
 
 				FileWriter fileWriter = new FileWriter(file.getName(), true);
 				BufferedWriter bw = new BufferedWriter(fileWriter);
@@ -638,11 +647,13 @@ public class GUI {
 			// Clean panel and go back to main menu
 			cardLayout.show(constPanel, "menu");
 			addStudentPanel.removeAll();
+			return;
 		});
 
 		backButton.addActionListener(event -> {
 			cardLayout.show(constPanel, "menu");
 			addStudentPanel.removeAll();
+			return;
 		});
 	}
 
@@ -670,15 +681,6 @@ public class GUI {
 		JTextField rNumberField = new JTextField();
 		JButton removeButton = new JButton("Remove");
 		JButton backButton = new JButton("Back");
-
-		// Initialize database/courses
-		// TODO: Maybe initialize this every time we're in main menu instead
-		database = new Database();
-		database.generateCourses('i');
-		database.generateCourses('c');
-		database.generateCourses('r');
-		database.generateCourses('e');
-		database.generateStudentList();
 
 		/*
 		 * Add Components to panel
@@ -729,11 +731,17 @@ public class GUI {
 		backButton.addActionListener(event -> {
 			cardLayout.show(constPanel, "menu");
 			remStudentPanel.removeAll();
+			return;
 		});
 
 		removeButton.addActionListener(event -> {
 
-			// TODO: Check if rNumber is 9 digits long
+			if (rNumberField.getText().length() != 9) {
+				JOptionPane.showMessageDialog(remStudentPanel, "R-Number must be 9 digits long (e.g. R12345678)",
+						"Fix R-Number field", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
 			// Make a copy of the list
 			ArrayList<Student> studentsCopy = new ArrayList<Student>(database.getStudentList());
 			for (Student student : studentsCopy) {
@@ -745,7 +753,6 @@ public class GUI {
 						JOptionPane.showMessageDialog(remStudentPanel,
 								"Error: There are no records of any student in the system.", "Unable to remove student",
 								JOptionPane.ERROR_MESSAGE);
-						// TODO: Perhaps go back to main menu instead
 						return;
 					}
 
@@ -781,22 +788,19 @@ public class GUI {
 						inputFile.delete();
 						outputFile.renameTo(inputFile);
 
-						// Remove Student from ArrayList<Student> StudentList in database
-						database.getStudentList().remove(student);
-
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
+					
 					// If reached here, student has been successfully removed from everywhere
 					JOptionPane.showMessageDialog(remStudentPanel, "Student successfully removed.", "Student Removal",
 							JOptionPane.OK_OPTION);
-
+					
 					// Go back to main menu
 					cardLayout.show(constPanel, "menu");
 					remStudentPanel.removeAll();
-
+					
+					return;
 				}
 			}
 
@@ -810,49 +814,361 @@ public class GUI {
 	////////////////////
 	//// Add Course ////
 	////////////////////
-	// TODO
+	////////////////////
 	private void addCourse(JPanel addCoursePanel) {
 		// Set up Panel
 		GridBagLayout layout = new GridBagLayout();
 		addCoursePanel.setLayout(layout);
 
 		// Set layout dimensions
-		layout.columnWidths = new int[] { 34, 136, 130, 0, 0, 134, 45, 183, 0, 0 };
-		layout.rowHeights = new int[] { 25, 0, 16, 26, 16, 26, 16, 27, 16, 27, 16, 27, 16, 29, 16, 31, 29, 0 };
-		layout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		layout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+		layout.columnWidths = new int[] { 34, 0, 0, 141, 130, 134, 45, 183, 0, 0, 0, 0 };
+		layout.rowHeights = new int[] { 25, 0, 16, 26, 0, 16, 26, 16, 27, 16, 27, 16, 27, 16, 29, 16, 31, 29, 0 };
+		layout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		layout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, 0.0, Double.MIN_VALUE };
 
 		/*
 		 * Common Components
 		 */
-		JLabel title = new JLabel("Add Course Form");
-		JButton backButton = new JButton("Back");
+		 JLabel title = new JLabel("Add Course Form");
+		 JLabel courseCRNLabel = new JLabel("Course CRN");
+		 JTextField courseCRNBox = new JTextField();
+		 JLabel courseTitleLabel = new JLabel("Course Title");
+		 JLabel creditsLabel = new JLabel("Credit Hours");
+		 JTextField courseTitleBox = new JTextField();
+		 JLabel coursePrefixLabel = new JLabel("Course Prefix");
+		 JLabel courseNumberLabel = new JLabel("Course Number");
+		 JTextField coursePrefixBox = new JTextField();
+		 JTextField courseNumField = new JTextField();
+		 JLabel competencyLabel = new JLabel("Competency");
+		 JLabel capacityLabel = new JLabel("Capacity");
+		 JButton submitButton = new JButton("Submit");
+		 Box horizontalBox = Box.createHorizontalBox();
+		 Box sundayGroup = Box.createVerticalBox();
+		 JLabel sundayLabel = new JLabel("S");
+		 JRadioButton sundayButton = new JRadioButton("");
+		 Box mondayGroup = Box.createVerticalBox();
+		 JLabel mondayLabel = new JLabel("M");
+		 JRadioButton mondayButton = new JRadioButton("");
+		 Box tuesdayGroup = Box.createVerticalBox();
+		 JLabel tuesdayLabel = new JLabel("T");
+		 JRadioButton tuesdayButton = new JRadioButton("");
+		 Box wednesdayGroup = Box.createVerticalBox();
+		 JLabel wednesdayLabel = new JLabel("W");
+		 JRadioButton wednesdayButton = new JRadioButton("");
+		 Box thursdayGroup = Box.createVerticalBox();
+		 JLabel thursdayLabel = new JLabel("T");
+		 JRadioButton thursdayButton = new JRadioButton("");
+		 Box fridayGroup = Box.createVerticalBox();
+		 JLabel fridayLabel = new JLabel("F");
+		 JRadioButton fridayButton = new JRadioButton("");
+		 Box saturdayGroup = Box.createVerticalBox();
+		 JLabel saturdayLabel = new JLabel("S");
+		 JRadioButton saturdayButton = new JRadioButton("");
+		 JLabel daysLabel = new JLabel("Meeting Days");
+		 JLabel meetingTimeLabel = new JLabel("Start Time");
+		 JLabel endTimeLabel = new JLabel("End Time");
+		 JButton addLabButton = new JButton("Add Lab");
+		 JButton backButton = new JButton("Back");
 		
+		/*
+		 * List possible credit hours 
+		 */
+		 String[] creditHours = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+		 JComboBox<String> creditsBox = new JComboBox<String>(creditHours);
+		 creditsBox.setSelectedItem("N/A");
+		 
+		 /*
+		  * List possible proficiency/competency
+		  */
+		 String[] competencies = { "BCMP", "FCMP", "MCMP", "WCMP", "ECMP" };
+		 JComboBox<String> competencyBox = new JComboBox<String>(competencies);
+		 competencyBox.setSelectedItem("N/A");
+		 
+		 /*
+		  * List class' capacity numbers
+		  */
+		 SpinnerNumberModel capacityModel = new SpinnerNumberModel(0, 0, 99, 1);
+		 JSpinner capacitySpinner = new JSpinner(capacityModel);
+		 
+		 /*
+		  * List possible start times
+		  */
+		 String[] startTimes = { };
+		 JComboBox<String> startTimeBox = new JComboBox<String>(startTimes);
+		 startTimeBox.setSelectedItem("N/A");
+		 
+		 /*
+		  * List possible end times
+		  */
+		 String[] endTimes = { };
+		 JComboBox<String> endTimeBox = new JComboBox<String>(endTimes);
+		 startTimeBox.setSelectedItem("N/A");
+		 
+		 
 		/*
 		 * Add Components to panel
 		 */
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+
 		GridBagConstraints gbc_title = new GridBagConstraints();
-		gbc_title.anchor = GridBagConstraints.WEST;
+		gbc_title.anchor = GridBagConstraints.NORTHWEST;
 		gbc_title.insets = new Insets(0, 0, 5, 5);
-		gbc_title.gridwidth = 3;
-		gbc_title.gridx = 3;
+		gbc_title.gridwidth = 2;
+		gbc_title.gridx = 4;
 		gbc_title.gridy = 1;
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setFont(new Font("Lucida Grande", Font.BOLD, 20));
 		addCoursePanel.add(title, gbc_title);
 		
+		GridBagConstraints gbc_courseTitleLabel = new GridBagConstraints();
+		gbc_courseTitleLabel.anchor = GridBagConstraints.WEST;
+		gbc_courseTitleLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_courseTitleLabel.gridx = 2;
+		gbc_courseTitleLabel.gridy = 5;
+		courseTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(courseTitleLabel, gbc_courseTitleLabel);
+		
+		GridBagConstraints gbc_courseTitleBox = new GridBagConstraints();
+		gbc_courseTitleBox.insets = new Insets(0, 0, 5, 5);
+		gbc_courseTitleBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_courseTitleBox.gridx = 2;
+		gbc_courseTitleBox.gridy = 6;
+		courseTitleBox.setColumns(10);
+		addCoursePanel.add(courseTitleBox, gbc_courseTitleBox);
+		
+		GridBagConstraints gbc_courseCRNLabel = new GridBagConstraints();
+		gbc_courseCRNLabel.anchor = GridBagConstraints.WEST;
+		gbc_courseCRNLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_courseCRNLabel.gridx = 2;
+		gbc_courseCRNLabel.gridy = 3;
+		courseCRNLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(courseCRNLabel, gbc_courseCRNLabel);
+		
+		GridBagConstraints gbc_creditsLabel = new GridBagConstraints();
+		gbc_creditsLabel.anchor = GridBagConstraints.WEST;
+		gbc_creditsLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_creditsLabel.gridx = 3;
+		gbc_creditsLabel.gridy = 5;
+		creditsLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(creditsLabel, gbc_creditsLabel);
+		
+		GridBagConstraints gbc_courseCRNBox = new GridBagConstraints();
+		gbc_courseCRNBox.insets = new Insets(0, 0, 5, 5);
+		gbc_courseCRNBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_courseCRNBox.gridx = 2;
+		gbc_courseCRNBox.gridy = 4;
+		courseCRNBox.setColumns(10);
+		addCoursePanel.add(courseCRNBox, gbc_courseCRNBox);
+		
+		GridBagConstraints gbc_creditsBox = new GridBagConstraints();
+		gbc_creditsBox.insets = new Insets(0, 0, 5, 5);
+		gbc_creditsBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_creditsBox.gridx = 3;
+		gbc_creditsBox.gridy = 6;
+		addCoursePanel.add(creditsBox, gbc_creditsBox);
+		
+		GridBagConstraints gbc_coursePrefixLabel = new GridBagConstraints();
+		gbc_coursePrefixLabel.anchor = GridBagConstraints.WEST;
+		gbc_coursePrefixLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_coursePrefixLabel.gridx = 2;
+		gbc_coursePrefixLabel.gridy = 7;
+		coursePrefixLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(coursePrefixLabel, gbc_coursePrefixLabel);
+		
+		GridBagConstraints gbc_courseNumberLabel = new GridBagConstraints();
+		gbc_courseNumberLabel.anchor = GridBagConstraints.WEST;
+		gbc_courseNumberLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_courseNumberLabel.gridx = 3;
+		gbc_courseNumberLabel.gridy = 7;
+		courseNumberLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(courseNumberLabel, gbc_courseNumberLabel);
+		
+		GridBagConstraints gbc_coursePrefixBox = new GridBagConstraints();
+		gbc_coursePrefixBox.insets = new Insets(0, 0, 5, 5);
+		gbc_coursePrefixBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_coursePrefixBox.gridx = 2;
+		gbc_coursePrefixBox.gridy = 8;
+		coursePrefixBox.setColumns(10);
+		addCoursePanel.add(coursePrefixBox, gbc_coursePrefixBox);
+		
+		GridBagConstraints gbc_courseNumField = new GridBagConstraints();
+		gbc_courseNumField.insets = new Insets(0, 0, 5, 5);
+		gbc_courseNumField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_courseNumField.gridx = 3;
+		gbc_courseNumField.gridy = 8;
+		courseNumField.setColumns(10);
+		addCoursePanel.add(courseNumField, gbc_courseNumField);
+		
+		GridBagConstraints gbc_competencyLabel = new GridBagConstraints();
+		gbc_competencyLabel.anchor = GridBagConstraints.WEST;
+		gbc_competencyLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_competencyLabel.gridx = 2;
+		gbc_competencyLabel.gridy = 9;
+		competencyLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(competencyLabel, gbc_competencyLabel);
+		
+		GridBagConstraints gbc_capacityLabel = new GridBagConstraints();
+		gbc_capacityLabel.anchor = GridBagConstraints.WEST;
+		gbc_capacityLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_capacityLabel.gridx = 3;
+		gbc_capacityLabel.gridy = 9;
+		capacityLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(capacityLabel, gbc_capacityLabel);
+		
+		GridBagConstraints gbc_competencyBox = new GridBagConstraints();
+		gbc_competencyBox.insets = new Insets(0, 0, 5, 5);
+		gbc_competencyBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_competencyBox.gridx = 2;
+		gbc_competencyBox.gridy = 10;
+		addCoursePanel.add(competencyBox, gbc_competencyBox);
+		
+		GridBagConstraints gbc_capacitySpinner = new GridBagConstraints();
+		gbc_capacitySpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_capacitySpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_capacitySpinner.gridx = 3;
+		gbc_capacitySpinner.gridy = 10;
+		addCoursePanel.add(capacitySpinner, gbc_capacitySpinner);
+		
+		GridBagConstraints gbc_lblMeetingTime = new GridBagConstraints();
+		gbc_lblMeetingTime.anchor = GridBagConstraints.WEST;
+		gbc_lblMeetingTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblMeetingTime.gridx = 2;
+		gbc_lblMeetingTime.gridy = 11;
+		meetingTimeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		meetingTimeLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(meetingTimeLabel, gbc_lblMeetingTime);
+		
+		GridBagConstraints gbc_lblEndTime = new GridBagConstraints();
+		gbc_lblEndTime.anchor = GridBagConstraints.WEST;
+		gbc_lblEndTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEndTime.gridx = 3;
+		gbc_lblEndTime.gridy = 11;
+		endTimeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		endTimeLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(endTimeLabel, gbc_lblEndTime);
+		
+		GridBagConstraints gbc_startTimeBox = new GridBagConstraints();
+		gbc_startTimeBox.insets = new Insets(0, 0, 5, 5);
+		gbc_startTimeBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_startTimeBox.gridx = 2;
+		gbc_startTimeBox.gridy = 12;
+		addCoursePanel.add(startTimeBox, gbc_startTimeBox);
+		
+		GridBagConstraints gbc_endTimeBox = new GridBagConstraints();
+		gbc_endTimeBox.insets = new Insets(0, 0, 5, 5);
+		gbc_endTimeBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_endTimeBox.gridx = 3;
+		gbc_endTimeBox.gridy = 12;
+		addCoursePanel.add(endTimeBox, gbc_endTimeBox);
+		
+		GridBagConstraints gbc_daysLabel = new GridBagConstraints();
+		gbc_daysLabel.anchor = GridBagConstraints.WEST;
+		gbc_daysLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_daysLabel.gridx = 2;
+		gbc_daysLabel.gridy = 13;
+		daysLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		daysLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		addCoursePanel.add(daysLabel, gbc_daysLabel);
+		
+		GridBagConstraints gbc_horizontalBox = new GridBagConstraints();
+		gbc_horizontalBox.gridwidth = 2;
+		gbc_horizontalBox.anchor = GridBagConstraints.WEST;
+		gbc_horizontalBox.insets = new Insets(0, 0, 5, 5);
+		gbc_horizontalBox.gridx = 2;
+		gbc_horizontalBox.gridy = 14;
+		addCoursePanel.add(horizontalBox, gbc_horizontalBox);
+		sundayGroup.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		horizontalBox.add(sundayGroup);
+		sundayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		sundayLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		sundayGroup.add(sundayLabel);
+		sundayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		sundayButton.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		sundayGroup.add(sundayButton);
+		
+		horizontalBox.add(mondayGroup);
+		mondayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		mondayGroup.add(mondayLabel);
+		mondayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		mondayGroup.add(mondayButton);
+		
+		horizontalBox.add(tuesdayGroup);
+		tuesdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		tuesdayGroup.add(tuesdayLabel);
+		tuesdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		tuesdayGroup.add(tuesdayButton);
+		
+		horizontalBox.add(wednesdayGroup);
+		wednesdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		wednesdayGroup.add(wednesdayLabel);
+		wednesdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		wednesdayGroup.add(wednesdayButton);
+		
+		horizontalBox.add(thursdayGroup);
+		thursdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		thursdayGroup.add(thursdayLabel);
+		thursdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		thursdayGroup.add(thursdayButton);
+		
+		horizontalBox.add(fridayGroup);
+		fridayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		fridayGroup.add(fridayLabel);
+		fridayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		fridayGroup.add(fridayButton);
+		
+		horizontalBox.add(saturdayGroup);
+		saturdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		saturdayGroup.add(saturdayLabel);
+		saturdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		saturdayGroup.add(saturdayButton);
+		
+		GridBagConstraints gbc_addLabButton = new GridBagConstraints();
+		gbc_addLabButton.insets = new Insets(0, 0, 5, 5);
+		gbc_addLabButton.gridx = 2;
+		gbc_addLabButton.gridy = 15;
+		addCoursePanel.add(addLabButton, gbc_addLabButton);
+		
 		GridBagConstraints gbc_backButton = new GridBagConstraints();
-		gbc_backButton.insets = new Insets(0, 0, 0, 5);
-		gbc_backButton.gridx = 7;
-		gbc_backButton.gridy = 16;
+		gbc_backButton.anchor = GridBagConstraints.WEST;
+		gbc_backButton.insets = new Insets(0, 0, 5, 5);
+		gbc_backButton.gridx = 2;
+		gbc_backButton.gridy = 18;
 		addCoursePanel.add(backButton, gbc_backButton);
+		
+		GridBagConstraints gbc_submitButton = new GridBagConstraints();
+		gbc_submitButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_submitButton.insets = new Insets(0, 0, 5, 5);
+		gbc_submitButton.gridx = 9;
+		gbc_submitButton.gridy = 18;
+		addCoursePanel.add(submitButton, gbc_submitButton);
+		
+		/*
+		 * Action Listeners
+		 */
 		
 		backButton.addActionListener(event -> {
 			cardLayout.show(constPanel, "menu");
 			addCoursePanel.removeAll();
 		});
 	}
+	
 
 	////////////////////
 	/// Remove Course //
@@ -877,15 +1193,6 @@ public class GUI {
 		JTextField crnField = new JTextField();
 		JButton removeButton = new JButton("Remove");
 		JButton backButton = new JButton("Back");
-
-		// Initialize database/courses
-		// TODO: Maybe initialize this every time we're in main menu instead
-		database = new Database();
-		database.generateCourses('i');
-		database.generateCourses('c');
-		database.generateCourses('r');
-		database.generateCourses('e');
-		database.generateStudentList();
 
 		/*
 		 * Add Components to panel
@@ -933,17 +1240,22 @@ public class GUI {
 		 * Action Listeners
 		 */
 		removeButton.addActionListener(event -> {
-			//
-			// TODO: Check if CRN is 5 digits long
-
+			
+			// Check if CRN is 5 digits long
+			if (crnField.getText().length() != 5) {
+				JOptionPane.showMessageDialog(remCoursePanel, "R-Number must be 9 digits long (e.g. R12345678)",
+						"Fix R-Number field", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+				
 			// Remove course entails removing it from every .txt file it may be on,
 			// since some courses can be considered introductory courses for some
 			// but elective for others and vice-versa.
 			boolean courseFound = false;
-			courseFound = remCourseFrom("./introductory.txt", crnField, remCoursePanel);
-			courseFound = remCourseFrom("./electives.txt", crnField, remCoursePanel);
-			courseFound = remCourseFrom("./competency.txt", crnField, remCoursePanel);
-			courseFound = remCourseFrom("./rccCourses.txt", crnField, remCoursePanel);
+			courseFound = remCourse_Helper("./introductory.txt", crnField, remCoursePanel);
+			courseFound = remCourse_Helper("./electives.txt", crnField, remCoursePanel);
+			courseFound = remCourse_Helper("./competency.txt", crnField, remCoursePanel);
+			courseFound = remCourse_Helper("./rccCourses.txt", crnField, remCoursePanel);
 
 			if (courseFound) {
 				// If reached here, course has been successfully removed from everywhere
@@ -963,7 +1275,8 @@ public class GUI {
 		});
 	}
 
-	private boolean remCourseFrom(String path, JTextField crnField, JPanel remCoursePanel) {
+	// @param path - the .txt to which remove the course from
+	private boolean remCourse_Helper(String path, JTextField crnField, JPanel remCoursePanel) {
 		// Check removal for introductory courses
 		if (path.equals("./introductory.txt")) {
 			// Make a copy of the list
@@ -1038,7 +1351,6 @@ public class GUI {
 						return true;
 
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -1055,7 +1367,6 @@ public class GUI {
 						JOptionPane.showMessageDialog(remCoursePanel,
 								"Error: There are no records of any introducory courses in the system.",
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
-						// TODO: Perhaps go back to main menu instead
 						// Go back to main menu
 						cardLayout.show(constPanel, "menu");
 						remCoursePanel.removeAll();
@@ -1116,7 +1427,6 @@ public class GUI {
 						return true;
 
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -1133,7 +1443,7 @@ public class GUI {
 						JOptionPane.showMessageDialog(remCoursePanel,
 								"Error: There are no records of any introducory courses in the system.",
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
-						// TODO: Perhaps go back to main menu instead
+
 						// Go back to main menu
 						cardLayout.show(constPanel, "menu");
 						remCoursePanel.removeAll();
@@ -1194,7 +1504,6 @@ public class GUI {
 						return true;
 
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -1211,7 +1520,7 @@ public class GUI {
 						JOptionPane.showMessageDialog(remCoursePanel,
 								"Error: There are no records of any introducory courses in the system.",
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
-						// TODO: Perhaps go back to main menu instead
+
 						// Go back to main menu
 						cardLayout.show(constPanel, "menu");
 						remCoursePanel.removeAll();
@@ -1271,7 +1580,6 @@ public class GUI {
 						return true;
 
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -1281,6 +1589,7 @@ public class GUI {
 		return true;
 	}
 
+	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
