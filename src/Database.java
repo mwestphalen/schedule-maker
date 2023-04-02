@@ -5,15 +5,27 @@ import java.io.File;
 import java.time.*;
 public class Database {
 	// Make the database a singleton
-	private static ArrayList<ScheduledCourse> electiveCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<ScheduledCourse> introductoryCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<ScheduledCourse> competencyCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<ScheduledCourse> rccCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<Student> studentList = new ArrayList<Student>();
+	private static ArrayList<ScheduledCourse> electiveCourses;
+	private static ArrayList<ScheduledCourse> introductoryCourses;
+	private static ArrayList<ScheduledCourse> competencyCourses;
+	private static ArrayList<ScheduledCourse> rccCourses;
+	private static ArrayList<Student> studentList;
 	// use : as delimiter as hour and minutes - for end time etc
 	
 	public Database() {
-		 // Maybe make calls to all of the generate functions?
+		// Initialize courses	
+		introductoryCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('i');
+		competencyCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('c');
+		rccCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('r');
+		electiveCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('e');
+		
+		// Initialize students' list
+		studentList = new ArrayList<Student>();
+		generateStudentList();
 	}
 	
 	public void generateCourses(char typeOfCourses) {
@@ -79,24 +91,24 @@ public class Database {
 					Time courseLabTime = new Time(meetingTime2, meetingDays2);
 					
 					if (typeOfCourses == 'i') {
-						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "Major"));
+						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 					} else if (typeOfCourses == 'c') {
-						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "Competency"));
+						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 					} else if (typeOfCourses == 'e') {
-						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "Elective"));
+						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 					} else {
-						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime, "RCC"));
+						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 					}
 					lineNumber++;
 				} else {
 					if (typeOfCourses == 'i') {
-						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, "Major"));
+						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime));
 					} else if (typeOfCourses == 'c') {
-						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime, "Competency"));
+						competencyCourses.add(new ScheduledCourse(courseToAdd, courseTime));
 					} else if (typeOfCourses == 'e') {
-						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime, "Elective"));
+						electiveCourses.add(new ScheduledCourse(courseToAdd, courseTime));
 					} else {
-						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime, "RCC"));
+						rccCourses.add(new ScheduledCourse(courseToAdd, courseTime));
 					}
 				}
 				lineNumber++;
