@@ -5,25 +5,20 @@ public class ScheduledCourse {
 	private Course courseLab;
 	private Time time;
 	private Time labTime;
-	private final boolean hasLab;
-	private String fulfillmentType;
+	private final boolean hasLab;	
 	
-	
-	public ScheduledCourse(Course c, Time t, String ft) {
+	public ScheduledCourse(Course c, Time t) {
 		course = c;
 		time = t;
 		hasLab = false;
-		fulfillmentType = ft;
 	}
 	
-	public ScheduledCourse(Course c, Time t, Course cl, Time lt, String ft) {
+	public ScheduledCourse(Course c, Time t, Course cl, Time lt) {
 		course = c;
 		courseLab = cl;
 		time = t;
 		labTime = lt;
-		hasLab = true;
-		fulfillmentType = ft;
-		
+		hasLab = true;	
 	}
 
 	public Course getCourse() {
@@ -59,13 +54,5 @@ public class ScheduledCourse {
 	
 	public boolean getHasLab() {
 		return hasLab;
-	}
-
-	public String getFulfillmentType() {
-		return fulfillmentType;
-	}
-
-	public void setFulfillmentType(String ft) {
-		fulfillmentType = ft;
 	}	
 }

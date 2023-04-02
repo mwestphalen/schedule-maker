@@ -375,7 +375,25 @@ public class Student {
 					// Competency)
 					cell = rowCreated.createCell(col);
 					cell.setCellStyle(defaultCellStyle);
-					cell.setCellValue(getStudentSchedule().getScheduleList()[classIndex].getFulfillmentType());
+					switch (classIndex) {
+					case 0:
+						cell.setCellValue("Major");
+						break;
+					case 1:
+						cell.setCellValue("Competency");
+						break;
+					case 2:
+						cell.setCellValue("Elective");
+						break;
+					case 3:
+						cell.setCellValue("RCC");
+						break;
+					default:
+						cell.setCellValue("error");
+						break;
+					}
+						
+					
 				}
 			}
 
@@ -431,7 +449,23 @@ public class Student {
 					case 6:
 						// Print course's fulfillment type (Major of Interest, RCC, Elective, Competency)
 						cell.setCellStyle(defaultCellStyle);
-						cell.setCellValue(getStudentSchedule().getScheduleList()[classIndex].getFulfillmentType());
+						switch (classIndex) {
+						case 0:
+							cell.setCellValue("Major");
+							break;
+						case 1:
+							cell.setCellValue("Competency");
+							break;
+						case 2:
+							cell.setCellValue("Elective");
+							break;
+						case 3:
+							cell.setCellValue("RCC");
+							break;
+						default:
+								cell.setCellValue("error");
+								break;
+						}
 
 						break;
 					default:
