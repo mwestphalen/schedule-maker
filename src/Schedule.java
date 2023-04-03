@@ -173,7 +173,7 @@ public class Schedule {
 
 	
 	public void addRCCCourse(ArrayList<ScheduledCourse> rccCourses, ArrayList<ScheduledCourse> rccPreferences) {
-		
+	
 		try {
 			if (!rccPreferences.isEmpty()) {
 				for (int i = 0; i < rccPreferences.size(); i++) {

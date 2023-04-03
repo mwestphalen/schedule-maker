@@ -8,10 +8,22 @@ public class Driver {
 		Student currentStudent;
 		for (int i = 0; i < studentList.size(); i++) {
 			currentStudent = studentList.get(i);
-			if (currentStudent.getStatus().equals("H") || currentStudent.getStatus().equals("E")) {
-				courseDeque.addFirst(currentStudent);
-			} else {
+			if (!currentStudent.getStatus().equals("H") && !currentStudent.getStatus().equals("E")) {
 				courseDeque.add(currentStudent);
+			}
+		}
+		
+		for (int i = 0; i < studentList.size(); i++) {
+			currentStudent = studentList.get(i);
+			if (currentStudent.getStatus().equals("H")) {
+				courseDeque.addFirst(currentStudent);
+			}
+		}
+		
+		for (int i = 0; i < studentList.size(); i++) {
+			currentStudent = studentList.get(i);
+			if (currentStudent.getStatus().equals("E")) {
+				courseDeque.addFirst(currentStudent);
 			}
 		}
 		return;
@@ -110,7 +122,7 @@ public class Driver {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//new DataTypeWindow();
+		//new GuiRemoveStudent();
 		
 		Database data = new Database();
 		// could use strings instead of letters to make it more clear
@@ -211,7 +223,6 @@ public class Driver {
 			System.out.print(" / " + data.getElectiveCourses().get(i).getCourse().getCapacity());
 			System.out.println();
 		}
-		
 		
 		System.out.println();
 		System.out.println("RCC Courses:");

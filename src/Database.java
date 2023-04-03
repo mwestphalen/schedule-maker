@@ -297,51 +297,51 @@ public class Database {
 	}
 	
 	// MUS 153 doesnt work for some reason
-		public ScheduledCourse findCourse(String name, char type) {
-			ScheduledCourse course;
-			if (type == 'i') {
-				for(int i = 0; i < electiveCourses.size(); i++) {
-					if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
-						return electiveCourses.get(i);
-					}
+	public ScheduledCourse findCourse(String name, char type) {
+		ScheduledCourse course;
+		if (type == 'i') {
+			for (int i = 0; i < electiveCourses.size(); i++) {
+				if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
+					return electiveCourses.get(i);
 				}
-				
-				System.out.println("Could not find Elective course " + name);
-				System.out.println("Please make sure preference sheet information is entered correctly.");
-				System.out.println("View the read.me for more information.");		
-			} else if (type == 'e') {
-				for(int i = 0; i < electiveCourses.size(); i++) {
-					if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
-						return electiveCourses.get(i);
-					}
-				}
-				
-				System.out.println("Could not find Elective course " + name);
-				System.out.println("Please make sure preference sheet information is entered correctly.");
-				System.out.println("View the read.me for more information.");
-			} else {
-				for(int i = 0; i < rccCourses.size(); i++) {
-					if (name.equals(rccCourses.get(i).getCourse().getCourseCode())) {
-						return rccCourses.get(i);
-					}
-				}
-				
-				System.out.println("Could not find RCC course " + name);
-				System.out.println("Please make sure preference sheet information is entered correctly.");
-				System.out.println("View the read.me for more information.");
 			}
-			 // prompt to see if they want to add a random course?
-			// maybe make option so that they can add random courses if a course is not found for rest of execution
-			getUserResponse(1);
-			if (type == 'i') {
-				course = Schedule.getRandomCourse(introductoryCourses);
-			}else if (type == 'e') {
-				course = Schedule.getRandomCourse(electiveCourses);
-			}else {
-				course = Schedule.getRandomCourse(competencyCourses);
+
+			System.out.println("Could not find Elective course " + name);
+			System.out.println("Please make sure preference sheet information is entered correctly.");
+			System.out.println("View the read.me for more information.");
+		} else if (type == 'e') {
+			for (int i = 0; i < electiveCourses.size(); i++) {
+				if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
+					return electiveCourses.get(i);
+				}
 			}
-			return course;
-			
+
+			System.out.println("Could not find Elective course " + name);
+			System.out.println("Please make sure preference sheet information is entered correctly.");
+			System.out.println("View the read.me for more information.");
+		} else {
+			for (int i = 0; i < rccCourses.size(); i++) {
+				if (name.equals(rccCourses.get(i).getCourse().getCourseCode())) {
+					return rccCourses.get(i);
+				}
+			}
+
+			System.out.println("Could not find RCC course " + name);
+			System.out.println("Please make sure preference sheet information is entered correctly.");
+			System.out.println("View the read.me for more information.");
 		}
-		
+		// prompt to see if they want to add a random course?
+		// maybe make option so that they can add random courses if a course is not
+		// found for rest of execution
+		getUserResponse(1);
+		if (type == 'i') {
+			course = Schedule.getRandomCourse(introductoryCourses);
+		} else if (type == 'e') {
+			course = Schedule.getRandomCourse(electiveCourses);
+		} else {
+			course = Schedule.getRandomCourse(competencyCourses);
+		}
+		return course;
+	}
+
 }

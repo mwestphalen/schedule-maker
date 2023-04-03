@@ -1,23 +1,9 @@
 // For EXCEL output
 import java.io.IOException;
 import java.io.FileOutputStream;
-
 import org.apache.poi.hssf.usermodel.HSSFHeader;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.FontUnderline;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
-import org.apache.poi.xssf.usermodel.XSSFDrawing;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFTextBox;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.xssf.usermodel.extensions.XSSFHeaderFooter;
 
 import java.util.ArrayList;
@@ -175,30 +161,6 @@ public class Student {
 	public void setStatus(String stat) {
 		status = stat;
 	}
-
-	public void printStudentSchedule() {
-		System.out.println("Intro: ");
-		schedule.getMajorCourse().getCourse().printCourseInfo();
-		System.out.print(" ");
-		schedule.getMajorCourse().getTime().printTime();
-		System.out.println();
-		System.out.println("Elective: ");
-		schedule.getElectiveCourse().getCourse().printCourseInfo();
-		System.out.print(" ");
-		schedule.getElectiveCourse().getTime().printTime();
-		System.out.println();
-		System.out.println("RCC: ");
-		schedule.getRCCCourse().getCourse().printCourseInfo();
-		System.out.print(" ");
-		schedule.getRCCCourse().getTime().printTime();
-		System.out.println();
-		System.out.println("Competency: ");
-		schedule.getCompetencyCourse().getCourse().printCourseInfo();
-		System.out.print(" ");
-		schedule.getCompetencyCourse().getTime().printTime();
-		System.out.println();
-	}
-
 	
 	public String[] getStudentInfo() {
 		String[] studentInfo = new String[3];
