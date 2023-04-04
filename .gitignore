@@ -3,7 +3,7 @@
 .settings
 .project
 .classpath
-README.md
+/README.md
 /target/
 /.apt_generated/
 StudentSchedules.xlsx
