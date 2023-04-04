@@ -10,14 +10,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GUI {
 	CardLayout cardLayout;
 	JPanel constPanel;
-	JButton addStudentButton, remStudentButton, addCourseButton, remCourseButton;
 	ArrayList<JComboBox> rccComboBoxes;
 	ArrayList<JComboBox> electivesComboBoxes;
 	GroupLayout.ParallelGroup picksParallel;
@@ -80,16 +82,19 @@ public class GUI {
 		mainMenuPanel.add(rollinsLogo, gbc_rollinsLogo);
 
 		// Where the GUI is assembled
-		addStudentButton = new JButton("Add Student");
-		remStudentButton = new JButton("Remove Student");
-		addCourseButton = new JButton("Add Course");
-		remCourseButton = new JButton("Remove Course");
+		JButton addStudentButton = new JButton("Add Student");
+		JButton remStudentButton = new JButton("Remove Student");
+		JButton addCourseButton = new JButton("Add Course");
+		JButton remCourseButton = new JButton("Remove Course");
+		JButton makeScheduleButton = new JButton("Make Schedule");
+		makeScheduleButton.setPreferredSize(new Dimension(150, 150));
 
 		Box box = Box.createVerticalBox();
 		box.add(addStudentButton);
 		box.add(remStudentButton);
 		box.add(addCourseButton);
 		box.add(remCourseButton);
+		box.add(makeScheduleButton);
 
 		GridBagConstraints gbc_box = new GridBagConstraints();
 		gbc_box.insets = new Insets(0, 0, 5, 5);
@@ -118,6 +123,42 @@ public class GUI {
 		remCourseButton.addActionListener(event -> {
 			cardLayout.show(constPanel, "remCourse");
 			remCourse(remCoursePanel);
+		});
+		
+		makeScheduleButton.addActionListener(event -> {
+			
+			Deque<Student> introDeque = new LinkedList<>();
+			Deque<Student> compDeque = new LinkedList<>();
+			Deque<Student> eleDeque = new LinkedList<>();
+			Deque<Student> rccDeque = new LinkedList<>();
+			
+			Driver.createDeque(database.getStudentList(), introDeque);
+			Driver.createDeque(database.getStudentList(), compDeque);
+			Driver.createDeque(database.getStudentList(), eleDeque);
+			Driver.createDeque(database.getStudentList(), rccDeque);
+			
+			// instead of checking if the courses are all full when adding can perhaps do a preemptive check comparing
+			// size of all courses in category to number of students
+			// might still run into issue if there is overlap
+			
+			Driver.addStudentsToIntroCourses(introDeque, database.getIntroductoryCourses());
+			System.out.println("All students have a introductory course added.");
+			Driver.addStudentsToCompetencyCourses(compDeque, database.getCompetencyCourses());
+			System.out.println("All students have a competency course added.");
+			Driver.addStudentsToElectiveCourses(eleDeque, database.getElectiveCourses());
+			System.out.println("All students have a elective course added.");
+			Driver.addStudentsToRCCCourses(rccDeque, database.getRCCCourses());
+			System.out.println("All students have a RCC course added.");
+			
+			// Print to XLSX File (one workbook w/ worksheets for each student... good)
+			for (int i = 0; i < database.getStudentList().size(); i++) {
+				database.getStudentList().get(i).printStudentSchedule_Excel(i + 1, database.getStudentList().size());
+			}
+			
+			JOptionPane.showMessageDialog(mainMenuPanel, "Student's schedules have been created.",
+					"Schedules Creation", JOptionPane.OK_OPTION);
+			
+			return;
 		});
 		
 		// Add other screens/panels to the layout manager (cardLayout)
@@ -231,7 +272,7 @@ public class GUI {
 		 * List possible student's status
 		 */
 
-		String[] statusOptions = { "N/A", "E", "H", "ARP" };
+		String[] statusOptions = { "N/A", "E", "H", "AMP" };
 		JComboBox<String> statusPick = new JComboBox<String>(statusOptions);
 		statusPick.setSelectedItem("N/A");
 
@@ -823,56 +864,103 @@ public class GUI {
 		// Set layout dimensions
 		layout.columnWidths = new int[] { 34, 0, 0, 141, 130, 134, 45, 183, 0, 0, 0, 0 };
 		layout.rowHeights = new int[] { 25, 0, 16, 26, 0, 16, 26, 16, 27, 16, 27, 16, 27, 16, 29, 16, 31, 29, 0 };
-		layout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		layout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, Double.MIN_VALUE };
+		layout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		layout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, Double.MIN_VALUE };
 
 		/*
 		 * Common Components
 		 */
-		 JLabel title = new JLabel("Add Course Form");
-		 JLabel courseCRNLabel = new JLabel("Course CRN");
-		 JTextField courseCRNBox = new JTextField();
-		 JLabel courseTitleLabel = new JLabel("Course Title");
-		 JLabel creditsLabel = new JLabel("Credit Hours");
-		 JTextField courseTitleBox = new JTextField();
-		 JLabel coursePrefixLabel = new JLabel("Course Prefix");
-		 JLabel courseNumberLabel = new JLabel("Course Number");
-		 JTextField coursePrefixBox = new JTextField();
-		 JTextField courseNumField = new JTextField();
-		 JLabel competencyLabel = new JLabel("Competency");
-		 JLabel capacityLabel = new JLabel("Capacity");
-		 JButton submitButton = new JButton("Submit");
-		 Box horizontalBox = Box.createHorizontalBox();
-		 Box sundayGroup = Box.createVerticalBox();
-		 JLabel sundayLabel = new JLabel("S");
-		 JRadioButton sundayButton = new JRadioButton("");
-		 Box mondayGroup = Box.createVerticalBox();
-		 JLabel mondayLabel = new JLabel("M");
-		 JRadioButton mondayButton = new JRadioButton("");
-		 Box tuesdayGroup = Box.createVerticalBox();
-		 JLabel tuesdayLabel = new JLabel("T");
-		 JRadioButton tuesdayButton = new JRadioButton("");
-		 Box wednesdayGroup = Box.createVerticalBox();
-		 JLabel wednesdayLabel = new JLabel("W");
-		 JRadioButton wednesdayButton = new JRadioButton("");
-		 Box thursdayGroup = Box.createVerticalBox();
-		 JLabel thursdayLabel = new JLabel("T");
-		 JRadioButton thursdayButton = new JRadioButton("");
-		 Box fridayGroup = Box.createVerticalBox();
-		 JLabel fridayLabel = new JLabel("F");
-		 JRadioButton fridayButton = new JRadioButton("");
-		 Box saturdayGroup = Box.createVerticalBox();
-		 JLabel saturdayLabel = new JLabel("S");
-		 JRadioButton saturdayButton = new JRadioButton("");
-		 JLabel daysLabel = new JLabel("Meeting Days");
-		 JLabel meetingTimeLabel = new JLabel("Start Time");
-		 JLabel endTimeLabel = new JLabel("End Time");
-		 JButton addLabButton = new JButton("Add Lab");
-		 JButton backButton = new JButton("Back");
-		
+		JLabel title = new JLabel("Add Course Form");
+		JLabel courseCRNLabel = new JLabel("Course CRN");
+		JTextField courseCRNBox = new JTextField();
+		JLabel courseSubjectLabel = new JLabel("Course Subject"); // TODO add component to screen
+		JTextField courseSubjectField = new JTextField();
+		JLabel courseTitleLabel = new JLabel("Course Title");
+		JLabel creditsLabel = new JLabel("Credit Hours");
+		JTextField courseTitleField = new JTextField();
+		JLabel coursePrefixLabel = new JLabel("Course Prefix");
+		JLabel courseNumberLabel = new JLabel("Course Number");
+		JTextField coursePrefixField = new JTextField();
+		JTextField courseNumField = new JTextField();
+		JLabel competencyLabel = new JLabel("Competency");
+		JLabel capacityLabel = new JLabel("Capacity");
+		Box horizontalBox = Box.createHorizontalBox();
+		Box sundayGroup = Box.createVerticalBox();
+		JLabel sundayLabel = new JLabel("S");
+		JRadioButton sundayButton = new JRadioButton("");
+		Box mondayGroup = Box.createVerticalBox();
+		JLabel mondayLabel = new JLabel("M");
+		JRadioButton mondayButton = new JRadioButton("");
+		Box tuesdayGroup = Box.createVerticalBox();
+		JLabel tuesdayLabel = new JLabel("T");
+		JRadioButton tuesdayButton = new JRadioButton("");
+		Box wednesdayGroup = Box.createVerticalBox();
+		JLabel wednesdayLabel = new JLabel("W");
+		JRadioButton wednesdayButton = new JRadioButton("");
+		Box thursdayGroup = Box.createVerticalBox();
+		JLabel thursdayLabel = new JLabel("T");
+		JRadioButton thursdayButton = new JRadioButton("");
+		Box fridayGroup = Box.createVerticalBox();
+		JLabel fridayLabel = new JLabel("F");
+		JRadioButton fridayButton = new JRadioButton("");
+		Box saturdayGroup = Box.createVerticalBox();
+		JLabel saturdayLabel = new JLabel("S");
+		JRadioButton saturdayButton = new JRadioButton("");
+		JLabel daysLabel = new JLabel("Meeting Days");
+		JLabel meetingTimeLabel = new JLabel("Start Time");
+		JLabel endTimeLabel = new JLabel("End Time");
+		JButton addLabButton = new JButton("Add Lab");
+		JButton backButton = new JButton("Back");
+		JButton submitButton = new JButton("Submit");
+		AtomicBoolean hasLab = new AtomicBoolean(false);
+
 		/*
-		 * List possible credit hours 
+		 * Common Lab course Components
+		 */
+		JLabel labCRNLabel;
+		JTextField labCRNBox;
+		JLabel labTitleLabel;
+		JTextField labTitleBox;
+		JLabel labCreditsLabel;
+		JLabel labCoursePrefixLabel;
+		JLabel labCourseNumberLabel;
+		JTextField labCoursePrefixBox;
+		JTextField labCourseNumField;
+		JLabel labCompetencyLabel;
+		JLabel labCapacityLabel;
+		Box labHorizontalBox;
+		Box labSundayGroup;
+		JLabel labSundayLabel;
+		JRadioButton labSundayButton;
+		Box labMondayGroup;
+		JLabel labMondayLabel;
+		JRadioButton labMondayButton;
+		Box labTuesdayGroup;
+		JLabel labTuesdayLabel;
+		JRadioButton labTuesdayButton;
+		Box labWednesdayGroup;
+		JLabel labWednesdayLabel;
+		JRadioButton labWednesdayButton;
+		Box labThursdayGroup;
+		JLabel labThursdayLabel;
+		JRadioButton labThursdayButton;
+		Box labFridayGroup;
+		JLabel labFridayLabel;
+		JRadioButton labFridayButton;
+		Box labSaturdayGroup;
+		JLabel labSaturdayLabel;
+		JRadioButton labSaturdayButton;
+		JLabel labDaysLabel;
+		JLabel labTimeLabel;
+		JLabel labEndTimeLabel;
+		JComboBox<String> labCreditsBox;
+		JComboBox<String> labCompetencyBox = new JComboBox<String>();
+		JSpinner labCapacitySpinner;
+
+		/*
+		 * 
+		 * /* List possible credit hours
 		 */
 		 String[] creditHours = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 		 JComboBox<String> creditsBox = new JComboBox<String>(creditHours);
@@ -894,16 +982,39 @@ public class GUI {
 		 /*
 		  * List possible start times
 		  */
-		 String[] startTimes = { };
+		 String[] startTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM",
+				 				 "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM",
+				 				 "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM",
+				 				 "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
+				 				 "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM",
+				 				 "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM",
+				 				 "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM",
+				 				 "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",};
+		 
 		 JComboBox<String> startTimeBox = new JComboBox<String>(startTimes);
 		 startTimeBox.setSelectedItem("N/A");
 		 
 		 /*
 		  * List possible end times
 		  */
-		 String[] endTimes = { };
+		 String[] endTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM",
+				 			   "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM",
+				 			   "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM",
+				 			   "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
+				 			   "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM",
+				 			   "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM",
+				 			   "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM",
+				 			   "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",};
+		 
 		 JComboBox<String> endTimeBox = new JComboBox<String>(endTimes);
-		 startTimeBox.setSelectedItem("N/A");
+		 endTimeBox.setSelectedItem("N/A");
+		 
+		 /*
+		  * Option for AM or PM classes
+		  */
+		 // TODO add component to screen, same for lab
+		 String[] AMorPM = { "AM", "PM"};
+		 JComboBox<String> AMorPMBox = new JComboBox<String>(AMorPM);
 		 
 		 
 		/*
@@ -915,7 +1026,7 @@ public class GUI {
 		GridBagConstraints gbc_title = new GridBagConstraints();
 		gbc_title.anchor = GridBagConstraints.NORTHWEST;
 		gbc_title.insets = new Insets(0, 0, 5, 5);
-		gbc_title.gridwidth = 2;
+		gbc_title.gridwidth = 4;
 		gbc_title.gridx = 4;
 		gbc_title.gridy = 1;
 		title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -935,8 +1046,8 @@ public class GUI {
 		gbc_courseTitleBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_courseTitleBox.gridx = 2;
 		gbc_courseTitleBox.gridy = 6;
-		courseTitleBox.setColumns(10);
-		addCoursePanel.add(courseTitleBox, gbc_courseTitleBox);
+		courseTitleField.setColumns(10);
+		addCoursePanel.add(courseTitleField, gbc_courseTitleBox);
 		
 		GridBagConstraints gbc_courseCRNLabel = new GridBagConstraints();
 		gbc_courseCRNLabel.anchor = GridBagConstraints.WEST;
@@ -990,8 +1101,8 @@ public class GUI {
 		gbc_coursePrefixBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_coursePrefixBox.gridx = 2;
 		gbc_coursePrefixBox.gridy = 8;
-		coursePrefixBox.setColumns(10);
-		addCoursePanel.add(coursePrefixBox, gbc_coursePrefixBox);
+		coursePrefixField.setColumns(10);
+		addCoursePanel.add(coursePrefixField, gbc_coursePrefixBox);
 		
 		GridBagConstraints gbc_courseNumField = new GridBagConstraints();
 		gbc_courseNumField.insets = new Insets(0, 0, 5, 5);
@@ -1159,9 +1270,412 @@ public class GUI {
 		gbc_submitButton.gridy = 18;
 		addCoursePanel.add(submitButton, gbc_submitButton);
 		
+		// If course has lab, initialize components and put them on the screen
+		if (hasLab.get()) {
+			labCRNLabel = new JLabel("Lab CRN");
+			labCRNBox = new JTextField();
+			labTitleLabel = new JLabel("Lab Title");
+			labTitleBox = new JTextField();
+			labCreditsLabel = new JLabel("Lab Credit Hours");
+			labCoursePrefixLabel = new JLabel("Lab Course Prefix");
+			labCourseNumberLabel = new JLabel("Lab Course Number");
+			labCoursePrefixBox = new JTextField();
+			labCourseNumField = new JTextField();
+			labCompetencyLabel = new JLabel("Lab Competency");
+			labCapacityLabel = new JLabel("Lab Capacity");
+			labHorizontalBox = Box.createHorizontalBox();
+			labSundayGroup = Box.createVerticalBox();
+			labSundayLabel = new JLabel("S");
+			labSundayButton = new JRadioButton("");
+			labMondayGroup = Box.createVerticalBox();
+			labMondayLabel = new JLabel("M");
+			labMondayButton = new JRadioButton("");
+			labTuesdayGroup = Box.createVerticalBox();
+			labTuesdayLabel = new JLabel("T");
+			labTuesdayButton = new JRadioButton("");
+			labWednesdayGroup = Box.createVerticalBox();
+			labWednesdayLabel = new JLabel("W");
+			labWednesdayButton = new JRadioButton("");
+			labThursdayGroup = Box.createVerticalBox();
+			labThursdayLabel = new JLabel("T");
+			labThursdayButton = new JRadioButton("");
+			labFridayGroup = Box.createVerticalBox();
+			labFridayLabel = new JLabel("F");
+			labFridayButton = new JRadioButton("");
+			labSaturdayGroup = Box.createVerticalBox();
+			labSaturdayLabel = new JLabel("S");
+			labSaturdayButton = new JRadioButton("");
+			labDaysLabel = new JLabel("Lab Meeting Days");
+			labTimeLabel = new JLabel("Lab Start Time");
+			labEndTimeLabel = new JLabel("Lab End Time");
+			
+			/*
+			 * List possible credit hours
+			 */
+			String[] labCreditHours = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+			labCreditsBox = new JComboBox<String>(labCreditHours);
+			labCreditsBox.setSelectedItem("N/A");
+
+			/*
+			 * List possible proficiency/competency
+			 */
+			String[] labCompetencies = { "N/A", "BCMP", "FCMP", "MCMP", "WCMP", "ECMP" };
+			labCompetencyBox = new JComboBox<String>(labCompetencies);
+			labCompetencyBox.setSelectedItem("N/A");
+
+			/*
+			 * List class' capacity numbers
+			 */
+			SpinnerNumberModel labCapacityModel = new SpinnerNumberModel(0, 0, 99, 1);
+			labCapacitySpinner = new JSpinner(labCapacityModel);
+
+			/*
+			 * List possible start times
+			 */
+			String[] labStartTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM",
+					"07:45 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM",
+					"09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM",
+					"11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM",
+					"01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM",
+					"03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM",
+					"05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM",
+					"07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM",
+					"09:45 PM", };
+
+			JComboBox<String> labStartTimeBox = new JComboBox<String>(labStartTimes);
+			labStartTimeBox.setSelectedItem("N/A");
+
+			/*
+			 * List possible end times
+			 */
+			String[] labEndTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM",
+					"07:45 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM",
+					"09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM",
+					"11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM",
+					"01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM",
+					"03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM",
+					"05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM",
+					"07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM",
+					"09:45 PM", };
+
+			JComboBox<String> labEndTimeBox = new JComboBox<String>(labEndTimes);
+			labEndTimeBox.setSelectedItem("N/A");
+			
+			GridBagConstraints gbc_labTitleLabel = new GridBagConstraints();
+			gbc_labTitleLabel.anchor = GridBagConstraints.WEST;
+			gbc_labTitleLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labTitleLabel.gridx = 5;
+			gbc_labTitleLabel.gridy = 5;
+			labTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labTitleLabel, gbc_labTitleLabel);
+			
+			GridBagConstraints gbc_labTitleBox = new GridBagConstraints();
+			gbc_labTitleBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labTitleBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labTitleBox.gridx = 5;
+			gbc_labTitleBox.gridy = 6;
+			addCoursePanel.add(labTitleBox, gbc_labTitleBox);
+			
+			GridBagConstraints gbc_labCRNLabel = new GridBagConstraints();
+			gbc_labCRNLabel.anchor = GridBagConstraints.WEST;
+			gbc_labCRNLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labCRNLabel.gridx = 5;
+			gbc_labCRNLabel.gridy = 3;
+			labCRNLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labCRNLabel, gbc_labCRNLabel);
+			
+			GridBagConstraints gbc_labCreditsLabel = new GridBagConstraints();
+			gbc_labCreditsLabel.anchor = GridBagConstraints.WEST;
+			gbc_labCreditsLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labCreditsLabel.gridx = 6;
+			gbc_labCreditsLabel.gridy = 5;
+			labCreditsLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labCreditsLabel, gbc_labCreditsLabel);
+			
+			GridBagConstraints gbc_labCourseCRNBox = new GridBagConstraints();
+			gbc_labCourseCRNBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labCourseCRNBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labCourseCRNBox.gridx = 5;
+			gbc_labCourseCRNBox.gridy = 4;
+			labCRNBox.setColumns(10);
+			addCoursePanel.add(labCRNBox, gbc_labCourseCRNBox);
+			
+			GridBagConstraints gbc_labCreditsBox = new GridBagConstraints();
+			gbc_labCreditsBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labCreditsBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labCreditsBox.gridx = 6;
+			gbc_labCreditsBox.gridy = 6;
+			addCoursePanel.add(labCreditsBox, gbc_labCreditsBox);
+			
+			GridBagConstraints gbc_labCoursePrefixLabel = new GridBagConstraints();
+			gbc_labCoursePrefixLabel.anchor = GridBagConstraints.WEST;
+			gbc_labCoursePrefixLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labCoursePrefixLabel.gridx = 5;
+			gbc_labCoursePrefixLabel.gridy = 7;
+			labCoursePrefixLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labCoursePrefixLabel, gbc_labCoursePrefixLabel);
+			
+			GridBagConstraints gbc_labCourseNumberLabel = new GridBagConstraints();
+			gbc_labCourseNumberLabel.anchor = GridBagConstraints.WEST;
+			gbc_labCourseNumberLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labCourseNumberLabel.gridx = 6;
+			gbc_labCourseNumberLabel.gridy = 7;
+			labCourseNumberLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labCourseNumberLabel, gbc_labCourseNumberLabel);
+			
+			GridBagConstraints gbc_labCoursePrefixBox = new GridBagConstraints();
+			gbc_labCoursePrefixBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labCoursePrefixBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labCoursePrefixBox.gridx = 5;
+			gbc_labCoursePrefixBox.gridy = 8;
+			labCoursePrefixBox.setColumns(10);
+			addCoursePanel.add(labCoursePrefixBox, gbc_labCoursePrefixBox);
+			
+			GridBagConstraints gbc_labCourseNumField = new GridBagConstraints();
+			gbc_labCourseNumField.insets = new Insets(0, 0, 5, 5);
+			gbc_labCourseNumField.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labCourseNumField.gridx = 6;
+			gbc_labCourseNumField.gridy = 8;
+			labCourseNumField.setColumns(10);
+			addCoursePanel.add(labCourseNumField, gbc_labCourseNumField);
+			
+			GridBagConstraints gbc_labCompetencyLabel = new GridBagConstraints();
+			gbc_labCompetencyLabel.anchor = GridBagConstraints.WEST;
+			gbc_labCompetencyLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labCompetencyLabel.gridx = 5;
+			gbc_labCompetencyLabel.gridy = 9;
+			labCompetencyLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labCompetencyLabel, gbc_labCompetencyLabel);
+			
+			GridBagConstraints gbc_labCapacityLabel = new GridBagConstraints();
+			gbc_labCapacityLabel.anchor = GridBagConstraints.WEST;
+			gbc_labCapacityLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labCapacityLabel.gridx = 6;
+			gbc_labCapacityLabel.gridy = 9;
+			labCapacityLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labCapacityLabel, gbc_labCapacityLabel);
+			
+			GridBagConstraints gbc_labCompetencyBox = new GridBagConstraints();
+			gbc_labCompetencyBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labCompetencyBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labCompetencyBox.gridx = 5;
+			gbc_labCompetencyBox.gridy = 10;
+			addCoursePanel.add(labCompetencyBox, gbc_labCompetencyBox);
+			
+			GridBagConstraints gbc_labCapacitySpinner = new GridBagConstraints();
+			gbc_labCapacitySpinner.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labCapacitySpinner.insets = new Insets(0, 0, 5, 5);
+			gbc_labCapacitySpinner.gridx = 6;
+			gbc_labCapacitySpinner.gridy = 10;
+			addCoursePanel.add(labCapacitySpinner, gbc_labCapacitySpinner);
+			
+			GridBagConstraints gbc_labMeetingTimeLabel = new GridBagConstraints();
+			gbc_labMeetingTimeLabel.anchor = GridBagConstraints.WEST;
+			gbc_labMeetingTimeLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labMeetingTimeLabel.gridx = 5;
+			gbc_labMeetingTimeLabel.gridy = 11;
+			labTimeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			labTimeLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labTimeLabel, gbc_labMeetingTimeLabel);
+			
+			GridBagConstraints gbc_labEndTimeLabel = new GridBagConstraints();
+			gbc_labEndTimeLabel.anchor = GridBagConstraints.WEST;
+			gbc_labEndTimeLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labEndTimeLabel.gridx = 6;
+			gbc_labEndTimeLabel.gridy = 11;
+			labEndTimeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			labEndTimeLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labEndTimeLabel, gbc_labEndTimeLabel);
+			
+			GridBagConstraints gbc_labStartTimeBox = new GridBagConstraints();
+			gbc_labStartTimeBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labStartTimeBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labStartTimeBox.gridx = 5;
+			gbc_labStartTimeBox.gridy = 12;
+			addCoursePanel.add(labStartTimeBox, gbc_labStartTimeBox);
+			
+			GridBagConstraints gbc_labEndTimeBox = new GridBagConstraints();
+			gbc_labEndTimeBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labEndTimeBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_labEndTimeBox.gridx = 6;
+			gbc_labEndTimeBox.gridy = 12;
+			addCoursePanel.add(labEndTimeBox, gbc_labEndTimeBox);
+			
+			GridBagConstraints gbc_labDaysLabel = new GridBagConstraints();
+			gbc_labDaysLabel.anchor = GridBagConstraints.WEST;
+			gbc_labDaysLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_labDaysLabel.gridx = 5;
+			gbc_labDaysLabel.gridy = 13;
+			labDaysLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			labDaysLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labDaysLabel, gbc_labDaysLabel);
+			
+			GridBagConstraints gbc_labHorizontalBox = new GridBagConstraints();
+			gbc_labHorizontalBox.gridwidth = 2;
+			gbc_labHorizontalBox.anchor = GridBagConstraints.WEST;
+			gbc_labHorizontalBox.insets = new Insets(0, 0, 5, 5);
+			gbc_labHorizontalBox.gridx = 5;
+			gbc_labHorizontalBox.gridy = 14;
+			addCoursePanel.add(labHorizontalBox, gbc_labHorizontalBox);
+			
+			labSundayGroup.setAlignmentX(Component.CENTER_ALIGNMENT);
+			labHorizontalBox.add(labSundayGroup);
+			
+			labSundayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			labSundayLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			
+			labSundayGroup.add(labSundayLabel);
+			labSundayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labSundayButton.setHorizontalAlignment(SwingConstants.CENTER);
+			labSundayGroup.add(labSundayButton);
+			
+			labHorizontalBox.add(labMondayGroup);
+			labMondayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labMondayGroup.add(labMondayLabel);
+			labMondayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labMondayGroup.add(labMondayButton);
+			
+			labHorizontalBox.add(labTuesdayGroup);
+			labTuesdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labTuesdayGroup.add(labTuesdayLabel);
+			labTuesdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labTuesdayGroup.add(labTuesdayButton);
+			
+			labHorizontalBox.add(labWednesdayGroup);
+			labWednesdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labWednesdayGroup.add(labWednesdayLabel);
+			labWednesdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labWednesdayGroup.add(labWednesdayButton);
+			
+			labHorizontalBox.add(labThursdayGroup);
+			labThursdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labThursdayGroup.add(labThursdayLabel);
+			labThursdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labThursdayGroup.add(labThursdayButton);
+			
+			labHorizontalBox.add(labFridayGroup);
+			labFridayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labFridayGroup.add(labFridayLabel);
+			labFridayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labFridayGroup.add(labFridayButton);
+			
+			labHorizontalBox.add(labSaturdayGroup);
+			labSaturdayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labSaturdayGroup.add(labSaturdayLabel);
+			labSaturdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			labSaturdayGroup.add(labSaturdayButton);
+
+			// Remove Add Lab Button
+			addCoursePanel.remove(addLabButton);
+			
+			// Add new components to then screen
+			addCoursePanel.revalidate();
+			addCoursePanel.repaint();
+		}
 		/*
 		 * Action Listeners
 		 */
+		addLabButton.addActionListener(event -> {
+			hasLab.set(true);
+		});
+
+		submitButton.addActionListener(event -> {
+			
+
+			// Check if CRN is 5 digits
+			if (courseCRNBox.getText().length() != 5) {
+				JOptionPane.showMessageDialog(addCoursePanel, "CRN must be 5 digits long (e.g. 98253)",
+						"Fix CRN number", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			// Adding course entails checking to see it exists in all of the .txt files,
+			// since some courses can be considered introductory courses for some but
+			// elective for others and vice-versa.
+			boolean courseFound = false;
+			courseFound = addCourse_Helper("./introductory.txt", courseCRNBox, addCoursePanel);
+			courseFound = addCourse_Helper("./electives.txt", courseCRNBox, addCoursePanel);
+			courseFound = addCourse_Helper("./competency.txt", courseCRNBox, addCoursePanel);
+			courseFound = addCourse_Helper("./rccCourses.txt", courseCRNBox, addCoursePanel);
+
+			// If course wasn't found, that means we can proceed with adding it to the .txt files
+			if (!courseFound) {
+				
+
+			} else { // If course was found in any of the other .txt files
+				JOptionPane.showMessageDialog(addCoursePanel,
+						"Error: The entered course CRN matches one from the current list. Please enter a different CRN.",
+						"Unable to add course", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			
+			// Initialize ScheduledCourse object and add course to .txt files
+			try {
+				String courseMeetingDays = ""; // TODO get meeting days
+				String courseData = capacitySpinner.getValue().toString() + ", " + courseCRNBox.getText()
+						+ ", " + coursePrefixField.getText() + " " + courseNumField + ", " + courseTitleField.getText() 
+						+ ", " + creditsBox.getSelectedItem().toString() + ", " + startTimeBox.getSelectedItem().toString()
+						+ "-" + endTimeBox.getSelectedItem().toString() + "-" + (AMorPMBox.getSelectedItem().toString().equals("AM") ?
+								"A" : "P") + ", " + courseMeetingDays + ", " + courseSubjectField.getText() + ", " + 
+						(competencyBox.getSelectedItem().toString().equals("N/A") ? "N" : competencyBox.getSelectedItem().toString()) +
+						", " + (hasLab.get() ? "true" : "false");
+				
+				// If class has a lab // TODO - fix and put in lab data
+				if (hasLab.get()) {
+					String labMeetingDays = ""; // TODO get lab meeting days
+					String labData = capacitySpinner.getValue().toString() + ", " + courseCRNBox.getText()
+					+ ", " + coursePrefixField.getText() + " "  + courseNumField + ", " + courseTitleField.getText() 
+					+ ", " + creditsBox.getSelectedItem().toString() + ", " + startTimeBox.getSelectedItem().toString()
+					+ "-" + endTimeBox.getSelectedItem().toString() + "-" + (AMorPMBox.getSelectedItem().toString().equals("AM") ?
+							"A" : "P") + ", " + courseMeetingDays + ", " + courseSubjectField.getText() + ", " + 
+					(competencyBox.getSelectedItem().toString().equals("N/A") ? "N" : competencyBox.getSelectedItem().toString()) +
+					", " + "false";
+					
+				}
+				//File file = new File("./students.txt");
+				//if (!file.exists()) {
+					//.createNewFile();
+				//}
+
+//				FileWriter fileWriter = new FileWriter(file.getName(), true);
+//				BufferedWriter bw = new BufferedWriter(fileWriter);
+//				bw.write(studentData1);
+//				bw.newLine();
+//				bw.write(studentData2);
+//				bw.newLine();
+//				bw.write(studentData3);
+//				bw.newLine();
+//				bw.close();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Error");
+			}
+			
+
+			
+			
+
+
+			// Clean panel and go back to main menu
+			cardLayout.show(constPanel, "menu");
+			addCoursePanel.removeAll();
+			return;
+		});
 		
 		backButton.addActionListener(event -> {
 			cardLayout.show(constPanel, "menu");
@@ -1169,6 +1683,63 @@ public class GUI {
 		});
 	}
 	
+	// @param path - the .txt. to which add the course to
+	// @return whether the course was found or not in the given path
+	private boolean addCourse_Helper(String path, JTextField crnField, JPanel addCoursePanel) {
+		// Check add course for introductory courses
+		if (path.equals("./introductory.txt")) {
+			// Make a copy of the list
+			ArrayList<ScheduledCourse> introductoryCopy = new ArrayList<ScheduledCourse>(
+					database.getIntroductoryCourses());
+			for (ScheduledCourse course : introductoryCopy) {
+				// If the entered CRN for the course matches one from the current list, reject request
+				// to add course
+				if (course.getCourse().getCRN() == Integer.parseInt(crnField.getText())) {
+					return true;
+				}
+			}
+
+		} else if (path.equals("./electives.txt")) {
+			// Make a copy of the list
+			ArrayList<ScheduledCourse> electivesCopy = new ArrayList<ScheduledCourse>(
+					database.getCompetencyCourses());
+			for (ScheduledCourse course : electivesCopy) {
+				// If the entered CRN for the course matches one from the current list, reject
+				// request to add course
+				if (course.getCourse().getCRN() == Integer.parseInt(crnField.getText())) {
+					return true;
+				}
+			}
+
+		} else if (path.equals("./competency.txt")) {
+			// Make a copy of the list
+			ArrayList<ScheduledCourse> competencyCopy = new ArrayList<ScheduledCourse>(
+					database.getCompetencyCourses());
+			for (ScheduledCourse course : competencyCopy) {
+				// If the entered CRN for the course matches one from the current list, reject
+				// request to add course
+				if (course.getCourse().getCRN() == Integer.parseInt(crnField.getText())) {
+					return true;
+				}
+			}
+
+		} else if (path.equals("./rccCourses.txt")) {
+			// Make a copy of the list
+			ArrayList<ScheduledCourse> rccCopy = new ArrayList<ScheduledCourse>(
+					database.getRCCCourses());
+			for (ScheduledCourse course : rccCopy) {
+				// If the entered CRN for the course matches one from the current list, reject
+				// request to add course
+				if (course.getCourse().getCRN() == Integer.parseInt(crnField.getText())) {
+					return true;
+				}
+			}
+		}
+		
+		// If we reached here, the course to be added was not found in the other .txt files.
+		// Proceed with course addition
+		return false;
+	}
 
 	////////////////////
 	/// Remove Course //
@@ -1243,8 +1814,8 @@ public class GUI {
 			
 			// Check if CRN is 5 digits long
 			if (crnField.getText().length() != 5) {
-				JOptionPane.showMessageDialog(remCoursePanel, "R-Number must be 9 digits long (e.g. R12345678)",
-						"Fix R-Number field", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(remCoursePanel, "CRN must be 5 digits long (e.g. 98512)",
+						"Fix CRN Number field", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 				
@@ -1261,10 +1832,13 @@ public class GUI {
 				// If reached here, course has been successfully removed from everywhere
 				JOptionPane.showMessageDialog(remCoursePanel, "Course successfully removed.", "Course Removal",
 						JOptionPane.OK_OPTION);
+				
 				// Go back to main menu
-
 				cardLayout.show(constPanel, "menu");
 				remCoursePanel.removeAll();
+			} else {
+				JOptionPane.showMessageDialog(remCoursePanel, "Error: Course with the given CRN could not be found.", "Course Removal",
+						JOptionPane.ERROR_MESSAGE);
 			}
 
 		});
@@ -1290,7 +1864,6 @@ public class GUI {
 						JOptionPane.showMessageDialog(remCoursePanel,
 								"Error: There are no records of any introducory courses in the system.",
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
-						// TODO: Perhaps go back to main menu instead
 						// Go back to main menu
 						cardLayout.show(constPanel, "menu");
 						remCoursePanel.removeAll();
@@ -1586,7 +2159,7 @@ public class GUI {
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	
