@@ -4,13 +4,11 @@ import java.util.Scanner;
 import java.io.File;
 import java.time.*;
 public class Database {
-	// Make the database a singleton
 	private static ArrayList<ScheduledCourse> electiveCourses;
 	private static ArrayList<ScheduledCourse> introductoryCourses;
 	private static ArrayList<ScheduledCourse> competencyCourses;
 	private static ArrayList<ScheduledCourse> rccCourses;
 	private static ArrayList<Student> studentList;
-	// use : as delimiter as hour and minutes - for end time etc
 	
 	public Database() {
 		// Initialize courses	
@@ -46,8 +44,6 @@ public class Database {
 				String line = fileInput.nextLine();
 				String[] values = line.split(", ");
                 if (!checkNumberOfVariables(lineNumber, fileObj, values, 10)) {
-	            	// weird interaction with courses that have a lab, need to make a, may want to end it program instead of giving
-                	// the user an option to continue
                 	lineNumber++;
 	                continue;
 	            }
@@ -158,7 +154,7 @@ public class Database {
 				ArrayList<ScheduledCourse> electivePref = new ArrayList<ScheduledCourse>();
 				for(int i = 0; i < 7; i++) {
 					if (!values2[i].equals("N")) {
-						// tests to see if they have an elective preference or not, if not don't add like if they have 3 preferences instead of 7
+						// tests to see if they have an elective preference or not, if not don't add
 						ScheduledCourse c = findCourse(values2[i], 'e');
 						electivePref.add(c);
 					}
@@ -202,7 +198,6 @@ public class Database {
 	}
 	
 	// want this to be private as don't want people calling thing and shutting down system
-	// closing the scanner creates weird errors
 	private void getUserResponse(int type) {
 		Scanner userResponse = new Scanner(System.in);
 		boolean valid = false;
@@ -296,7 +291,6 @@ public class Database {
 		return studentList;
 	}
 	
-	// MUS 153 doesnt work for some reason
 	public ScheduledCourse findCourse(String name, char type) {
 		ScheduledCourse course;
 		if (type == 'i') {
@@ -330,9 +324,7 @@ public class Database {
 			System.out.println("Please make sure preference sheet information is entered correctly.");
 			System.out.println("View the read.me for more information.");
 		}
-		// prompt to see if they want to add a random course?
-		// maybe make option so that they can add random courses if a course is not
-		// found for rest of execution
+
 		getUserResponse(1);
 		if (type == 'i') {
 			course = Schedule.getRandomCourse(introductoryCourses);
@@ -343,5 +335,4 @@ public class Database {
 		}
 		return course;
 	}
-
 }

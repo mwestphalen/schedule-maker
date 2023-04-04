@@ -125,7 +125,6 @@ public class Driver {
 		//new GuiRemoveStudent();
 		
 		Database data = new Database();
-		// could use strings instead of letters to make it more clear
 		
 		data.generateCourses('i');
 		System.out.println("Introductory courses have been loaded.");
@@ -156,10 +155,6 @@ public class Driver {
 		createDeque(studentList, eleDeque);
 		createDeque(studentList, rccDeque);
 		
-		// instead of checking if the courses are all full when adding can perhaps do a preemptive check comparing
-		// size of all courses in category to number of students
-		// might still run into issue if there is overlap
-		
 		addStudentsToIntroCourses(introDeque, data.getIntroductoryCourses());
 		System.out.println("All students have a introductory course added.");
 		addStudentsToCompetencyCourses(compDeque, data.getCompetencyCourses());
@@ -169,12 +164,13 @@ public class Driver {
 		addStudentsToRCCCourses(rccDeque, data.getRCCCourses());
 		System.out.println("All students have a RCC course added.");
 		
-		// here to make sure that the deque is in order and working
+		// Use this to check if deque is working:
 //		Iterator<Student> it = majorDeque.iterator();
 //		 while (it.hasNext()) {
 //			 System.out.println(it.next().getFirstName());
 //		 }
-		
+
+		// Use this to check course information for system testing:
 //		for (int i = 0; i < studentList.size(); i++) {
 //      	Student s1 = studentList.get(i);
 //           s1.getStudentSchedule().addCourseCredits();

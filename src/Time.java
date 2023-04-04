@@ -15,7 +15,6 @@ public class Time {
 		setMeetingDays(meetingDays1);
 	}
 	
-	// TEST TO MAKE SURE THAT THIS WORKS AS INTENDED
 	public void setMeetingTimes(String meetingInformation) {
 		String[] values = meetingInformation.split("-");
 		String[] firstTimes= values[0].split(":");
@@ -56,5 +55,4 @@ public class Time {
 	public String[] getTimeInfo_XLSX() {
 		return new String[] {meetingDays, startTime.toString() + "-" + endTime.toString() + String.valueOf(amOrPm)};
 	}
-
 }
