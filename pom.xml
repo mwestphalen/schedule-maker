@@ -3,6 +3,12 @@
   <groupId>ScheduleMaker</groupId>
   <artifactId>ScheduleMaker</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <name>Rollins Schedule Automation</name>
+  <description>This software automates schedule creation for Rollins' incoming freshmen.</description>
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -16,15 +22,18 @@
     </plugins>
   </build>
   <dependencies>
+  	<!-- Needed to write data to Excel Template -->
+	<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
   	<dependency>
   		<groupId>org.apache.poi</groupId>
   		<artifactId>poi-ooxml</artifactId>
   		<version>5.2.3</version>
   	</dependency>
-  	<dependency>
-  		<groupId>org.apache.logging.log4j</groupId>
-  		<artifactId>log4j-core</artifactId>
-  		<version>2.19.0</version>
-  	</dependency>
+  	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+	<dependency>
+    	<groupId>org.apache.logging.log4j</groupId>
+    	<artifactId>log4j-core</artifactId>
+    	<version>2.19.0</version>
+    </dependency>
   </dependencies>
 </project>

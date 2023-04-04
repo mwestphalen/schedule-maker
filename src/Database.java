@@ -5,15 +5,27 @@ import java.io.File;
 import java.time.*;
 public class Database {
 	// Make the database a singleton
-	private static ArrayList<ScheduledCourse> electiveCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<ScheduledCourse> introductoryCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<ScheduledCourse> competencyCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<ScheduledCourse> rccCourses = new ArrayList<ScheduledCourse>();
-	private static ArrayList<Student> studentList = new ArrayList<Student>();
+	private static ArrayList<ScheduledCourse> electiveCourses;
+	private static ArrayList<ScheduledCourse> introductoryCourses;
+	private static ArrayList<ScheduledCourse> competencyCourses;
+	private static ArrayList<ScheduledCourse> rccCourses;
+	private static ArrayList<Student> studentList;
 	// use : as delimiter as hour and minutes - for end time etc
 	
 	public Database() {
-		 // Maybe make calls to all of the generate functions?
+		// Initialize courses	
+		introductoryCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('i');
+		competencyCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('c');
+		rccCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('r');
+		electiveCourses = new ArrayList<ScheduledCourse>();
+		generateCourses('e');
+		
+		// Initialize students' list
+		studentList = new ArrayList<Student>();
+		generateStudentList();
 	}
 	
 	public void generateCourses(char typeOfCourses) {
@@ -33,16 +45,17 @@ public class Database {
 			while (fileInput.hasNextLine()) {
 				String line = fileInput.nextLine();
 				String[] values = line.split(", ");
-				if (!checkNumberOfVariables(lineNumber, fileObj, values, 10)) {
-					// weird interaction with courses that have a lab, need to make a, may want to end it program instead of giving
-					// the user an option to continue
-					lineNumber++;
-					continue;
-				}
+                if (!checkNumberOfVariables(lineNumber, fileObj, values, 10)) {
+	            	// weird interaction with courses that have a lab, need to make a, may want to end it program instead of giving
+                	// the user an option to continue
+                	lineNumber++;
+	                continue;
+	            }
+	            
 				if (!checkCourseVariables(lineNumber, fileObj, values)) {
-					lineNumber++;
-					continue;
-				}
+	                lineNumber++;
+	                continue;
+	            }
 				int courseCapacity = Integer.parseInt(values[0]);
 				int CRN = Integer.parseInt(values[1]);
 				String course = values[2];
@@ -61,6 +74,7 @@ public class Database {
 					if (!checkNumberOfVariables(lineNumber, fileObj, values, 10)) {
 						continue;
 					}
+					
 					if (!checkCourseVariables(lineNumber, fileObj, values)) {
 						continue;
 					}
@@ -75,6 +89,7 @@ public class Database {
 					String proficiency2 = values2[8];
 					Course courseLabToAdd = new Course(courseCapacity2, CRN2, course2, courseTitle2, credits2, courseMajor2, proficiency2);
 					Time courseLabTime = new Time(meetingTime2, meetingDays2);
+					
 					if (typeOfCourses == 'i') {
 						introductoryCourses.add(new ScheduledCourse(courseToAdd, courseTime, courseLabToAdd, courseLabTime));
 					} else if (typeOfCourses == 'c') {
@@ -100,18 +115,19 @@ public class Database {
 			}
 			fileInput.close();
 		} catch (FileNotFoundException exc) {
-			if (typeOfCourses == 'i') {
-				System.out.println("The course file: introductory.txt is missing.");
-			} else if (typeOfCourses == 'c') {
-				System.out.println("The course file: competency.txt is missing.");
-			} else if (typeOfCourses == 'e') {
-				System.out.println("The course file: electives.txt is missing.");
-			} else {
-				System.out.println("The course file: rccCourses.txt is missing.");
-			}
-			System.out.println("Please make sure all course files are present to run the system.");
-			System.out.println("System shutting down.");
-			System.exit(0);
+			 if (typeOfCourses == 'i') {
+				 System.out.println("The course file: introductory.txt is missing.");
+			 } else if (typeOfCourses == 'c') {
+				 System.out.println("The course file: competency.txt is missing.");
+			 } else if (typeOfCourses == 'e') {
+				 System.out.println("The course file: electives.txt is missing.");
+			 } else {
+				 System.out.println("The course file: rccCourses.txt is missing.");
+			 }
+			
+			 System.out.println("Please make sure all course files are present to run the system.");
+		     System.out.println("System shutting down.");
+			 System.exit(0);
 		}
 	}
 	
@@ -152,7 +168,7 @@ public class Database {
 				lineNumber++;
 				String[] values3 = line3.split(", ");
 				ArrayList<ScheduledCourse> rccPref = new ArrayList<ScheduledCourse>();
-				for(int i = 0; i < 7; i++) {
+				for(int i = 0; i < 8; i++) {
 					if (!values3[i].equals("N")) {
 						ScheduledCourse c = findCourse(values3[i], 'r');
 						rccPref.add(c);
@@ -164,10 +180,9 @@ public class Database {
 		} catch (Exception exc) {
 			System.out.println("An error occurred.");
 			exc.printStackTrace();
-			System.exit(0);
+			 System.exit(0);
 		}
 	}
-	
 	
 	public boolean checkNumberOfVariables(int lineNumber, File txtFile, String[] values, int expectedLength) {
 		boolean noError = true;
@@ -204,6 +219,7 @@ public class Database {
 					valid = true;
 				} else if (input.equals("N")) {
 					System.out.println("Very well, system is shutting down.");
+					userResponse.close();
 					System.exit(0);
 				}
 				System.out.println("Invalid response. Please enter Y if you wish to continue, or N if you wish to stop.");
@@ -284,48 +300,48 @@ public class Database {
 	public ScheduledCourse findCourse(String name, char type) {
 		ScheduledCourse course;
 		if (type == 'i') {
-			for(int i = 0; i < electiveCourses.size(); i++) {
-				if (name.equals(electiveCourses.get(i).getCourse().getCourseName())) {
+			for (int i = 0; i < electiveCourses.size(); i++) {
+				if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
 					return electiveCourses.get(i);
 				}
 			}
-			
+
 			System.out.println("Could not find Elective course " + name);
 			System.out.println("Please make sure preference sheet information is entered correctly.");
-			System.out.println("View the read.me for more information.");		
+			System.out.println("View the read.me for more information.");
 		} else if (type == 'e') {
-			for(int i = 0; i < electiveCourses.size(); i++) {
-				if (name.equals(electiveCourses.get(i).getCourse().getCourseName())) {
+			for (int i = 0; i < electiveCourses.size(); i++) {
+				if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
 					return electiveCourses.get(i);
 				}
 			}
-			
+
 			System.out.println("Could not find Elective course " + name);
 			System.out.println("Please make sure preference sheet information is entered correctly.");
 			System.out.println("View the read.me for more information.");
 		} else {
-			for(int i = 0; i < rccCourses.size(); i++) {
-				if (name.equals(rccCourses.get(i).getCourse().getCourseName())) {
+			for (int i = 0; i < rccCourses.size(); i++) {
+				if (name.equals(rccCourses.get(i).getCourse().getCourseCode())) {
 					return rccCourses.get(i);
 				}
 			}
-			
+
 			System.out.println("Could not find RCC course " + name);
 			System.out.println("Please make sure preference sheet information is entered correctly.");
 			System.out.println("View the read.me for more information.");
 		}
-		 // prompt to see if they want to add a random course?
-		// maybe make option so that they can add random courses if a course is not found for rest of execution
+		// prompt to see if they want to add a random course?
+		// maybe make option so that they can add random courses if a course is not
+		// found for rest of execution
 		getUserResponse(1);
 		if (type == 'i') {
 			course = Schedule.getRandomCourse(introductoryCourses);
-		}else if (type == 'e') {
+		} else if (type == 'e') {
 			course = Schedule.getRandomCourse(electiveCourses);
-		}else {
+		} else {
 			course = Schedule.getRandomCourse(competencyCourses);
 		}
 		return course;
-		
 	}
-	
+
 }

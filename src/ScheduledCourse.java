@@ -5,8 +5,7 @@ public class ScheduledCourse {
 	private Course courseLab;
 	private Time time;
 	private Time labTime;
-	private final boolean hasLab;
-	
+	private final boolean hasLab;	
 	
 	public ScheduledCourse(Course c, Time t) {
 		course = c;
@@ -19,8 +18,7 @@ public class ScheduledCourse {
 		courseLab = cl;
 		time = t;
 		labTime = lt;
-		hasLab = true;
-		
+		hasLab = true;	
 	}
 
 	public Course getCourse() {

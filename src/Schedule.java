@@ -27,7 +27,7 @@ public class Schedule {
 						ScheduledCourse toAdd = introCourses.get(j);
 						if (major.equals(toAdd.getCourse().getCourseMajor())) {
 							if (addCourse(toAdd, "M")) {
-							return;
+								return;
 							}
 						}
 					}
@@ -38,7 +38,6 @@ public class Schedule {
 			System.out.println("Please make sure that there are enough courses for students");
 			System.exit(0);
 		}
-	
 	}
 	
 	public void addElectiveCourse(ArrayList<ScheduledCourse> electiveCourses, ArrayList<ScheduledCourse> electivePref) {
@@ -149,7 +148,7 @@ public class Schedule {
 		// makes list of all English 140 courses
 		ArrayList<ScheduledCourse> english140Courses = new ArrayList<ScheduledCourse>();
 		for (int i = 0; i < competencyCourses.size(); i++) {
-			if(competencyCourses.get(i).getCourse().getCourseName().contains("ENGW 140")) {
+			if(competencyCourses.get(i).getCourse().getCourseCode().contains("ENGW 140")) {
 				english140Courses.add(competencyCourses.get(i));
 			}
 		}
@@ -174,6 +173,7 @@ public class Schedule {
 
 	
 	public void addRCCCourse(ArrayList<ScheduledCourse> rccCourses, ArrayList<ScheduledCourse> rccPreferences) {
+	
 		try {
 			if (!rccPreferences.isEmpty()) {
 				for (int i = 0; i < rccPreferences.size(); i++) {
@@ -187,9 +187,9 @@ public class Schedule {
 			boolean courseFound = false;
 			while (!courseFound) {
 				ScheduledCourse toAdd = getRandomCourse(rccCourses);
-				if (addCourse(toAdd, "R")) {
-					return;
-				}
+			if (addCourse(toAdd, "R")) {
+				return;
+			}
 			}
 		} catch (Exception e) {
 			System.out.println("Error: When retrieving RCC course course to add to schedule.");
@@ -217,7 +217,6 @@ public class Schedule {
 	public ScheduledCourse[] getScheduleList() {
 		return scheduleList;
 	}
-	
 	
 	public ScheduledCourse getMajorCourse() {
 		return scheduleList[0];
@@ -250,7 +249,7 @@ public class Schedule {
 	public void setRCCCourse(ScheduledCourse rcc) {
 		scheduleList[3] = rcc;
 	}
-	
+
 	public int getTotalCredits() {
 		return totalCredits;
 	}
@@ -289,6 +288,7 @@ public class Schedule {
 				} else {
 					setRCCCourse(toAdd);
 				}
+				
 				toAdd.getCourse().addStudent();
 				if (toAdd.getHasLab()) {
 					toAdd.getCourseLab().addStudent();
