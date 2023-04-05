@@ -242,13 +242,7 @@ public class Student {
 	}
 	 	
 	public void printStudentSchedule_Excel(int studentNum, int totalNumOfStudents) {
-		/* TODO
-		 * Check how many sheets it creates in different machines...
-		 * 1. For some reason, they are all stopping at 129 ... studentList.size() in main = 129
-		 * 2. Might have to break 100 each per workbook b/c of limiting memory.
-		 */
-		
-		
+
 		// Create blank sheet for each student under one workbook
 		XSSFSheet sheet = workbook.createSheet(firstName + " " + lastName + " (" + studentNum + ")");
 		sheet.setFitToPage(true);
