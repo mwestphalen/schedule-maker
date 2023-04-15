@@ -7,3 +7,6 @@
 /target/
 /.apt_generated/
 StudentSchedules.xlsx
+target/classes/META-INF/MANIFEST.MF
+target/classes/META-INF/maven/ScheduleMaker/ScheduleMaker/pom.properties
+target/classes/META-INF/maven/ScheduleMaker/ScheduleMaker/pom.xml

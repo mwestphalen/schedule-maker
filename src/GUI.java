@@ -18,18 +18,15 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GUI {
-	CardLayout cardLayout;
-	JPanel constPanel;
-	ArrayList<JComboBox> rccComboBoxes;
-	ArrayList<JComboBox> electivesComboBoxes;
-	GroupLayout.ParallelGroup picksParallel;
-	GroupLayout.SequentialGroup picksSequential;
-	Database database;
+	private JFrame frame; 
+	private CardLayout cardLayout;
+	private JPanel cards;
+	private Database database;
 
 	public GUI() {
 
 		// Create and set up
-		JFrame frame = new JFrame("Freshmen Schedule Automation");
+		frame = new JFrame("Freshmen Schedule Automation");
 		frame.setMinimumSize(new Dimension(770, 560));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -67,8 +64,8 @@ public class GUI {
 
 		// Create the panel that contains the "cards"
 		cardLayout = new CardLayout();
-		constPanel = new JPanel(cardLayout);
-		constPanel.add(mainMenuPanel, "menu");
+		cards = new JPanel(cardLayout);
+		cards.add(mainMenuPanel, "menu");
 
 		JLabel rollinsLogo = new JLabel();
 		rollinsLogo
@@ -106,22 +103,22 @@ public class GUI {
 		 * Action Listeners
 		 */
 		addStudentButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "addStudent");
+			cardLayout.show(cards, "addStudent");
 			addStudent(addStudentPanel);
 		});
 
 		remStudentButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "remStudent");
+			cardLayout.show(cards, "remStudent");
 			remStudent(remStudentPanel);
 		});
 
 		addCourseButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "addCourse");
+			cardLayout.show(cards, "addCourse");
 			addCourse(addCoursePanel);
 		});
 
 		remCourseButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "remCourse");
+			cardLayout.show(cards, "remCourse");
 			remCourse(remCoursePanel);
 		});
 		
@@ -162,16 +159,16 @@ public class GUI {
 		});
 		
 		// Add other screens/panels to the layout manager (cardLayout)
-		constPanel.add(addStudentPanel, "addStudent");
-		constPanel.add(remStudentPanel, "remStudent");
-		constPanel.add(addCoursePanel, "addCourse");
-		constPanel.add(remCoursePanel, "remCourse");
+		cards.add(addStudentPanel, "addStudent");
+		cards.add(remStudentPanel, "remStudent");
+		cards.add(addCoursePanel, "addCourse");
+		cards.add(remCoursePanel, "remCourse");
 
 		// First page to show when application opens
-		cardLayout.show(constPanel, "menu");
+		cardLayout.show(cards, "menu");
 
 		// Display the window
-		frame.getContentPane().add(constPanel);
+		frame.getContentPane().add(cards);
 		frame.setSize(1000, 800);
 		frame.setLocationRelativeTo(null);
 		frame.pack();
@@ -215,6 +212,8 @@ public class GUI {
 		JButton addElectiveButton = new JButton("+");
 		JButton backButton = new JButton("Back");
 		JButton submitButton = new JButton("Submit");
+		ArrayList<JComboBox> rccComboBoxes;
+		ArrayList<JComboBox> electivesComboBoxes;
 
 		/*
 		 * Get introductory course list
@@ -682,17 +681,17 @@ public class GUI {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Error");
+				System.out.println("Error writing student data to file");
 			}
 
 			// Clean panel and go back to main menu
-			cardLayout.show(constPanel, "menu");
+			cardLayout.show(cards, "menu");
 			addStudentPanel.removeAll();
 			return;
 		});
 
 		backButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "menu");
+			cardLayout.show(cards, "menu");
 			addStudentPanel.removeAll();
 			return;
 		});
@@ -770,7 +769,7 @@ public class GUI {
 		 */
 
 		backButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "menu");
+			cardLayout.show(cards, "menu");
 			remStudentPanel.removeAll();
 			return;
 		});
@@ -838,7 +837,7 @@ public class GUI {
 							JOptionPane.OK_OPTION);
 					
 					// Go back to main menu
-					cardLayout.show(constPanel, "menu");
+					cardLayout.show(cards, "menu");
 					remStudentPanel.removeAll();
 					
 					return;
@@ -855,7 +854,7 @@ public class GUI {
 	////////////////////
 	//// Add Course ////
 	////////////////////
-	////////////////////
+
 	private void addCourse(JPanel addCoursePanel) {
 		// Set up Panel
 		GridBagLayout layout = new GridBagLayout();
@@ -913,53 +912,8 @@ public class GUI {
 		JButton addLabButton = new JButton("Add Lab");
 		JButton backButton = new JButton("Back");
 		JButton submitButton = new JButton("Submit");
-		AtomicBoolean hasLab = new AtomicBoolean(false);
 
 		/*
-		 * Common Lab course Components
-		 */
-		JLabel labCRNLabel;
-		JTextField labCRNBox;
-		JLabel labTitleLabel;
-		JTextField labTitleBox;
-		JLabel labCreditsLabel;
-		JLabel labCoursePrefixLabel;
-		JLabel labCourseNumberLabel;
-		JTextField labCoursePrefixBox;
-		JTextField labCourseNumField;
-		JLabel labCompetencyLabel;
-		JLabel labCapacityLabel;
-		Box labHorizontalBox;
-		Box labSundayGroup;
-		JLabel labSundayLabel;
-		JRadioButton labSundayButton;
-		Box labMondayGroup;
-		JLabel labMondayLabel;
-		JRadioButton labMondayButton;
-		Box labTuesdayGroup;
-		JLabel labTuesdayLabel;
-		JRadioButton labTuesdayButton;
-		Box labWednesdayGroup;
-		JLabel labWednesdayLabel;
-		JRadioButton labWednesdayButton;
-		Box labThursdayGroup;
-		JLabel labThursdayLabel;
-		JRadioButton labThursdayButton;
-		Box labFridayGroup;
-		JLabel labFridayLabel;
-		JRadioButton labFridayButton;
-		Box labSaturdayGroup;
-		JLabel labSaturdayLabel;
-		JRadioButton labSaturdayButton;
-		JLabel labDaysLabel;
-		JLabel labTimeLabel;
-		JLabel labEndTimeLabel;
-		JComboBox<String> labCreditsBox;
-		JComboBox<String> labCompetencyBox = new JComboBox<String>();
-		JSpinner labCapacitySpinner;
-
-		/*
-		 * 
 		 * /* List possible credit hours
 		 */
 		 String[] creditHours = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
@@ -969,7 +923,7 @@ public class GUI {
 		 /*
 		  * List possible proficiency/competency
 		  */
-		 String[] competencies = { "BCMP", "FCMP", "MCMP", "WCMP", "ECMP" };
+		 String[] competencies = { "N/A", "BCMP", "FCMP", "MCMP", "WCMP", "ECMP" };
 		 JComboBox<String> competencyBox = new JComboBox<String>(competencies);
 		 competencyBox.setSelectedItem("N/A");
 		 
@@ -982,41 +936,136 @@ public class GUI {
 		 /*
 		  * List possible start times
 		  */
-		 String[] startTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM",
-				 				 "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM",
-				 				 "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM",
-				 				 "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
-				 				 "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM",
-				 				 "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM",
-				 				 "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM",
-				 				 "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",};
-		 
-		 JComboBox<String> startTimeBox = new JComboBox<String>(startTimes);
-		 startTimeBox.setSelectedItem("N/A");
+			String[] startTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "06:50 AM", "07:00 AM", "07:15 AM",
+					"07:30 AM", "07:45 AM", "07:50 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "08:50 AM",
+					"09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "09:50 AM", "10:00 AM", "10:15 AM", "10:30 AM",
+					"10:45 AM", "10:50 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "11:50 AM", "12:00 PM",
+					"12:15 PM", "12:30 PM", "12:45 PM", "12:50 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
+					"01:50 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "02:50 PM", "03:00 PM", "03:15 PM",
+					"03:30 PM", "03:45 PM", "03:50 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "04:50 PM",
+					"05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "05:50 PM", "06:00 PM", "06:15 PM", "06:30 PM",
+					"06:45 PM", "06:50 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "07:50 PM", "08:00 PM",
+					"08:15 PM", "08:30 PM", "08:45 PM", "08:50 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
+					"09:50 PM", };
+
+			JComboBox<String> startTimeBox = new JComboBox<String>(startTimes);
+			startTimeBox.setSelectedItem("N/A");
 		 
 		 /*
 		  * List possible end times
 		  */
-		 String[] endTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM",
-				 			   "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM",
-				 			   "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM",
-				 			   "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
-				 			   "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM",
-				 			   "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM",
-				 			   "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM",
-				 			   "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",};
-		 
-		 JComboBox<String> endTimeBox = new JComboBox<String>(endTimes);
-		 endTimeBox.setSelectedItem("N/A");
+			String[] endTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "06:50 AM", "07:00 AM", "07:15 AM",
+					"07:30 AM", "07:45 AM", "07:50 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "08:50 AM",
+					"09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "09:50 AM", "10:00 AM", "10:15 AM", "10:30 AM",
+					"10:45 AM", "10:50 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "11:50 AM", "12:00 PM",
+					"12:15 PM", "12:30 PM", "12:45 PM", "12:50 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
+					"01:50 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "02:50 PM", "03:00 PM", "03:15 PM",
+					"03:30 PM", "03:45 PM", "03:50 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "04:50 PM",
+					"05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "05:50 PM", "06:00 PM", "06:15 PM", "06:30 PM",
+					"06:45 PM", "06:50 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "07:50 PM", "08:00 PM",
+					"08:15 PM", "08:30 PM", "08:45 PM", "08:50 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
+					"09:50 PM", };
+
+			JComboBox<String> endTimeBox = new JComboBox<String>(endTimes);
+			endTimeBox.setSelectedItem("N/A");
+
+			/*
+			 * Common Lab course Components
+			 */
+		JLabel labCRNLabel = new JLabel("Lab CRN");
+		JTextField labCRNBox = new JTextField();
+		JLabel labTitleLabel = new JLabel("Lab Title");
+		JTextField labTitleBox = new JTextField();
+		JLabel labCreditsLabel = new JLabel("Lab Credit Hours");
+		JLabel labPrefixLabel = new JLabel("Lab Course Prefix");
+		JLabel labNumberLabel = new JLabel("Lab Course Number");
+		JTextField labPrefixField = new JTextField();
+		JTextField labNumField = new JTextField();
+		JLabel labCompetencyLabel = new JLabel("Lab Competency");
+		JLabel labCapacityLabel = new JLabel("Lab Capacity");
+		Box labHorizontalBox = Box.createHorizontalBox();
+		Box labSundayGroup = Box.createVerticalBox();
+		JLabel labSundayLabel = new JLabel("S");
+		JRadioButton labSundayButton = new JRadioButton("");
+		Box labMondayGroup = Box.createVerticalBox();
+		JLabel labMondayLabel = new JLabel("M");
+		JRadioButton labMondayButton = new JRadioButton("");
+		Box labTuesdayGroup = Box.createVerticalBox();
+		JLabel labTuesdayLabel = new JLabel("T");
+		JRadioButton labTuesdayButton = new JRadioButton("");
+		Box labWednesdayGroup = Box.createVerticalBox();
+		JLabel labWednesdayLabel = new JLabel("W");
+		JRadioButton labWednesdayButton = new JRadioButton("");
+		Box labThursdayGroup = Box.createVerticalBox();
+		JLabel labThursdayLabel = new JLabel("T");
+		JRadioButton labThursdayButton = new JRadioButton("");
+		Box labFridayGroup = Box.createVerticalBox();
+		JLabel labFridayLabel = new JLabel("F");
+		JRadioButton labFridayButton = new JRadioButton("");
+		Box labSaturdayGroup = Box.createVerticalBox();
+		JLabel labSaturdayLabel = new JLabel("S");
+		JRadioButton labSaturdayButton = new JRadioButton("");
+		JLabel labDaysLabel = new JLabel("Lab Meeting Days");
+		JLabel labTimeLabel = new JLabel("Lab Start Time");
+		JLabel labEndTimeLabel = new JLabel("Lab End Time");
+		AtomicBoolean hasLab = new AtomicBoolean(false);
+		
+		/*
+		 * List possible lab credit hours
+		 */
+		String[] labCreditHours = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+		JComboBox<String> labCreditsBox = new JComboBox<String>(labCreditHours);
+		labCreditsBox.setSelectedItem("N/A");
 		 
 		 /*
-		  * Option for AM or PM classes
+		  * List possible lab proficiency/competency
 		  */
-		 // TODO add component to screen, same for lab
-		 String[] AMorPM = { "AM", "PM"};
-		 JComboBox<String> AMorPMBox = new JComboBox<String>(AMorPM);
+		String[] labCompetencies = { "N/A", "BCMP", "FCMP", "MCMP", "WCMP", "ECMP" };
+		JComboBox<String> labCompetencyBox = new JComboBox<String>(labCompetencies);
+		labCompetencyBox.setSelectedItem("N/A");
 		 
+		 /*
+		  * List lab's capacity numbers
+		  */
+		SpinnerNumberModel labCapacityModel = new SpinnerNumberModel(0, 0, 99, 1);
+		JSpinner labCapacitySpinner = new JSpinner(labCapacityModel);
 		 
+		 	/*
+			 * List possible start times
+			 */
+			String[] labStartTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "06:50 AM", "07:00 AM",
+					"07:15 AM", "07:30 AM", "07:45 AM", "07:50 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM",
+					"08:50 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "09:50 AM", "10:00 AM", "10:15 AM",
+					"10:30 AM", "10:45 AM", "10:50 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "11:50 AM",
+					"12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "12:50 PM", "01:00 PM", "01:15 PM", "01:30 PM",
+					"01:45 PM", "01:50 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "02:50 PM", "03:00 PM",
+					"03:15 PM", "03:30 PM", "03:45 PM", "03:50 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM",
+					"04:50 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "05:50 PM", "06:00 PM", "06:15 PM",
+					"06:30 PM", "06:45 PM", "06:50 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "07:50 PM",
+					"08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "08:50 PM", "09:00 PM", "09:15 PM", "09:30 PM",
+					"09:45 PM", "09:50 PM", };
+
+			JComboBox<String> labStartTimeBox = new JComboBox<String>(labStartTimes);
+			labStartTimeBox.setSelectedItem("N/A");
+
+			/*
+			 * List possible end times
+			 */
+			String[] labEndTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "06:50 AM", "07:00 AM", "07:15 AM",
+					"07:30 AM", "07:45 AM", "07:50 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "08:50 AM",
+					"09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "09:50 AM", "10:00 AM", "10:15 AM", "10:30 AM",
+					"10:45 AM", "10:50 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "11:50 AM", "12:00 PM",
+					"12:15 PM", "12:30 PM", "12:45 PM", "12:50 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
+					"01:50 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "02:50 PM", "03:00 PM", "03:15 PM",
+					"03:30 PM", "03:45 PM", "03:50 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "04:50 PM",
+					"05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "05:50 PM", "06:00 PM", "06:15 PM", "06:30 PM",
+					"06:45 PM", "06:50 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "07:50 PM", "08:00 PM",
+					"08:15 PM", "08:30 PM", "08:45 PM", "08:50 PM", "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
+					"09:50 PM", };
+
+			JComboBox<String> labEndTimeBox = new JComboBox<String>(labEndTimes);
+			labEndTimeBox.setSelectedItem("N/A");
+
 		/*
 		 * Add Components to panel
 		 */
@@ -1270,97 +1319,11 @@ public class GUI {
 		gbc_submitButton.gridy = 18;
 		addCoursePanel.add(submitButton, gbc_submitButton);
 		
-		// If course has lab, initialize components and put them on the screen
-		if (hasLab.get()) {
-			labCRNLabel = new JLabel("Lab CRN");
-			labCRNBox = new JTextField();
-			labTitleLabel = new JLabel("Lab Title");
-			labTitleBox = new JTextField();
-			labCreditsLabel = new JLabel("Lab Credit Hours");
-			labCoursePrefixLabel = new JLabel("Lab Course Prefix");
-			labCourseNumberLabel = new JLabel("Lab Course Number");
-			labCoursePrefixBox = new JTextField();
-			labCourseNumField = new JTextField();
-			labCompetencyLabel = new JLabel("Lab Competency");
-			labCapacityLabel = new JLabel("Lab Capacity");
-			labHorizontalBox = Box.createHorizontalBox();
-			labSundayGroup = Box.createVerticalBox();
-			labSundayLabel = new JLabel("S");
-			labSundayButton = new JRadioButton("");
-			labMondayGroup = Box.createVerticalBox();
-			labMondayLabel = new JLabel("M");
-			labMondayButton = new JRadioButton("");
-			labTuesdayGroup = Box.createVerticalBox();
-			labTuesdayLabel = new JLabel("T");
-			labTuesdayButton = new JRadioButton("");
-			labWednesdayGroup = Box.createVerticalBox();
-			labWednesdayLabel = new JLabel("W");
-			labWednesdayButton = new JRadioButton("");
-			labThursdayGroup = Box.createVerticalBox();
-			labThursdayLabel = new JLabel("T");
-			labThursdayButton = new JRadioButton("");
-			labFridayGroup = Box.createVerticalBox();
-			labFridayLabel = new JLabel("F");
-			labFridayButton = new JRadioButton("");
-			labSaturdayGroup = Box.createVerticalBox();
-			labSaturdayLabel = new JLabel("S");
-			labSaturdayButton = new JRadioButton("");
-			labDaysLabel = new JLabel("Lab Meeting Days");
-			labTimeLabel = new JLabel("Lab Start Time");
-			labEndTimeLabel = new JLabel("Lab End Time");
-			
-			/*
-			 * List possible credit hours
-			 */
-			String[] labCreditHours = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
-			labCreditsBox = new JComboBox<String>(labCreditHours);
-			labCreditsBox.setSelectedItem("N/A");
-
-			/*
-			 * List possible proficiency/competency
-			 */
-			String[] labCompetencies = { "N/A", "BCMP", "FCMP", "MCMP", "WCMP", "ECMP" };
-			labCompetencyBox = new JComboBox<String>(labCompetencies);
-			labCompetencyBox.setSelectedItem("N/A");
-
-			/*
-			 * List class' capacity numbers
-			 */
-			SpinnerNumberModel labCapacityModel = new SpinnerNumberModel(0, 0, 99, 1);
-			labCapacitySpinner = new JSpinner(labCapacityModel);
-
-			/*
-			 * List possible start times
-			 */
-			String[] labStartTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM",
-					"07:45 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM",
-					"09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM",
-					"11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM",
-					"01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM",
-					"03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM",
-					"05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM",
-					"07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM",
-					"09:45 PM", };
-
-			JComboBox<String> labStartTimeBox = new JComboBox<String>(labStartTimes);
-			labStartTimeBox.setSelectedItem("N/A");
-
-			/*
-			 * List possible end times
-			 */
-			String[] labEndTimes = { "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM", "07:00 AM", "07:15 AM", "07:30 AM",
-					"07:45 AM", "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM",
-					"09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM",
-					"11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM",
-					"01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM",
-					"03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM",
-					"05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM",
-					"07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM", "09:15 PM", "09:30 PM",
-					"09:45 PM", };
-
-			JComboBox<String> labEndTimeBox = new JComboBox<String>(labEndTimes);
-			labEndTimeBox.setSelectedItem("N/A");
-			
+		/*
+		 * Action Listeners
+		 */
+		addLabButton.addActionListener(event -> {
+			hasLab.set(true);
 			GridBagConstraints gbc_labTitleLabel = new GridBagConstraints();
 			gbc_labTitleLabel.anchor = GridBagConstraints.WEST;
 			gbc_labTitleLabel.insets = new Insets(0, 0, 5, 5);
@@ -1412,32 +1375,32 @@ public class GUI {
 			gbc_labCoursePrefixLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_labCoursePrefixLabel.gridx = 5;
 			gbc_labCoursePrefixLabel.gridy = 7;
-			labCoursePrefixLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-			addCoursePanel.add(labCoursePrefixLabel, gbc_labCoursePrefixLabel);
+			labPrefixLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labPrefixLabel, gbc_labCoursePrefixLabel);
 			
 			GridBagConstraints gbc_labCourseNumberLabel = new GridBagConstraints();
 			gbc_labCourseNumberLabel.anchor = GridBagConstraints.WEST;
 			gbc_labCourseNumberLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_labCourseNumberLabel.gridx = 6;
 			gbc_labCourseNumberLabel.gridy = 7;
-			labCourseNumberLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-			addCoursePanel.add(labCourseNumberLabel, gbc_labCourseNumberLabel);
+			labNumberLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			addCoursePanel.add(labNumberLabel, gbc_labCourseNumberLabel);
 			
 			GridBagConstraints gbc_labCoursePrefixBox = new GridBagConstraints();
 			gbc_labCoursePrefixBox.insets = new Insets(0, 0, 5, 5);
 			gbc_labCoursePrefixBox.fill = GridBagConstraints.HORIZONTAL;
 			gbc_labCoursePrefixBox.gridx = 5;
 			gbc_labCoursePrefixBox.gridy = 8;
-			labCoursePrefixBox.setColumns(10);
-			addCoursePanel.add(labCoursePrefixBox, gbc_labCoursePrefixBox);
+			labPrefixField.setColumns(10);
+			addCoursePanel.add(labPrefixField, gbc_labCoursePrefixBox);
 			
 			GridBagConstraints gbc_labCourseNumField = new GridBagConstraints();
 			gbc_labCourseNumField.insets = new Insets(0, 0, 5, 5);
 			gbc_labCourseNumField.fill = GridBagConstraints.HORIZONTAL;
 			gbc_labCourseNumField.gridx = 6;
 			gbc_labCourseNumField.gridy = 8;
-			labCourseNumField.setColumns(10);
-			addCoursePanel.add(labCourseNumField, gbc_labCourseNumField);
+			labNumField.setColumns(10);
+			addCoursePanel.add(labNumField, gbc_labCourseNumField);
 			
 			GridBagConstraints gbc_labCompetencyLabel = new GridBagConstraints();
 			gbc_labCompetencyLabel.anchor = GridBagConstraints.WEST;
@@ -1577,19 +1540,12 @@ public class GUI {
 			labSaturdayButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 			
 			labSaturdayGroup.add(labSaturdayButton);
-
 			// Remove Add Lab Button
 			addCoursePanel.remove(addLabButton);
-			
+
 			// Add new components to then screen
 			addCoursePanel.revalidate();
 			addCoursePanel.repaint();
-		}
-		/*
-		 * Action Listeners
-		 */
-		addLabButton.addActionListener(event -> {
-			hasLab.set(true);
 		});
 
 		submitButton.addActionListener(event -> {
@@ -1606,86 +1562,105 @@ public class GUI {
 			// since some courses can be considered introductory courses for some but
 			// elective for others and vice-versa.
 			boolean courseFound = false;
-			courseFound = addCourse_Helper("./introductory.txt", courseCRNBox, addCoursePanel);
-			courseFound = addCourse_Helper("./electives.txt", courseCRNBox, addCoursePanel);
-			courseFound = addCourse_Helper("./competency.txt", courseCRNBox, addCoursePanel);
-			courseFound = addCourse_Helper("./rccCourses.txt", courseCRNBox, addCoursePanel);
+			courseFound = addCourse_Helper(addCoursePanel, "./introductory.txt", courseCRNBox);
+			courseFound = addCourse_Helper(addCoursePanel, "./electives.txt", courseCRNBox);
+			courseFound = addCourse_Helper(addCoursePanel, "./competency.txt", courseCRNBox);
+			courseFound = addCourse_Helper(addCoursePanel, "./rccCourses.txt", courseCRNBox);
 
-			// If course wasn't found, that means we can proceed with adding it to the .txt files
-			if (!courseFound) {
-				
-
-			} else { // If course was found in any of the other .txt files
+			// If course was found, that means we can't proceed with adding it to the .txt files
+			if (courseFound) {
 				JOptionPane.showMessageDialog(addCoursePanel,
 						"Error: The entered course CRN matches one from the current list. Please enter a different CRN.",
 						"Unable to add course", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
-			
 			// Initialize ScheduledCourse object and add course to .txt files
 			try {
-				String courseMeetingDays = ""; // TODO get meeting days
+				String courseMeetingDays = "MWF"; // TODO get meeting days
 				String courseData = capacitySpinner.getValue().toString() + ", " + courseCRNBox.getText()
-						+ ", " + coursePrefixField.getText() + " " + courseNumField + ", " + courseTitleField.getText() 
-						+ ", " + creditsBox.getSelectedItem().toString() + ", " + startTimeBox.getSelectedItem().toString()
-						+ "-" + endTimeBox.getSelectedItem().toString() + "-" + (AMorPMBox.getSelectedItem().toString().equals("AM") ?
-								"A" : "P") + ", " + courseMeetingDays + ", " + courseSubjectField.getText() + ", " + 
+						+ ", " + coursePrefixField.getText() + " " + courseNumField.getText() + ", " + courseTitleField.getText() 
+						+ ", " + creditsBox.getSelectedItem().toString() + ", " + startTimeBox.getSelectedItem().toString().substring(0, 5)
+						+ "-" + endTimeBox.getSelectedItem().toString().substring(0, 5) + "-"
+						+ endTimeBox.getSelectedItem().toString().charAt(6) + ", " + courseMeetingDays + ", " + "N" + ", " + 
 						(competencyBox.getSelectedItem().toString().equals("N/A") ? "N" : competencyBox.getSelectedItem().toString()) +
 						", " + (hasLab.get() ? "true" : "false");
 				
 				// If class has a lab // TODO - fix and put in lab data
-				if (hasLab.get()) {
-					String labMeetingDays = ""; // TODO get lab meeting days
-					String labData = capacitySpinner.getValue().toString() + ", " + courseCRNBox.getText()
-					+ ", " + coursePrefixField.getText() + " "  + courseNumField + ", " + courseTitleField.getText() 
-					+ ", " + creditsBox.getSelectedItem().toString() + ", " + startTimeBox.getSelectedItem().toString()
-					+ "-" + endTimeBox.getSelectedItem().toString() + "-" + (AMorPMBox.getSelectedItem().toString().equals("AM") ?
-							"A" : "P") + ", " + courseMeetingDays + ", " + courseSubjectField.getText() + ", " + 
-					(competencyBox.getSelectedItem().toString().equals("N/A") ? "N" : competencyBox.getSelectedItem().toString()) +
+				String labData = "";
+				if (hasLab.get() == true) {
+					String labMeetingDays = "M"; // TODO get lab meeting days
+					labData = labCapacitySpinner.getValue().toString() + ", " + labCRNBox.getText()
+					+ ", " + labPrefixField.getText() + " "  + labNumField.getText() + ", " + labTitleBox.getText() 
+					+ ", " + labCreditsBox.getSelectedItem().toString() + ", " + labStartTimeBox.getSelectedItem().toString().substring(0, 5)
+					+ "-" + labEndTimeBox.getSelectedItem().toString().substring(0, 5) + "-" 
+					+ labEndTimeBox.getSelectedItem().toString().charAt(6) + ", " + labMeetingDays + ", " + "N" + ", " + 
+					(labCompetencyBox.getSelectedItem().toString().equals("N/A") ? "N" : labCompetencyBox.getSelectedItem().toString()) +
 					", " + "false";
-					
 				}
-				//File file = new File("./students.txt");
-				//if (!file.exists()) {
-					//.createNewFile();
-				//}
-
-//				FileWriter fileWriter = new FileWriter(file.getName(), true);
-//				BufferedWriter bw = new BufferedWriter(fileWriter);
-//				bw.write(studentData1);
-//				bw.newLine();
-//				bw.write(studentData2);
-//				bw.newLine();
-//				bw.write(studentData3);
-//				bw.newLine();
-//				bw.close();
+				
+				// Add course data to rccCourses.txt if it is one
+				if (coursePrefixField.getText().equals("RCC")) {
+					addCourseTo("./rccCourses.txt", courseData, labData);
+				} else {
+					
+					// Add course to introductory.txt and electives.txt, since any of these courses
+					// can also be an elective
+					addCourseTo("./introductory.txt", courseData, labData);
+					addCourseTo("./electives.txt", courseData, labData);
+					
+					// Add course data to competency.txt if it has a competency
+					if (!competencyBox.getSelectedItem().toString().equals("N/A")) {
+						addCourseTo("./competency.txt", courseData, labData);
+					}
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Error");
 			}
-			
-
-			
-			
-
 
 			// Clean panel and go back to main menu
-			cardLayout.show(constPanel, "menu");
+			cardLayout.show(cards, "menu");
 			addCoursePanel.removeAll();
 			return;
 		});
 		
 		backButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "menu");
+			cardLayout.show(cards, "menu");
 			addCoursePanel.removeAll();
 		});
 	}
 	
+	private void addCourseTo(String filePath, String courseData, String labData) {
+		try {
+			File file = new File(filePath);
+			if (!file.exists() ) {
+				file.createNewFile();
+			}
+			
+			FileWriter fileWriter = new FileWriter(file.getName(), true);
+			BufferedWriter bw = new BufferedWriter(fileWriter);
+			bw.newLine();
+			bw.write(courseData);
+			bw.newLine();
+			// If course has a lab
+			if (labData.length() != 0) {
+				bw.write(labData);
+				bw.newLine();
+			}
+			bw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.print("Error writing course data to file " + filePath);
+		}
+		
+	}
+	
 	// @param path - the .txt. to which add the course to
 	// @return whether the course was found or not in the given path
-	private boolean addCourse_Helper(String path, JTextField crnField, JPanel addCoursePanel) {
+	private boolean addCourse_Helper(JPanel addCoursePanel, String path, JTextField crnField) {
 		// Check add course for introductory courses
 		if (path.equals("./introductory.txt")) {
 			// Make a copy of the list
@@ -1823,10 +1798,10 @@ public class GUI {
 			// since some courses can be considered introductory courses for some
 			// but elective for others and vice-versa.
 			boolean courseFound = false;
-			courseFound = remCourse_Helper("./introductory.txt", crnField, remCoursePanel);
-			courseFound = remCourse_Helper("./electives.txt", crnField, remCoursePanel);
-			courseFound = remCourse_Helper("./competency.txt", crnField, remCoursePanel);
-			courseFound = remCourse_Helper("./rccCourses.txt", crnField, remCoursePanel);
+			courseFound = remCourse_Helper(remCoursePanel, "./introductory.txt", crnField);
+			courseFound = remCourse_Helper(remCoursePanel, "./electives.txt", crnField);
+			courseFound = remCourse_Helper(remCoursePanel, "./competency.txt", crnField);
+			courseFound = remCourse_Helper(remCoursePanel, "./rccCourses.txt", crnField);
 
 			if (courseFound) {
 				// If reached here, course has been successfully removed from everywhere
@@ -1834,7 +1809,7 @@ public class GUI {
 						JOptionPane.OK_OPTION);
 				
 				// Go back to main menu
-				cardLayout.show(constPanel, "menu");
+				cardLayout.show(cards, "menu");
 				remCoursePanel.removeAll();
 			} else {
 				JOptionPane.showMessageDialog(remCoursePanel, "Error: Course with the given CRN could not be found.", "Course Removal",
@@ -1844,13 +1819,13 @@ public class GUI {
 		});
 		
 		backButton.addActionListener(event -> {
-			cardLayout.show(constPanel, "menu");
+			cardLayout.show(cards, "menu");
 			remCoursePanel.removeAll();
 		});
 	}
 
 	// @param path - the .txt to which remove the course from
-	private boolean remCourse_Helper(String path, JTextField crnField, JPanel remCoursePanel) {
+	private boolean remCourse_Helper(JPanel remCoursePanel, String path, JTextField crnField) {
 		// Check removal for introductory courses
 		if (path.equals("./introductory.txt")) {
 			// Make a copy of the list
@@ -1865,7 +1840,7 @@ public class GUI {
 								"Error: There are no records of any introducory courses in the system.",
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
 						// Go back to main menu
-						cardLayout.show(constPanel, "menu");
+						cardLayout.show(cards, "menu");
 						remCoursePanel.removeAll();
 						return false;
 					}
@@ -1941,7 +1916,7 @@ public class GUI {
 								"Error: There are no records of any introducory courses in the system.",
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
 						// Go back to main menu
-						cardLayout.show(constPanel, "menu");
+						cardLayout.show(cards, "menu");
 						remCoursePanel.removeAll();
 						return false;
 					}
@@ -2018,7 +1993,7 @@ public class GUI {
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
 
 						// Go back to main menu
-						cardLayout.show(constPanel, "menu");
+						cardLayout.show(cards, "menu");
 						remCoursePanel.removeAll();
 						return false;
 					}
@@ -2095,7 +2070,7 @@ public class GUI {
 								"Unable to remove course", JOptionPane.ERROR_MESSAGE);
 
 						// Go back to main menu
-						cardLayout.show(constPanel, "menu");
+						cardLayout.show(cards, "menu");
 						remCoursePanel.removeAll();
 						return false;
 					}
