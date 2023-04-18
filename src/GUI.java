@@ -913,6 +913,7 @@ public class GUI {
 		JButton backButton = new JButton("Back");
 		JButton submitButton = new JButton("Submit");
 
+
 		/*
 		 * /* List possible credit hours
 		 */
@@ -1575,21 +1576,80 @@ public class GUI {
 				return;
 			}
 			
-			// Initialize ScheduledCourse object and add course to .txt files
+			// Get course meeting days
 			try {
-				String courseMeetingDays = "MWF"; // TODO get meeting days
-				String courseData = capacitySpinner.getValue().toString() + ", " + courseCRNBox.getText()
-						+ ", " + coursePrefixField.getText() + " " + courseNumField.getText() + ", " + courseTitleField.getText() 
-						+ ", " + creditsBox.getSelectedItem().toString() + ", " + startTimeBox.getSelectedItem().toString().substring(0, 5)
+				String courseMeetingDays = ""; 
+				if (mondayButton.isSelected()) {
+					courseMeetingDays += "M";
+				}
+
+				if (tuesdayButton.isSelected()) {
+					courseMeetingDays += "T";
+				}
+
+				if (wednesdayButton.isSelected()) {
+					courseMeetingDays += "W";
+				}
+
+				if (thursdayButton.isSelected()) {
+					courseMeetingDays += "R";
+				}
+
+				if (fridayButton.isSelected()) {
+					courseMeetingDays += "R";
+				}
+
+				if (saturdayButton.isSelected()) {
+					courseMeetingDays += "S";
+				}
+
+				if (sundayButton.isSelected()) {
+					courseMeetingDays += "U";
+				}
+
+				// Initialize ScheduledCourse object and add course to .txt files
+				String courseData = capacitySpinner.getValue().toString() + ", " + courseCRNBox.getText() + ", "
+						+ coursePrefixField.getText() + " " + courseNumField.getText() + ", "
+						+ courseTitleField.getText() + ", " + creditsBox.getSelectedItem().toString() + ", "
+						+ startTimeBox.getSelectedItem().toString().substring(0, 5)
 						+ "-" + endTimeBox.getSelectedItem().toString().substring(0, 5) + "-"
 						+ endTimeBox.getSelectedItem().toString().charAt(6) + ", " + courseMeetingDays + ", " + "N" + ", " + 
 						(competencyBox.getSelectedItem().toString().equals("N/A") ? "N" : competencyBox.getSelectedItem().toString()) +
 						", " + (hasLab.get() ? "true" : "false");
 				
-				// If class has a lab // TODO - fix and put in lab data
+
+				// If class has a lab
 				String labData = "";
 				if (hasLab.get() == true) {
-					String labMeetingDays = "M"; // TODO get lab meeting days
+					String labMeetingDays = "";
+					if (labMondayButton.isSelected()) {
+						labMeetingDays += "M";
+					}
+
+					if (labTuesdayButton.isSelected()) {
+						labMeetingDays += "T";
+					}
+
+					if (labWednesdayButton.isSelected()) {
+						labMeetingDays += "W";
+					}
+
+					if (labThursdayButton.isSelected()) {
+						labMeetingDays += "R";
+					}
+
+					if (labFridayButton.isSelected()) {
+						labMeetingDays += "R";
+					}
+
+					if (labSaturdayButton.isSelected()) {
+						labMeetingDays += "S";
+					}
+
+					if (labSundayButton.isSelected()) {
+						labMeetingDays += "U";
+					}
+					
 					labData = labCapacitySpinner.getValue().toString() + ", " + labCRNBox.getText()
 					+ ", " + labPrefixField.getText() + " "  + labNumField.getText() + ", " + labTitleBox.getText() 
 					+ ", " + labCreditsBox.getSelectedItem().toString() + ", " + labStartTimeBox.getSelectedItem().toString().substring(0, 5)
@@ -1643,11 +1703,10 @@ public class GUI {
 			BufferedWriter bw = new BufferedWriter(fileWriter);
 			bw.newLine();
 			bw.write(courseData);
-			bw.newLine();
 			// If course has a lab
 			if (labData.length() != 0) {
-				bw.write(labData);
 				bw.newLine();
+				bw.write(labData);
 			}
 			bw.close();
 			
