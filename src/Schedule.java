@@ -5,6 +5,14 @@ public class Schedule {
 	private ScheduledCourse[] scheduleList = new ScheduledCourse[4];
 	private int totalCredits = 0;
 	
+	/**
+	 * Goes through introductory courses to find course that matches with majors student is interested in.
+	 * If course is available then its added to the student's schedule. If no courses are available for the majors
+	 * the student is interested in the student is added to a random course. 
+	 * 
+	 * @param introCourses all of the introductory courses offered
+	 * @param majors majors student is interested in
+	 */
 	public void addIntroCourse(ArrayList<ScheduledCourse> introCourses, String[] majors) {
 		// third iteration is for when both majors are full
 		String major = "N";
@@ -39,6 +47,14 @@ public class Schedule {
 		}
 	}
 	
+	/**
+	 * Goes through all of students preferences, finding the course and seeing if the student can be added to it.
+	 * If the student can without any issues (time conflicts, available seats). If non of the student's preferences work
+	 * then the student is added to a random course that fits with their schedule.
+	 * 
+	 * @param electiveCourses all of the elective courses offered
+	 * @param electivePref all of the courses the student is interested in for an elective
+	 */
 	public void addElectiveCourse(ArrayList<ScheduledCourse> electiveCourses, ArrayList<ScheduledCourse> electivePref) {
 		
 		if (!electivePref.isEmpty()) {
@@ -58,11 +74,20 @@ public class Schedule {
 		}
 	}
 
+	/**
+	 * Adds a competency course to the student schedule. Checks to see if student has a language they are interested in
+	 * and if the course associated with that language works with the student's schedule. If not checks the majors to see
+	 * what courses best fit with the students schedule due to some majors covering competencies already in their schedule.
+	 * If none of these options work then the student is added to a general competency ENG 140. If all of those courses are 
+	 * taken then the student is added to a random competency course that works for their schedule.
+	 * 
+	 * @param competencyCourses all of the competency courses offered
+	 * @param majors the majors that the student is interested in
+	 * @param lang the language that the student is interested in
+	 */
 	public void addCompetencyCourse(ArrayList<ScheduledCourse> competencyCourses, String[] majors, String lang) {
 		
 		ScheduledCourse toAdd;
-		// if student has a language preference priority is put on getting them into that course
-		// could cause problems with not recognizing language preference. VALIDATE
 		if (!lang.equals("N")) {
 			ArrayList<ScheduledCourse> languageCourses = new ArrayList<ScheduledCourse>();
 			for (int i = 0; i < competencyCourses.size(); i++) {
@@ -164,7 +189,14 @@ public class Schedule {
 		}
 	}
 
-	
+	/**
+	 * Goes through all of students preferences, finding the course and seeing if the student can be added to it.
+	 * If the student can without any issues (time conflicts, available seats). If non of the student's preferences work
+	 * then the student is added to a random course that fits with their schedule.
+	 * 
+	 * @param rccCourses all RCC courses offered
+	 * @param rccPreferences the RCC courses that the student is interested in
+	 */
 	public void addRCCCourse(ArrayList<ScheduledCourse> rccCourses, ArrayList<ScheduledCourse> rccPreferences) {
 	
 		try {
@@ -189,22 +221,6 @@ public class Schedule {
 			System.out.println("Please make sure that there are enough courses for students");
 			System.exit(0);
 		}
-//		if (!rccPreferences.isEmpty()) {
-//			for (int i = 0; i < rccPreferences.size(); i++) {
-//				ScheduledCourse toAdd = rccPreferences.get(i);
-//				if (addCourse(toAdd, "R")) {
-//					return;
-//				}
-//				}
-//			}
-//		// this adds a random method, if there is an empty list or none of the courses listed are available
-//		boolean courseFound = false;
-//		while (!courseFound) {
-//			ScheduledCourse toAdd = getRandomCourse(rccCourses);
-//			if (addCourse(toAdd, "R")) {
-//				return;
-//			}
-//		}
 	}
 	
 	public ScheduledCourse[] getScheduleList() {
@@ -251,6 +267,9 @@ public class Schedule {
 		totalCredits = i;
 	}
 	
+	/**
+	 * Adds all the credits for courses in the students schedule storing the result in total credits.
+	 */
 	public void addCourseCredits() {
 		int creditsToAdd;
 		for (int i = 0; i < 4; i++) {
@@ -268,6 +287,15 @@ public class Schedule {
 		}
 	}
 	
+	/**
+	 * Checks the availability and whether the course has a conflict with other schedule courses. If the course
+	 * is available and there is no conflict then method returns true. If there is an issue with either of the two
+	 * then the method returns false. 
+	 * 
+	 * @param toAdd the course that is attempting to be added to the schedule
+	 * @param courseType the type of course the course being added to the schedule is
+	 * @return boolean false if adding course failed, true if adding course succeeded
+	 */
 	public boolean addCourse(ScheduledCourse toAdd, String courseType) {
 		// M is for major, C is for competency, E is for elective, and R for RCC
 		if (toAdd.getCourse().checkAvailability()) {
@@ -293,7 +321,13 @@ public class Schedule {
 	}
 
 	
-	// break up this code to different methods to long
+	/**
+	 * Checks to see if there is any time conflict the ScheduledCourse c has with already scheduled courses.
+	 * If there is a time conflict then the method returns false and the course is not added to the schedule.
+	 * 
+	 * @param c ScheduledCourse that will potentially be added to the schedule.
+	 * @return true if there is not time conflict, false if there is time conflict
+	 */
 	public boolean checkConflict(ScheduledCourse c) {
 		
 		if (c.getHasLab()) {
@@ -352,6 +386,13 @@ public class Schedule {
 		return true;
 	}
 	
+	/**
+	 * Takes in lab time of lab course and checks to see if there is any time conflict with already scheduled courses.
+	 * If there is a time conflict then the method returns false and the course is not added to the schedule.
+	 * 
+	 * @param labTime time the lab course takes place
+	 * @return true if there is no time conflict, false if there is time conflict
+	 */
 	public boolean checkLabConflict(Time labTime) {
 		for (int i = 0; i < 4; i++) {
 			if (scheduleList[i] == null) {
@@ -401,7 +442,12 @@ public class Schedule {
 		return true;
 	}
 	
-	// takes list of courses and selects a random course from it
+	/**
+	 * Takes a list of courses and selects a random course from it.
+	 * 
+	 * @param courses list of courses to be chosen from
+	 * @return a random ScheduledCourse
+	 */
 	public static ScheduledCourse getRandomCourse(ArrayList<ScheduledCourse> courses) {
 		Random rand = new Random();
 		int index = rand.nextInt(courses.size());

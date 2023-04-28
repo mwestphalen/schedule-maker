@@ -3,13 +3,27 @@ import java.util.*;
 
 
 public class Driver {
-	
+	/**
+	 * Sorts students based off their status where students with no status are added first, followed by students with honors,
+	 * students in the accelerated program, and finally honor students. 
+	 * 
+	 * @param studentList list of students to be sorted
+	 * @param courseDeque the deque the sorted students will be added to
+	 */
 	public static void createDeque(ArrayList<Student> studentList, Deque<Student> courseDeque) {
 		Student currentStudent;
 		for (int i = 0; i < studentList.size(); i++) {
 			currentStudent = studentList.get(i);
-			if (!currentStudent.getStatus().equals("H") && !currentStudent.getStatus().equals("E")) {
+			if (!currentStudent.getStatus().equals("H") && !currentStudent.getStatus().equals("E") 
+					&& !currentStudent.getStatus().equals("A")) {
 				courseDeque.add(currentStudent);
+			}
+		}
+		
+		for (int i = 0; i < studentList.size(); i++) {
+			currentStudent = studentList.get(i);
+			if (currentStudent.getStatus().equals("A")) {
+				courseDeque.addFirst(currentStudent);
 			}
 		}
 		
@@ -29,6 +43,14 @@ public class Driver {
 		return;
 	}
 	
+	/**
+	 * Adds introductory course to students in the deque. If a student does not have any preferred majors (all majors are "N") 
+	 * then the student is added to the end of the deque, having a course assigned to them once all students
+	 * with a preference have a course assigned.
+	 * 
+	 * @param courseDeque sorted list of students
+	 * @param courses all introductory courses
+	 */
 	public static void addStudentsToIntroCourses(Deque<Student> courseDeque,  ArrayList<ScheduledCourse> courses) {
 		Student currentStudent;
 		int studentsNoPref = 0;
@@ -52,6 +74,14 @@ public class Driver {
 		}
 	}
 	
+	/**
+	 * Adds competency course to students in the deque. If a student does not have any preferred majors (all "N")
+	 * then the student is added to the end of the deque, having a course assigned to them once all students
+	 * with a preference have a course assigned.
+	 * 
+	 * @param courseDeque sorted list of students
+	 * @param courses all competency courses
+	 */
 	public static void addStudentsToCompetencyCourses(Deque<Student> courseDeque, ArrayList<ScheduledCourse> courses) {
 		Student currentStudent;
 		int studentsNoPref = 0;
@@ -76,6 +106,14 @@ public class Driver {
 		}
 	}
 	
+	/**
+	 * Adds elective course to students in the deque. If a student has an empty elective preference (all "N") array-list
+	 * then the student is added to the end of the deque, having a course assigned to them once all students with
+	 * a preference have a course assigned.
+	 * 
+	 * @param courseDeque sorted list of students
+	 * @param courses all elective courses
+	 */
 	public static void addStudentsToElectiveCourses(Deque<Student> courseDeque, ArrayList<ScheduledCourse> courses) {
 		Student currentStudent;
 		int studentsNoPref = 0;
@@ -98,6 +136,14 @@ public class Driver {
 		}
 	}
 	
+	/**
+	 * Adds RCC course to students in the deque. If a student has an empty RCC preference (all "N") array-list
+	 * then the student is added to the end of the deque, having a course assigned to them once all students with
+	 * a preference have a course assigned.
+	 * 
+	 * @param courseDeque sorted list of students
+	 * @param courses all RCC courses
+	 */
 	public static void addStudentsToRCCCourses(Deque<Student> courseDeque, ArrayList<ScheduledCourse> courses) {
 		Student currentStudent;
 		int studentsNoPref = 0;

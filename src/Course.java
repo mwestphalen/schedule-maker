@@ -55,6 +55,11 @@ public class Course {
 		numbStudents++;
 	}
 	
+	/**
+	 * Checks if the course has enough room to add another student.
+	 * 
+	 * @return true if there is still room in the course for students and false if not
+	 */
 	public boolean checkAvailability() {
 		if (capacity > numbStudents) {
 			return true;

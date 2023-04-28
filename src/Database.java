@@ -10,6 +10,9 @@ public class Database {
 	private static ArrayList<ScheduledCourse> rccCourses;
 	private static ArrayList<Student> studentList;
 	
+	/**
+	 * Constructor for Database. Used to initialize the array-lists of courses.
+	 */
 	public Database() {
 		// Initialize courses	
 		introductoryCourses = new ArrayList<ScheduledCourse>();
@@ -26,7 +29,13 @@ public class Database {
 		generateStudentList();
 	}
 	
-	public void generateCourses(char typeOfCourses) {
+	/**
+	 * Populates one of the array-lists for courses based on passed in character.
+	 * Passed in character decides which file is to be read from and where the ScheduledCourses will be stored.
+	 * 
+	 * @param typeOfCourses a character that indicates which course type to generate courses for
+	 */
+	public boolean generateCourses(char typeOfCourses) {
 		try {
 			File fileObj;
 			if (typeOfCourses == 'i') {
@@ -43,15 +52,8 @@ public class Database {
 			while (fileInput.hasNextLine()) {
 				String line = fileInput.nextLine();
 				String[] values = line.split(", ");
-                if (!checkNumberOfVariables(lineNumber, fileObj, values, 10)) {
-                	lineNumber++;
-	                continue;
-	            }
-	            
-				if (!checkCourseVariables(lineNumber, fileObj, values)) {
-	                lineNumber++;
-	                continue;
-	            }
+				checkNumberOfVariables(lineNumber, fileObj, values, 10);
+				checkCourseVariables(lineNumber, fileObj, values);
 				int courseCapacity = Integer.parseInt(values[0]);
 				int CRN = Integer.parseInt(values[1]);
 				String course = values[2];
@@ -67,13 +69,8 @@ public class Database {
 				if (hasLab == true) {
 					String line2 = fileInput.nextLine();
 					String[] values2 = line2.split(", ");
-					if (!checkNumberOfVariables(lineNumber, fileObj, values, 10)) {
-						continue;
-					}
-					
-					if (!checkCourseVariables(lineNumber, fileObj, values)) {
-						continue;
-					}
+					checkNumberOfVariables(lineNumber, fileObj, values, 10);
+					checkCourseVariables(lineNumber, fileObj, values);
 					int courseCapacity2 = Integer.parseInt(values2[0]);
 					int CRN2 = Integer.parseInt(values2[1]);
 					String course2 = values2[2];
@@ -110,7 +107,9 @@ public class Database {
 				lineNumber++;
 			}
 			fileInput.close();
-		} catch (FileNotFoundException exc) {
+			
+			return true;
+		} catch (FileNotFoundException exc) { // TODO: Don't shutdown, instead just let GUI know
 			 if (typeOfCourses == 'i') {
 				 System.out.println("The course file: introductory.txt is missing.");
 			 } else if (typeOfCourses == 'c') {
@@ -123,11 +122,15 @@ public class Database {
 			
 			 System.out.println("Please make sure all course files are present to run the system.");
 		     System.out.println("System shutting down.");
-			 System.exit(0);
+		     return false;
+			 //System.exit(0);
 		}
 	}
 	
-	public void generateStudentList() {
+	/**
+	 * Generates student objects from the student text file, adding them to the student list.
+	 */
+	public void generateStudentList() { // TODO: Change return type ton let GUI know
 		try {
 			File fileObj = new File("students.txt");
 			Scanner fileInput = new Scanner(fileObj);
@@ -136,11 +139,7 @@ public class Database {
 				String line = fileInput.nextLine();
 				lineNumber++;
 				String[] values = line.split(", ");
-				if (!checkNumberOfVariables(lineNumber, fileObj, values, 7)) {
-					fileInput.nextLine();
-					fileInput.nextLine();
-					continue;
-				}
+				checkNumberOfVariables(lineNumber, fileObj, values, 7);
 				String rNumber = values[0];
 				String firstName = values[1];
 				String lastName = values[2];
@@ -173,65 +172,51 @@ public class Database {
 				studentList.add(new Student(firstName, lastName, rNumber, firstMajor, secondMajor, lang, status, electivePref, rccPref));
 			}
 			fileInput.close();
-		} catch (Exception exc) {
+		} catch (Exception exc) { // TODO: Let gui know instead
 			System.out.println("An error occurred.");
 			exc.printStackTrace();
 			 System.exit(0);
 		}
 	}
 	
-	public boolean checkNumberOfVariables(int lineNumber, File txtFile, String[] values, int expectedLength) {
-		boolean noError = true;
+	/**
+	 * Checks to see if the number of variables on the line in the text file matches the expected amount.
+	 * 
+	 * @param lineNumber the line in the text file that the scanner is currently reading in
+	 * @param txtFile the text file which the scanner is reading from
+	 * @param values the data stored on the line in the text file
+	 * @param expectedLength how many points of data are expected on the text file line
+	 * @return false if an error was found at a certain line/file, true if no errors were found
+	 */ // TODO: handle printing to console instead of GUI.
+	public boolean checkNumberOfVariables(int lineNumber, File txtFile, String[] values, int expectedLength) { 
 		if (values.length < expectedLength) {
 			System.out.println("Error on line " + lineNumber + " in file " + txtFile);
 			System.out.println("Missing expected variable");
 			System.out.println();
-			noError = false;
-			getUserResponse(0);
+			return false;
+			//System.exit(0);
 		} else if (values.length > expectedLength) {
 			System.out.println("There are to many variables on line " + lineNumber + " in file " + txtFile);
 			System.out.println();
-			noError = false;
-			getUserResponse(0);
+			return false;
 		}
-		return noError;
+		return true;
 	}
 	
-	// want this to be private as don't want people calling thing and shutting down system
-	private void getUserResponse(int type) {
-		Scanner userResponse = new Scanner(System.in);
-		boolean valid = false;
-		if (type == 1) {
-			System.out.println("Would you like to continue by using a random course of the same category? (Y/N)");
-		} else {
-			System.out.println("Would you like to continue to generate student schedules without this student and or course? (Y/N)");
-			System.out.println("WARNING: This may lead to labs being scheduled as courses.");
-		}
-		while (!valid) {
-			try {
-				String input = userResponse.nextLine();
-				if (input.equals("Y")) {
-					valid = true;
-				} else if (input.equals("N")) {
-					System.out.println("Very well, system is shutting down.");
-					userResponse.close();
-					System.exit(0);
-				}
-				System.out.println("Invalid response. Please enter Y if you wish to continue, or N if you wish to stop.");
-			} catch (Exception e) {
-				System.out.println("Invalid response. Please enter Y if you wish to continue, or N if you wish to stop.");
-			}
-		}
-	}
-	
-	public boolean checkCourseVariables(int lineNumber, File txtFile, String[] values) {
-		boolean noError = true;
+
+	/**
+	 * Checks to see if the type of data in the text file matches the expected types.
+	 * 
+	 * @param lineNumber the line in the text file that the scanner is currently reading in
+	 * @param txtFile the text file which the scanner is reading from
+	 * @param values the data stored on the line in the text file
+	 */ // TODO: change return type to handle printing erros to GUI
+	public void checkCourseVariables(int lineNumber, File txtFile, String[] values) {
 		try {
 			Integer.parseInt(values[0]);
 			Integer.parseInt(values[1]);
 			Integer.parseInt(values[4]);
 			Boolean.parseBoolean(values[9]);
-			// test to make sure time is good below
 			String[] meetingTimes = values[5].split("-");
 			String[] firstTimes = meetingTimes[0].split(":");
 			String[] secondTimes = meetingTimes[1].split(":");
@@ -243,12 +228,19 @@ public class Database {
 			System.out.println("Error on line " + lineNumber + " in file " + txtFile);
 			System.out.println("Invalid type for course information.");
 			System.out.println();
-			noError = false;
-			getUserResponse(0);
+			System.exit(0);
 		}
-		return noError;
+		return;
 	}
-	
+
+	/**
+	 * Checks to see if there is enough courses of a certain type to house all students. 
+	 * If there is not enough courses, type is used to indicate to the user which type of course does not have enough courses in it.
+	 * 
+	 * @param courseCategory all of the courses for a certain type of course
+	 * @param numbOfStudents int of the number of students
+	 * @param type character to represent type of courses
+	 */ // TODO: change return type to handle printing to GUI instead
 	public void enoughCoursesForStudents(ArrayList<ScheduledCourse> courseCategory, int numbOfStudents, char type) {
 		int totalCourseSeats = 0;
 		String courseTypeName;
@@ -271,6 +263,7 @@ public class Database {
 		}
 	}
 	
+	
 	public ArrayList<ScheduledCourse> getElectiveCourses() {
 		return electiveCourses;
 	}
@@ -291,8 +284,15 @@ public class Database {
 		return studentList;
 	}
 	
+	/**
+	 * Returns the searched for ScheduledCourse based off its name and what type of course it is. 
+	 * 
+	 * @param name the name of the searched for course
+	 * @param type the type of the searched for course
+	 * @return
+	 */ // TODO: change printing statements to reflect errors on GUI
 	public ScheduledCourse findCourse(String name, char type) {
-		ScheduledCourse course;
+		ScheduledCourse course = null;
 		if (type == 'i') {
 			for (int i = 0; i < electiveCourses.size(); i++) {
 				if (name.equals(electiveCourses.get(i).getCourse().getCourseCode())) {
@@ -324,15 +324,7 @@ public class Database {
 			System.out.println("Please make sure preference sheet information is entered correctly.");
 			System.out.println("View the read.me for more information.");
 		}
-
-		getUserResponse(1);
-		if (type == 'i') {
-			course = Schedule.getRandomCourse(introductoryCourses);
-		} else if (type == 'e') {
-			course = Schedule.getRandomCourse(electiveCourses);
-		} else {
-			course = Schedule.getRandomCourse(competencyCourses);
-		}
+		System.exit(0);
 		return course;
 	}
 }
