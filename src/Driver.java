@@ -210,22 +210,6 @@ public class Driver {
 		addStudentsToRCCCourses(rccDeque, data.getRCCCourses());
 		System.out.println("All students have a RCC course added.");
 		
-		// Use this to check if deque is working:
-//		Iterator<Student> it = majorDeque.iterator();
-//		 while (it.hasNext()) {
-//			 System.out.println(it.next().getFirstName());
-//		 }
-
-		// Use this to check course information for system testing:
-//		for (int i = 0; i < studentList.size(); i++) {
-//      	Student s1 = studentList.get(i);
-//           s1.getStudentSchedule().addCourseCredits();
-//           System.out.println(s1.getFirstName() + " " + s1.getLastName());
-//           System.out.println("Total Credits: " + s1.getStudentSchedule().getTotalCredits());
-//           s1.printStudentSchedule();
-//           System.out.println();
-//		}
-		
 		// Print to TERMINAL
 		for (int i = 0; i < studentList.size(); i++) { 
 			Student s1 = studentList.get(i);
@@ -236,7 +220,7 @@ public class Driver {
 			System.out.println();
 		}	
 		
-		// Print to XLSX File (one workbook w/ worksheets for each student... good)
+		// Print to XLSX File (one workbook w/ worksheets for each student)
 		for (int i = 0; i < studentList.size(); i++) {
 			studentList.get(i).printStudentSchedule_Excel(i + 1, studentList.size());
 		}

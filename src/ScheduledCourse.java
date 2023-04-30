@@ -36,6 +36,10 @@ public class ScheduledCourse {
 	public Time getLabTime() {
 		return labTime;
 	}
+	
+	public boolean getHasLab() {
+		return hasLab;
+	}
 
 	public void setTime(Time time) {
 		this.time = time;
@@ -50,9 +54,5 @@ public class ScheduledCourse {
 	
 	public void setCourseLab(Course course) {
 		courseLab = course;
-	}
-	
-	public boolean getHasLab() {
-		return hasLab;
 	}
 }

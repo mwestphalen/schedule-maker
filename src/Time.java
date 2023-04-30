@@ -15,25 +15,8 @@ public class Time {
 		setMeetingDays(meetingDays1);
 	}
 	
-	public void setMeetingTimes(String meetingInformation) {
-		String[] values = meetingInformation.split("-");
-		String[] firstTimes= values[0].split(":");
-		String[] secondTimes = values[1].split(":");
-		int firstHour = Integer.parseInt(firstTimes[0]);
-		int firstMinutes = Integer.parseInt(firstTimes[1]);
-		int secondHour = Integer.parseInt(secondTimes[0]);
-		int secondMinutes = Integer.parseInt(secondTimes[1]);
-		startTime = LocalTime.of(firstHour, firstMinutes);
-		endTime = LocalTime.of(secondHour, secondMinutes);
-		amOrPm = values[2].charAt(0);
-	}
-	
 	public String getMeetingDays() {
 		return meetingDays;
-	}
-	
-	public void setMeetingDays(String meetingDays1) {
-		meetingDays = meetingDays1;
 	}
 	
 	public LocalTime getStartTime() {
@@ -48,11 +31,28 @@ public class Time {
 		return amOrPm;
 	}
 	
-	public void printTime() {
-		System.out.print(startTime + "-" + endTime + "-" + amOrPm + " " + meetingDays);
-	}
-	
 	public String[] getTimeInfo_XLSX() {
 		return new String[] {meetingDays, startTime.toString() + "-" + endTime.toString() + String.valueOf(amOrPm)};
+	}
+	
+	public void setMeetingDays(String meetingDays1) {
+		meetingDays = meetingDays1;
+	}
+	
+	public void setMeetingTimes(String meetingInformation) {
+		String[] values = meetingInformation.split("-");
+		String[] firstTimes= values[0].split(":");
+		String[] secondTimes = values[1].split(":");
+		int firstHour = Integer.parseInt(firstTimes[0]);
+		int firstMinutes = Integer.parseInt(firstTimes[1]);
+		int secondHour = Integer.parseInt(secondTimes[0]);
+		int secondMinutes = Integer.parseInt(secondTimes[1]);
+		startTime = LocalTime.of(firstHour, firstMinutes);
+		endTime = LocalTime.of(secondHour, secondMinutes);
+		amOrPm = values[2].charAt(0);
+	}
+	
+	public void printTime() {
+		System.out.print(startTime + "-" + endTime + "-" + amOrPm + " " + meetingDays);
 	}
 }

@@ -4,9 +4,9 @@ import java.util.Scanner;
 import java.io.File;
 import java.time.*;
 public class Database {
-	private static ArrayList<ScheduledCourse> electiveCourses;
 	private static ArrayList<ScheduledCourse> introductoryCourses;
 	private static ArrayList<ScheduledCourse> competencyCourses;
+	private static ArrayList<ScheduledCourse> electiveCourses;
 	private static ArrayList<ScheduledCourse> rccCourses;
 	private static ArrayList<Student> studentList;
 	
@@ -201,8 +201,7 @@ public class Database {
 			return false;
 		}
 		return true;
-	}
-	
+	}	
 
 	/**
 	 * Checks to see if the type of data in the text file matches the expected types.
@@ -263,21 +262,20 @@ public class Database {
 		}
 	}
 	
+	public ArrayList<ScheduledCourse> getIntroductoryCourses() {
+		return introductoryCourses;
+	}
+	
+	public ArrayList<ScheduledCourse> getCompetencyCourses() {
+		return competencyCourses;
+	}
 	
 	public ArrayList<ScheduledCourse> getElectiveCourses() {
 		return electiveCourses;
 	}
 	
-	public ArrayList<ScheduledCourse> getIntroductoryCourses() {
-		return introductoryCourses;
-	}
-	
 	public ArrayList<ScheduledCourse> getRCCCourses() {
 		return rccCourses;
-	}
-	
-	public ArrayList<ScheduledCourse> getCompetencyCourses() {
-		return competencyCourses;
 	}
 	
 	public ArrayList<Student> getStudentList() {

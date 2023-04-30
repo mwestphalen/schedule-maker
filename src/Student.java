@@ -29,12 +29,14 @@ public class Student {
 	private static XSSFFont subheaderFont;
 	private static XSSFDrawing patriarch;
 	private static XSSFTextBox textbox;
+	// Every student shares the same Excel Workbook with the same styling
 	static {
 		// Create blank workbook
 		workbook = new XSSFWorkbook();
 		
 		// Set up fonts for output
 		XSSFFont boldFont = workbook.createFont();
+		boldFont.setColor(IndexedColors.WHITE.getIndex());
 		boldFont.setBold(true);
 		
 		subheaderFont = workbook.createFont();
@@ -122,12 +124,16 @@ public class Student {
 		return lastName;
 	}
 	
+	public String[] getMajors() {
+		return majors;
+	}
+	
 	public String getStatus() {
 		return status;
 	}
 	
-	public String[] getMajors() {
-		return majors;
+	public String getLanguage() {
+		return language;
 	}
 	
 	public ArrayList<ScheduledCourse> getElectivePreferences() {
@@ -138,8 +144,15 @@ public class Student {
 		return rccPreferences;
 	}
 	
-	public String getLanguage() {
-		return language;
+	
+	public String[] getStudentPersonalInfo() {
+		String[] studentInfo = new String[3];
+		studentInfo[0] = firstName + " " + lastName;
+		studentInfo[1] = rNumber;
+		studentInfo[2] = majors[0] + ", " + majors[1];
+		
+		return studentInfo;
+
 	}
 	
 	public void setRNumber(String num) {
@@ -162,29 +175,21 @@ public class Student {
 		status = stat;
 	}
 	
-	public String[] getStudentInfo() {
-		String[] studentInfo = new String[3];
-		studentInfo[0] = firstName + " " + lastName;
-		studentInfo[1] = rNumber;
-		studentInfo[2] = majors[0] + ", " + majors[1];
-		
-		return studentInfo;
-
-	}
+	
 
 	
 	public void printStudentSchedule_Terminal() {
 		System.out.println("Intro: ");
 		try {
-			schedule.getMajorCourse().getCourse().printCourseInfo();
+			schedule.getIntroCourse().getCourse().printCourseInfo();
 			System.out.print(" ");
-			schedule.getMajorCourse().getTime().printTime();
+			schedule.getIntroCourse().getTime().printTime();
 			
-			if (schedule.getMajorCourse().getHasLab()) {
+			if (schedule.getIntroCourse().getHasLab()) {
 				System.out.println();
-				schedule.getMajorCourse().getCourseLab().printCourseInfo();
+				schedule.getIntroCourse().getCourseLab().printCourseInfo();
 				System.out.print(" ");
-				schedule.getMajorCourse().getLabTime().printTime();
+				schedule.getIntroCourse().getLabTime().printTime();
 			}
 		} catch (Exception e){
 			
@@ -456,7 +461,7 @@ public class Student {
 		}
 				
 		// Print Student's RCC Preferences
-		printStudentPreferences_Excel(sheet, hasLab);
+		printPreferences_Excel(sheet, hasLab);
 		
 		// Writing to excel file
 		try (FileOutputStream outputStream = new FileOutputStream("StudentSchedules.xlsx")) {
@@ -573,7 +578,7 @@ public class Student {
 		cell.setCellValue("Fulfilment");
 	}
 
-	public void printStudentPreferences_Excel(XSSFSheet sheet, boolean hasLab) {
+	public void printPreferences_Excel(XSSFSheet sheet, boolean hasLab) {
 		
 		/*
 		Print Student's RCC Preference

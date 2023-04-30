@@ -19,12 +19,24 @@ public class Course {
 		proficiency = proficiency1;
 	}
 	
+	public int getCapacity() {
+		return capacity;
+	}
+	
 	public int getCRN() {
 		return CRN;
 	}
 	
+	public String getCourseCode() {
+		return courseCode;
+	}
+	
 	public String getCourseTitle() {
 		return courseTitle;
+	}
+	
+	public int getCredits() {
+		return credits;
 	}
 	
 	public String getCourseMajor() {
@@ -33,18 +45,6 @@ public class Course {
 	
 	public String getProficiency() {
 		return proficiency;
-	}
-	
-	public String getCourseCode() {
-		return courseCode;
-	}
-	
-	public int getCredits() {
-		return credits;
-	}
-	
-	public int getCapacity() {
-		return capacity;
 	}
 	
 	public int getNumbStudents() {

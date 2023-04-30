@@ -223,70 +223,6 @@ public class Schedule {
 		}
 	}
 	
-	public ScheduledCourse[] getScheduleList() {
-		return scheduleList;
-	}
-	
-	public ScheduledCourse getMajorCourse() {
-		return scheduleList[0];
-	}
-
-	public void setIntroCourse(ScheduledCourse introCourse) {
-		scheduleList[0] = introCourse;
-	}
-	
-	public ScheduledCourse getCompetencyCourse() {
-		return scheduleList[1];
-	}
-
-	public void setCompetencyCourse(ScheduledCourse competencyCourse) {
-		scheduleList[1] = competencyCourse;
-	}
-	
-	public ScheduledCourse getElectiveCourse() {
-		return scheduleList[2];
-	}
-			
-	public void setElectiveCourse(ScheduledCourse electiveCourse) {
-		scheduleList[2] = electiveCourse;
-	}
-
-	public ScheduledCourse getRCCCourse() {
-		return scheduleList[3];
-	}
-	
-	public void setRCCCourse(ScheduledCourse rcc) {
-		scheduleList[3] = rcc;
-	}
-
-	public int getTotalCredits() {
-		return totalCredits;
-	}
-	
-	public void setTotalCredits(int i) {
-		totalCredits = i;
-	}
-	
-	/**
-	 * Adds all the credits for courses in the students schedule storing the result in total credits.
-	 */
-	public void addCourseCredits() {
-		int creditsToAdd;
-		for (int i = 0; i < 4; i++) {
-			creditsToAdd = 0;
-			try {
-				scheduleList[i].getCourse();
-				creditsToAdd = scheduleList[i].getCourse().getCredits();
-				if (scheduleList[i].getHasLab() == true) {
-					creditsToAdd = creditsToAdd + scheduleList[i].getCourseLab().getCredits();
-				}
-			} catch (Exception e) {
-				
-			}
-			totalCredits = totalCredits + creditsToAdd;
-		}
-	}
-	
 	/**
 	 * Checks the availability and whether the course has a conflict with other schedule courses. If the course
 	 * is available and there is no conflict then method returns true. If there is an issue with either of the two
@@ -319,7 +255,26 @@ public class Schedule {
 			}
 		return false;
 	}
-
+	
+	/**
+	 * Adds all the credits for courses in the students schedule storing the result in total credits.
+	 */
+	public void addCourseCredits() {
+		int creditsToAdd;
+		for (int i = 0; i < 4; i++) {
+			creditsToAdd = 0;
+			try {
+				scheduleList[i].getCourse();
+				creditsToAdd = scheduleList[i].getCourse().getCredits();
+				if (scheduleList[i].getHasLab() == true) {
+					creditsToAdd = creditsToAdd + scheduleList[i].getCourseLab().getCredits();
+				}
+			} catch (Exception e) {
+				
+			}
+			totalCredits = totalCredits + creditsToAdd;
+		}
+	}
 	
 	/**
 	 * Checks to see if there is any time conflict the ScheduledCourse c has with already scheduled courses.
@@ -442,6 +397,29 @@ public class Schedule {
 		return true;
 	}
 	
+	public int getTotalCredits() {
+		return totalCredits;
+	}
+	
+	public ScheduledCourse[] getScheduleList() {
+		return scheduleList;
+	}
+	
+	public ScheduledCourse getIntroCourse() {
+		return scheduleList[0];
+	}
+	
+	public ScheduledCourse getCompetencyCourse() {
+		return scheduleList[1];
+	}
+	
+	public ScheduledCourse getElectiveCourse() {
+		return scheduleList[2];
+	}
+	public ScheduledCourse getRCCCourse() {
+		return scheduleList[3];
+	}
+	
 	/**
 	 * Takes a list of courses and selects a random course from it.
 	 * 
@@ -453,5 +431,25 @@ public class Schedule {
 		int index = rand.nextInt(courses.size());
 		ScheduledCourse selectedCourse = courses.get(index);
 		return selectedCourse;
+	}
+			
+	public void setIntroCourse(ScheduledCourse introCourse) {
+		scheduleList[0] = introCourse;
+	}
+	
+	public void setCompetencyCourse(ScheduledCourse competencyCourse) {
+		scheduleList[1] = competencyCourse;
+	}
+	
+	public void setElectiveCourse(ScheduledCourse electiveCourse) {
+		scheduleList[2] = electiveCourse;
+	}
+	
+	public void setRCCCourse(ScheduledCourse rcc) {
+		scheduleList[3] = rcc;
+	}
+	
+	public void setTotalCredits(int i) {
+		totalCredits = i;
 	}
 }
