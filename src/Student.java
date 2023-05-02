@@ -36,8 +36,8 @@ public class Student {
 		
 		// Set up fonts for output
 		XSSFFont boldFont = workbook.createFont();
-		boldFont.setColor(IndexedColors.WHITE.getIndex());
 		boldFont.setBold(true);
+		boldFont.setColor(IndexedColors.WHITE.getIndex());
 		
 		subheaderFont = workbook.createFont();
 		subheaderFont.setBold(true);
