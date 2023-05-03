@@ -26,7 +26,4 @@
 24, 91567, PHY 120L, General Physics 1, 2, 02:00-05:00-P, W, PHY, N, false
 29, 92192, MAT 103, Statistical Reasoning, 4, 01:00-02:15-P, MW, MAT, MCMP, false
 29, 91429, MAT 109, Precalculus Mathematics, 4, 11:00-11:50-A, MWF, MAT, MCMP, false
-15, 91600, PSY 101, Introduction to Psychology, 4, 06:45-9:15-P, M, PSY, N, false
-24, 91620, PSY 150, Perspectives in Psychology 1, 4, 03:30-04:45-P, TR, PSY, N, false
-18, 91626, PSY 250, Statistics & Research Methods 1 w/ Lab, 4, 11:00-12:50-P, TR, PSY, MCMP, true
-18, 91626, PSY 250L, Statistics & Research Methods 1 Lab, 2, 02:00-03:15-P, TR, PSY, N, false
+
