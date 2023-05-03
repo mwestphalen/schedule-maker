@@ -26,7 +26,7 @@ public class GUI {
 	public GUI() {
 
 		// Create and set up
-		frame = new JFrame("Freshmen Schedule Automation");
+		frame = new JFrame("Rollins Schedule Maker");
 		frame.setMinimumSize(new Dimension(770, 560));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -34,7 +34,7 @@ public class GUI {
 		 *  Where the components controlled by the cardLayout are initialized
 		 */
 		JPanel mainMenuPanel = new JPanel()  {
-			// Using anonymous inner class to override method the that
+			// Using anonymous inner class to override method that
 			// displays the window to the screen
 			@Override 
 			public void setVisible(boolean visible) {
@@ -43,7 +43,13 @@ public class GUI {
 				
 				// Generate courses and students' list every time we reach the main menu, aka, update and refresh
 				if (visible) {
-					database = new Database();
+					// TODO: check return value and display warning sign if false
+					database = Database.getInstance();
+					if (database.initalizeDatabase() == false) {
+						JOptionPane.showMessageDialog(cards, "Error initializing database. Please check the text files.",
+								"Initializing Database", JOptionPane.ERROR_MESSAGE);
+						System.out.println("Error initializing database");
+					}
 					System.out.println("Database initiated");
 				}
 			}
@@ -67,9 +73,11 @@ public class GUI {
 		cards = new JPanel(cardLayout);
 		cards.add(mainMenuPanel, "menu");
 
+		ImageIcon icon = new ImageIcon("/Users/matheuswestphalen/Projects/ScheduleMaker/resources/rollins_logo.png");
 		JLabel rollinsLogo = new JLabel();
 		rollinsLogo
-				.setIcon(new ImageIcon("/Users/matheuswestphalen/Projects/ScheduleMaker/resources/rollins_logo.png"));
+				.setIcon(icon);
+
 
 		GridBagConstraints gbc_rollinsLogo = new GridBagConstraints();
 		gbc_rollinsLogo.fill = GridBagConstraints.BOTH;
@@ -124,6 +132,34 @@ public class GUI {
 		
 		makeScheduleButton.addActionListener(event -> {
 			
+			// Check if there are enough courses for all students
+			if (database.enoughCoursesForStudents(database.getIntroductoryCourses(), database.getStudentList().size(), 'i') == false) {
+				// Not enough introductory courses
+				JOptionPane.showMessageDialog(mainMenuPanel, "Error: There are more students than there are Introductory courses. Please add more",
+						"Not enough courses", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if (database.enoughCoursesForStudents(database.getCompetencyCourses(), database.getStudentList().size(), 'c') == false) {
+				// Not enough competency courses
+				JOptionPane.showMessageDialog(mainMenuPanel, "Error: There are more students than there are Competency courses. Please add more",
+						"Not enough courses", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			if (database.enoughCoursesForStudents(database.getElectiveCourses(), database.getStudentList().size(), 'e') == false) {
+				// Not enough elective courses
+				JOptionPane.showMessageDialog(mainMenuPanel, "Error: There are more students than there are Elective courses. Please add more",
+						"Not enough courses", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if (database.enoughCoursesForStudents(database.getRCCCourses(), database.getStudentList().size(), 'r') == false) {
+				// Not enough RCC courses
+				JOptionPane.showMessageDialog(mainMenuPanel, "Error: There are more students than there are RCC courses. Please add more",
+						"Not enough courses", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			
 			Deque<Student> introDeque = new LinkedList<>();
 			Deque<Student> compDeque = new LinkedList<>();
 			Deque<Student> eleDeque = new LinkedList<>();
@@ -152,8 +188,8 @@ public class GUI {
 				database.getStudentList().get(i).printStudentSchedule_Excel(i + 1, database.getStudentList().size());
 			}
 			
-			JOptionPane.showMessageDialog(mainMenuPanel, "Student's schedules have been created.",
-					"Schedules Creation", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(mainMenuPanel, "Students' schedules have been created.",
+					"Schedules Creation", JOptionPane.INFORMATION_MESSAGE, icon);
 			
 			return;
 		});
@@ -271,7 +307,7 @@ public class GUI {
 		 * List possible student's status
 		 */
 
-		String[] statusOptions = { "N/A", "E", "H", "AMP" };
+		String[] statusOptions = { "N/A", "Early Decision", "Honors", "Accelerated Program" };
 		JComboBox<String> statusPick = new JComboBox<String>(statusOptions);
 		statusPick.setSelectedItem("N/A");
 
@@ -476,7 +512,7 @@ public class GUI {
 
 		electivesLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		GridBagConstraints gbc_electivesLabel = new GridBagConstraints();
-		gbc_electivesLabel.anchor = GridBagConstraints.WEST;
+		gbc_electivesLabel.anchor = GridBagConstraints.NORTHWEST;
 		gbc_electivesLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_electivesLabel.gridx = 1;
 		gbc_electivesLabel.gridy = 14;
@@ -539,17 +575,17 @@ public class GUI {
 			gbc_electivesComboBoxes.gridy++;
 
 			// Move back/submit button down
-			gbc_backButton.gridy++;
-			gbc_submitButton.gridy++;
+			//gbc_backButton.gridy++;
+			//gbc_submitButton.gridy++;
 
 			// Add new combobox and update addButton
 			addStudentPanel.add(newComboBox, gbc_rccComboBoxes);
 			addStudentPanel.add(addRCCButton, gbc_addRCCButton);
-			addStudentPanel.add(backButton, gbc_backButton);
-			addStudentPanel.add(submitButton, gbc_submitButton);
 			addStudentPanel.add(electivesLabel, gbc_electivesLabel);
 			addStudentPanel.add(electivesComboBoxes.get(0), gbc_electivesComboBoxes);
 			addStudentPanel.add(addElectiveButton, gbc_addElectiveButton);
+			addStudentPanel.add(backButton, gbc_backButton);
+			addStudentPanel.add(submitButton, gbc_submitButton);
 
 			addStudentPanel.revalidate();
 			addStudentPanel.repaint();
@@ -584,11 +620,13 @@ public class GUI {
 
 			// Move submit button down
 			gbc_submitButton.gridy++;
+			gbc_backButton.gridy++;
 
-			addStudentPanel.add(submitButton, gbc_submitButton);
 			addStudentPanel.add(electivesLabel, gbc_electivesLabel);
 			addStudentPanel.add(electivesComboBoxes.get(0), gbc_electivesComboBoxes);
 			addStudentPanel.add(addElectiveButton, gbc_addElectiveButton);
+			addStudentPanel.add(backButton, gbc_backButton);
+			addStudentPanel.add(submitButton, gbc_submitButton);
 
 			addStudentPanel.revalidate();
 			addStudentPanel.repaint();
@@ -615,14 +653,14 @@ public class GUI {
 				if (rNumberField.getText().equals(student.getRNumber())) {
 					// Found a student with the same R-Number, issue warning
 					JOptionPane.showMessageDialog(addStudentPanel,
-							"Error: A student with the same R-Number is already in the system.", "Unable to remove student",
+							"Error: A student with the same R-Number is already in the system.", "Unable to add student",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 			}
 			
 			// Add student to .txt file
-			try {
+			try (FileWriter fw = new FileWriter("./students.txt", true)){
 				// Convert the selected preferences for RCC into arrays using Course Code
 				// instead of Course Title
 				String[] rccPref = { "N", "N", "N", "N", "N", "N", "N", "N" };
@@ -645,7 +683,7 @@ public class GUI {
 					}
 				}
 
-				// Initialize Student Object
+				// Initialize Student data
 				String studentData1 = rNumberField.getText() + ", " + firstNameField.getText() + ", "
 						+ lastNameField.getText() + ", " + (major1Pick.getSelectedItem().toString().equals("N/A") ? "N"
 								: major1Pick.getSelectedItem().toString())
@@ -657,26 +695,26 @@ public class GUI {
 								: langPreferencePick.getSelectedItem().toString())
 						+ // Ternary Operator: (condition) ? (value if true) : (value if false)
 						", " + (statusPick.getSelectedItem().toString().equals("N/A") ? "N"
-								: statusPick.getSelectedItem().toString()); // Ternary Operator: (condition) ? (value if true) : (value if false)
+								: statusPick.getSelectedItem().toString().charAt(0)); // Ternary Operator: (condition) ? (value if true) : (value if false)
 				
 				String studentData2 = electivePref[0] + ", " + electivePref[1] + ", " + electivePref[2] + ", "
 						+ electivePref[3] + ", " + electivePref[4] + ", " + electivePref[5] + ", " + electivePref[6];
 				String studentData3 = rccPref[0] + ", " + rccPref[1] + ", " + rccPref[2] + ", " + rccPref[3] + ", "
 						+ rccPref[4] + ", " + rccPref[5] + ", " + rccPref[6] + ", " + rccPref[7];
 
-				File file = new File("./students.txt");
-				if (!file.exists()) {
-					file.createNewFile();
-				}
+				//File file = new File("./students.txt");
+				//if (!file.exists()) {
+					//file.createNewFile();
+				//}
 
-				FileWriter fileWriter = new FileWriter(file.getName(), true);
-				BufferedWriter bw = new BufferedWriter(fileWriter);
+				//FileWriter fileWriter = new FileWriter(file.getName(), true);
+				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(studentData1);
 				bw.newLine();
 				bw.write(studentData2);
 				bw.newLine();
 				bw.write(studentData3);
-				bw.newLine();
+				bw.newLine();	
 				bw.close();
 
 			} catch (Exception e) {
@@ -684,6 +722,12 @@ public class GUI {
 				System.out.println("Error writing student data to file");
 			}
 
+			
+			// Issue message that student was successfully added
+			JOptionPane.showMessageDialog(addStudentPanel,
+					"Student was successfully added.", "Student successfully added",
+					JOptionPane.INFORMATION_MESSAGE);
+			
 			// Clean panel and go back to main menu
 			cardLayout.show(cards, "menu");
 			addStudentPanel.removeAll();
@@ -802,15 +846,23 @@ public class GUI {
 						Scanner scanner = new Scanner(inputFile);
 						BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 						while (scanner.hasNextLine()) {
+							boolean lastInFile = false;
 							// Read student data that is split into 3 lines
 							String line1 = scanner.nextLine();
 							String line2 = scanner.nextLine();
 							String line3 = scanner.nextLine();
 
-							// Check if R-Number of student to be removed matches the first string
-							// in the first line, which happens to be the R-Number as well. If so,
-							// we are not writing it back to the file
-							if (!line1.startsWith(student.getRNumber())) {
+							if (line1.startsWith(student.getRNumber())) {
+								if (scanner.hasNextLine()) {
+									line1 = scanner.nextLine();
+									line2 = scanner.nextLine();
+									line3 = scanner.nextLine();
+								} else {
+									lastInFile = true;
+								}
+							}
+							
+							if (!lastInFile) {
 								writer.write(line1);
 								writer.newLine();
 								writer.write(line2);
@@ -819,7 +871,6 @@ public class GUI {
 								writer.newLine();
 							}
 						}
-
 						// Close input and output stream
 						scanner.close();
 						writer.close();
@@ -833,8 +884,8 @@ public class GUI {
 					}
 					
 					// If reached here, student has been successfully removed from everywhere
-					JOptionPane.showMessageDialog(remStudentPanel, "Student successfully removed.", "Student Removal",
-							JOptionPane.OK_OPTION);
+					JOptionPane.showMessageDialog(remStudentPanel, "Student was successfully removed.", "Student Removal",
+							JOptionPane.INFORMATION_MESSAGE, null);
 					
 					// Go back to main menu
 					cardLayout.show(cards, "menu");
@@ -1544,7 +1595,7 @@ public class GUI {
 			// Remove Add Lab Button
 			addCoursePanel.remove(addLabButton);
 
-			// Add new components to then screen
+			// Add new components to the screen
 			addCoursePanel.revalidate();
 			addCoursePanel.repaint();
 		});
@@ -1564,17 +1615,36 @@ public class GUI {
 			// elective for others and vice-versa.
 			boolean courseFound = false;
 			courseFound = addCourse_Helper(addCoursePanel, "./introductory.txt", courseCRNBox);
-			courseFound = addCourse_Helper(addCoursePanel, "./electives.txt", courseCRNBox);
-			courseFound = addCourse_Helper(addCoursePanel, "./competency.txt", courseCRNBox);
-			courseFound = addCourse_Helper(addCoursePanel, "./rccCourses.txt", courseCRNBox);
-
 			// If course was found, that means we can't proceed with adding it to the .txt files
 			if (courseFound) {
 				JOptionPane.showMessageDialog(addCoursePanel,
-						"Error: The entered course CRN matches one from the current list. Please enter a different CRN.",
+						"Error: The entered course CRN matches one found in introductory.txt. Please enter a different CRN.",
 						"Unable to add course", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			courseFound = addCourse_Helper(addCoursePanel, "./electives.txt", courseCRNBox);
+			if (courseFound) {
+				JOptionPane.showMessageDialog(addCoursePanel,
+						"Error: The entered course CRN matches one found in electives.txt. Please enter a different CRN.",
+						"Unable to add course", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			courseFound = addCourse_Helper(addCoursePanel, "./competency.txt", courseCRNBox);
+			if (courseFound) {
+				JOptionPane.showMessageDialog(addCoursePanel,
+						"Error: The entered course CRN matches one found in competency.txt. Please enter a different CRN.",
+						"Unable to add course", JOptionPane.ERROR_MESSAGE);
+				return;
+			}			
+			courseFound = addCourse_Helper(addCoursePanel, "./rccCourses.txt", courseCRNBox);
+			if (courseFound) {
+				JOptionPane.showMessageDialog(addCoursePanel,
+						"Error: The entered course CRN matches one found in rccCourses.txt. Please enter a different CRN.",
+						"Unable to add course", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			
 			
 			// Get course meeting days
 			try {
@@ -1596,7 +1666,7 @@ public class GUI {
 				}
 
 				if (fridayButton.isSelected()) {
-					courseMeetingDays += "R";
+					courseMeetingDays += "F";
 				}
 
 				if (saturdayButton.isSelected()) {
@@ -1639,7 +1709,7 @@ public class GUI {
 					}
 
 					if (labFridayButton.isSelected()) {
-						labMeetingDays += "R";
+						labMeetingDays += "F";
 					}
 
 					if (labSaturdayButton.isSelected()) {
@@ -1661,25 +1731,56 @@ public class GUI {
 				
 				// Add course data to rccCourses.txt if it is one
 				if (coursePrefixField.getText().equals("RCC")) {
-					addCourseTo("./rccCourses.txt", courseData, labData);
+					if (addCourseTo("./rccCourses.txt", courseData, labData) == false) {
+						JOptionPane.showMessageDialog(addCoursePanel,
+								"Error adding RCC course. Go back to main menu and try again.", "Error adding course",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				} else {
 					
 					// Add course to introductory.txt and electives.txt, since any of these courses
 					// can also be an elective
-					addCourseTo("./introductory.txt", courseData, labData);
-					addCourseTo("./electives.txt", courseData, labData);
+					if (addCourseTo("./introductory.txt", courseData, labData) == false) {
+						JOptionPane.showMessageDialog(addCoursePanel,
+								"Error adding course. Go back to main menu and try again.", "Error adding course",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					if (addCourseTo("./electives.txt", courseData, labData) == false) {
+						JOptionPane.showMessageDialog(addCoursePanel,
+								"Error adding course. Go back to main menu and try again.", "Error adding course",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					
 					// Add course data to competency.txt if it has a competency
 					if (!competencyBox.getSelectedItem().toString().equals("N/A")) {
-						addCourseTo("./competency.txt", courseData, labData);
+						if (addCourseTo("./competency.txt", courseData, labData) == false) {
+							JOptionPane.showMessageDialog(addCoursePanel,
+									"Error adding competency course. Go back to main menu and try again.", "Error adding course",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
 					}
 				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Error");
+				JOptionPane.showMessageDialog(addCoursePanel,
+						"Error adding course. Go back to main menu and try again.", "Error adding course",
+						JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 
+			
+			// Issue message that course was successfully added
+			JOptionPane.showMessageDialog(addCoursePanel,
+					"Course was successfully added.", "Course successfully added",
+					JOptionPane.INFORMATION_MESSAGE);
+			
 			// Clean panel and go back to main menu
 			cardLayout.show(cards, "menu");
 			addCoursePanel.removeAll();
@@ -1692,7 +1793,10 @@ public class GUI {
 		});
 	}
 	
-	private void addCourseTo(String filePath, String courseData, String labData) {
+	/*
+	 * @return true if succeeded, false otherwise
+	 */
+	private boolean addCourseTo(String filePath, String courseData, String labData) {
 		try {
 			File file = new File(filePath);
 			if (!file.exists() ) {
@@ -1701,20 +1805,21 @@ public class GUI {
 			
 			FileWriter fileWriter = new FileWriter(file.getName(), true);
 			BufferedWriter bw = new BufferedWriter(fileWriter);
-			bw.newLine();
 			bw.write(courseData);
 			// If course has a lab
 			if (labData.length() != 0) {
 				bw.newLine();
 				bw.write(labData);
 			}
+			bw.newLine();
 			bw.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.print("Error writing course data to file " + filePath);
+			return false;
 		}
-		
+		return true;
 	}
 	
 	// @param path - the .txt. to which add the course to
@@ -1774,10 +1879,11 @@ public class GUI {
 		// Proceed with course addition
 		return false;
 	}
-
-	////////////////////
-	/// Remove Course //
-	////////////////////
+	
+	///////////////////////
+	//// Remove Course ////
+	///////////////////////
+	
 	private void remCourse(JPanel remCoursePanel) {
 		// Set up Panel
 		GridBagLayout layout = new GridBagLayout();
@@ -1856,27 +1962,37 @@ public class GUI {
 			// Remove course entails removing it from every .txt file it may be on,
 			// since some courses can be considered introductory courses for some
 			// but elective for others and vice-versa.
-			boolean courseFound = false;
-			courseFound = remCourse_Helper(remCoursePanel, "./introductory.txt", crnField);
-			courseFound = remCourse_Helper(remCoursePanel, "./electives.txt", crnField);
-			courseFound = remCourse_Helper(remCoursePanel, "./competency.txt", crnField);
-			courseFound = remCourse_Helper(remCoursePanel, "./rccCourses.txt", crnField);
+			boolean courseFound1 = false;
+			boolean courseFound2 = false;
+			boolean courseFound3 = false;
+			boolean courseFound4 = false;
+			courseFound1 = removeCourseFromFile(remCoursePanel, "./introductory.txt", crnField);
+			courseFound2 = removeCourseFromFile(remCoursePanel, "./electives.txt", crnField);
+			courseFound3 = removeCourseFromFile(remCoursePanel, "./competency.txt", crnField);
+			courseFound4 = removeCourseFromFile(remCoursePanel, "./rccCourses.txt", crnField);
 
-			if (courseFound) {
+			if (courseFound1 || courseFound2 || courseFound3 || courseFound4) {
 				// If reached here, course has been successfully removed from everywhere
-				JOptionPane.showMessageDialog(remCoursePanel, "Course successfully removed.", "Course Removal",
-						JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(remCoursePanel, "The course has been removed from the "
+						+ "database", "Course Removal",
+						JOptionPane.INFORMATION_MESSAGE);
 				
 				// Go back to main menu
 				cardLayout.show(cards, "menu");
 				remCoursePanel.removeAll();
+				return;
+				
 			} else {
-				JOptionPane.showMessageDialog(remCoursePanel, "Error: Course with the given CRN could not be found.", "Course Removal",
+				
+				// If reached here, course could not be found in any text file
+				JOptionPane.showMessageDialog(remCoursePanel, "Error: The entered course could "
+						+ "not be found in the database. Please enter a different CRN.", "Course Removal",
 						JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 
 		});
-		
+					
 		backButton.addActionListener(event -> {
 			cardLayout.show(cards, "menu");
 			remCoursePanel.removeAll();
@@ -1884,7 +2000,7 @@ public class GUI {
 	}
 
 	// @param path - the .txt to which remove the course from
-	private boolean remCourse_Helper(JPanel remCoursePanel, String path, JTextField crnField) {
+	private boolean removeCourseFromFile(JPanel remCoursePanel, String path, JTextField crnField) {
 		// Check removal for introductory courses
 		if (path.equals("./introductory.txt")) {
 			// Make a copy of the list
@@ -1923,21 +2039,27 @@ public class GUI {
 						Scanner scanner = new Scanner(inputFile);
 						while (scanner.hasNextLine()) {
 							// Read line by line
+							boolean lastInFile = false;
 							String line = scanner.nextLine();
 							String[] courseDetails = line.split(", ");
 
-							// CRN will be the second string/element on the file/array
-							// If the CRN is found, it won't be written to the file
 							if (courseDetails[1].equals(crnField.getText().toString())) {
 
 								// Check if that course has a lab, if so, also remove
 								// the next line containing lab details/info
-								if (courseDetails[9].equals("True")) {
+								if (courseDetails[9].equals("true")) {
 									scanner.nextLine();
 								}
-
-								scanner.nextLine();
-							} else {
+								
+								if (scanner.hasNextLine()) {
+									line = scanner.nextLine();
+								} else {
+									lastInFile = true;
+								}
+							}
+							
+							// If not in the last line of the file
+							if (!lastInFile) {
 								writer.write(line);
 								writer.newLine();
 							}
@@ -2000,20 +2122,27 @@ public class GUI {
 						Scanner scanner = new Scanner(inputFile);
 						while (scanner.hasNextLine()) {
 							// Read line by line
+							boolean lastInFile = false;
 							String line = scanner.nextLine();
 							String[] courseDetails = line.split(", ");
 
-							// CRN will be the second string/element on the file/array
-							// If the CRN is found, it won't be written to the file
 							if (courseDetails[1].equals(crnField.getText().toString())) {
+
 								// Check if that course has a lab, if so, also remove
 								// the next line containing lab details/info
-								if (courseDetails[9].equals("True")) {
+								if (courseDetails[9].equals("true")) {
 									scanner.nextLine();
 								}
-
-								scanner.nextLine();
-							} else {
+								
+								if (scanner.hasNextLine()) {
+									line = scanner.nextLine();
+								} else {
+									lastInFile = true;
+								}
+							}
+							
+							// If not in the last line of the file
+							if (!lastInFile) {
 								writer.write(line);
 								writer.newLine();
 							}
@@ -2076,21 +2205,28 @@ public class GUI {
 
 						Scanner scanner = new Scanner(inputFile);
 						while (scanner.hasNextLine()) {
+							boolean lastInFile = false;
 							// Read line by line
 							String line = scanner.nextLine();
 							String[] courseDetails = line.split(", ");
 
-							// CRN will be the second string/element on the file/array
-							// If the CRN is found, it won't be written to the file
 							if (courseDetails[1].equals(crnField.getText().toString())) {
+
 								// Check if that course has a lab, if so, also remove
 								// the next line containing lab details/info
-								if (courseDetails[9].equals("True")) {
+								if (courseDetails[9].equals("true")) {
 									scanner.nextLine();
 								}
-
-								scanner.nextLine();
-							} else {
+								
+								if (scanner.hasNextLine()) {
+									line = scanner.nextLine();
+								} else {
+									lastInFile = true;
+								}
+							}
+							
+							// If not in the last line of the file
+							if (!lastInFile) {
 								writer.write(line);
 								writer.newLine();
 							}
@@ -2144,7 +2280,7 @@ public class GUI {
 							// false
 							writer = new BufferedWriter(new FileWriter(outputFile, false));
 							writer.write("");
-							writer.close();
+							//writer.close();
 						} else {
 							// Create a new file
 							outputFile.createNewFile();
@@ -2152,21 +2288,28 @@ public class GUI {
 						}
 						Scanner scanner = new Scanner(inputFile);
 						while (scanner.hasNextLine()) {
+							boolean lastInFile = false;
 							// Read line by line
 							String line = scanner.nextLine();
 							String[] courseDetails = line.split(", ");
 
-							// CRN will be the second string/element on the file/array
-							// If the CRN is found, it won't be written to the file
 							if (courseDetails[1].equals(crnField.getText().toString())) {
+
 								// Check if that course has a lab, if so, also remove
 								// the next line containing lab details/info
-								if (courseDetails[9].equals("True")) {
+								if (courseDetails[9].equals("true")) {
 									scanner.nextLine();
 								}
-
-								scanner.nextLine();
-							} else {
+								
+								if (scanner.hasNextLine()) {
+									line = scanner.nextLine();
+								} else {
+									lastInFile = true;
+								}
+							}
+							
+							// If not in the last line of the file
+							if (!lastInFile) {
 								writer.write(line);
 								writer.newLine();
 							}

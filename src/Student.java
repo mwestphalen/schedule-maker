@@ -248,8 +248,22 @@ public class Student {
 	 	
 	public void printStudentSchedule_Excel(int studentNum, int totalNumOfStudents) {
 
+		// Set the sheet name
+		String sheetName = studentNum + ". " + firstName + " " + lastName;
+		
+		// Check if a sheet with the same name already exists
+		int sheetIndex = workbook.getSheetIndex(sheetName);
+		if (sheetIndex != -1) {
+			// If sheet exists, remove it
+			workbook.removeSheetAt(sheetIndex);
+		}
+		
 		// Create blank sheet for each student under one workbook
-		XSSFSheet sheet = workbook.createSheet(firstName + " " + lastName + " (" + studentNum + ")");
+		XSSFSheet sheet = workbook.createSheet(sheetName);
+		
+		
+		
+		
 		sheet.setFitToPage(true);
 		sheet.getPrintSetup().setFitWidth((short) 1);
 		sheet.getPrintSetup().setFitHeight((short) 0);
@@ -464,7 +478,9 @@ public class Student {
 		printPreferences_Excel(sheet, hasLab);
 		
 		// Writing to excel file
-		try (FileOutputStream outputStream = new FileOutputStream("StudentSchedules.xlsx")) {
+		try {
+			String downloadsPath = System.getProperty("user.home") + "/Desktop/";
+			FileOutputStream outputStream = new FileOutputStream(downloadsPath + "StudentSchedules.xlsx");
 			workbook.write(outputStream);
 			
 			// Remove template sheet and close output stream
@@ -476,6 +492,7 @@ public class Student {
 			
 		} catch (IOException e) { 
 			e.printStackTrace();
+			System.out.println("Error creating file");
 		}  
 		
 		

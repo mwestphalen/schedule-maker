@@ -212,9 +212,10 @@ public class Schedule {
 			boolean courseFound = false;
 			while (!courseFound) {
 				ScheduledCourse toAdd = getRandomCourse(rccCourses);
-			if (addCourse(toAdd, "R")) {
-				return;
-			}
+				System.out.println(toAdd.getCourse().getCourseTitle());
+				if (addCourse(toAdd, "R")) {
+					return;
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("Error: When retrieving RCC course course to add to schedule.");
@@ -250,9 +251,11 @@ public class Schedule {
 				if (toAdd.getHasLab()) {
 					toAdd.getCourseLab().addStudent();
 				}
+				
 				return true;
-				}
-			}
+			} 
+		}
+		
 		return false;
 	}
 	
@@ -317,6 +320,7 @@ public class Schedule {
 							int addEndVEnd = toAddEnd.compareTo(end);
 							if (addStartVStart > 0 && addStartVEnd <= 0) {
 								// checks if start is in between course times ex: 1-2 to add vs 12-1:15
+								
 								return false;
 							} else if (addEndVStart > 0 && addEndVEnd <= 0) {
 								// checks if end time of course is between course times ex: 1-2:15 to add vs 2-3:15

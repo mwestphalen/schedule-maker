@@ -167,23 +167,13 @@ public class Driver {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//new GuiRemoveStudent();
+		// Get instance of database
+		Database data = Database.getInstance();
 		
-		Database data = new Database();
+		// Initialize database
+		data.initalizeDatabase();
 		
-		data.generateCourses('i');
-		System.out.println("Introductory courses have been loaded.");
-		data.generateCourses('c');
-		System.out.println("Competency courses have been loaded.");
-		data.generateCourses('e');
-		System.out.println("Elective courses have been loaded.");
-		data.generateCourses('r');
-		System.out.println("RCC courses have been loaded.");
-		
-		data.generateStudentList();
-		System.out.println("Students have been loaded.");
-		
+		// Check if there are enough courses for all students
 		data.enoughCoursesForStudents(data.getIntroductoryCourses(), data.getStudentList().size(), 'i');
 		data.enoughCoursesForStudents(data.getCompetencyCourses(), data.getStudentList().size(), 'c');
 		data.enoughCoursesForStudents(data.getElectiveCourses(), data.getStudentList().size(), 'e');
