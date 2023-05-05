@@ -294,7 +294,10 @@ public class Database {
 			Integer.parseInt(values[0]);
 			Integer.parseInt(values[1]);
 			Integer.parseInt(values[4]);
-			Boolean.parseBoolean(values[9]);
+			if (values[9].equals("true") || values[9].equals("false")) {
+			} else {
+				return false;
+			}
 			String[] meetingTimes = values[5].split("-");
 			String[] firstTimes = meetingTimes[0].split(":");
 			String[] secondTimes = meetingTimes[1].split(":");

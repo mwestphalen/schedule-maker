@@ -48,6 +48,7 @@ public class GUI {
 					if (database.initalizeDatabase() == false) {
 						JOptionPane.showMessageDialog(cards, "Error initializing database. Please check the text files.",
 								"Initializing Database", JOptionPane.ERROR_MESSAGE);
+						System.exit(0);
 						System.out.println("Error initializing database");
 					}
 					System.out.println("Database initiated");
@@ -188,8 +189,9 @@ public class GUI {
 				database.getStudentList().get(i).printStudentSchedule_Excel(i + 1, database.getStudentList().size());
 			}
 			
-			JOptionPane.showMessageDialog(mainMenuPanel, "Students' schedules have been created.",
+			JOptionPane.showMessageDialog(mainMenuPanel, "Students' schedules have been created. Quitting the system now.",
 					"Schedules Creation", JOptionPane.INFORMATION_MESSAGE, icon);
+			System.exit(0);
 			
 			return;
 		});
